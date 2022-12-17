@@ -1,0 +1,93 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=fallback");
+
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+
+/* Additional styles */
+@import "additional-styles/utility-patterns.css";
+@import "additional-styles/range-slider.css";
+@import "additional-styles/toggle-switch.css";
+@import "additional-styles/flatpickr.css";
+@import "additional-styles/theme.css";
+
+@import "tailwindcss/utilities";
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+
+* {
+  font-family: "Poppins", sans-serif;
+}
+/* 
+body {
+  height: 1000rem;
+} */
+
+.input-group {
+  @apply flex flex-col gap-2;
+}
+
+.input-group label {
+  @apply font-semibold text-slate-600;
+}
+
+.form-group {
+  @apply grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-5;
+}
+
+.accomplished {
+  @apply transition-all flex items-center bg-[#fcc425] rounded-full px-3 py-2 font-semibold text-[1rem] text-white shadow-lg;
+}
+
+.not-accomplished {
+  @apply transition-all flex items-center bg-white rounded-full px-3 py-2 font-semibold text-[1rem] text-[#23408e] shadow-lg;
+}
+
+.active-form {
+  @apply block;
+}
+.non-active-form {
+  @apply hidden;
+}
+
+.container {
+  @apply lg:px-14 px-6 max-w-7xl mx-auto;
+}
+
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ant-modal-footer .ant-btn:hover:nth-child(1) {
+  @apply border-secondary text-secondary;
+}
+
+.ant-modal-footer .ant-btn:nth-child(2) {
+  @apply bg-secondary text-white;
+}
