@@ -11,10 +11,16 @@ import {
 import "./css/style.css";
 import "./charts/ChartjsConfig";
 
+// Utils
+import { getUserIsLogin } from "./utils/Utils";
+import Setting from "./pages/setting";
+import { APIBASEURL, FecthData, requestSetting } from "./service/API";
+
 // ----- Pages ----- //
 
 // Dashboard
 import Dashboard from "./pages/Dashboard";
+import Admin from "./pages/Admin";
 
 // PPDB
 import PPDB from "./pages/PPDB/admin/PPDB";
@@ -28,10 +34,10 @@ import Register from "./pages/auth/Register";
 
 // Forbidden
 import NotLogin from "./pages/notLogin";
-import Home from "./pages/Landing Page/Home";
 
-// Utils
-import { getUserIsLogin } from "./utils/Utils";
+// Landing Page
+import Home from "./pages/Landing Page/Home";
+import VisiMisi from "./pages/Landing Page/Profile Sekolah/VisiMisi";
 
 const ProtedtedRoute = ({ user, student = "", admin = "" }) => {
   if (!JSON.parse(localStorage.getItem("logged"))) {
@@ -55,16 +61,44 @@ const IsNotLogged = ({ logged, children }) => {
 };
 function App() {
   const location = useLocation();
+
   useEffect(() => {
     document.querySelector("html").style.scrollBehavior = "auto";
     window.scroll({ top: 0 });
     document.querySelector("html").style.scrollBehavior = "";
   }, [location.pathname]); // triggered on route change
 
+  useEffect(() => {
+    const refreshToken = async () => {
+      const request = await fetch(
+        `${APIBASEURL}/auth/refresh`,
+        requestSetting("POST")
+      );
+
+      const result = await request.json();
+      const data = result;
+
+      let user = JSON.parse(localStorage.getItem("usr"));
+      user.acctkn = data.access_token;
+
+      localStorage.setItem("usr", JSON.stringify(user));
+    };
+
+    setInterval(() => {});
+    setInterval(() => {
+      (async () => refreshToken())();
+    }, 50000);
+    return () => clearInterval();
+  }, []);
+
   return (
     <>
       <Routes>
+        {/* Landing Page */}
         <Route exact path="/" element={<Home />} />
+        <Route exact path="/visi&misi" element={<VisiMisi />} />
+
+        {/* Dashboard */}
         <Route
           exact
           path="/dashboard"
@@ -94,6 +128,12 @@ function App() {
           }
         />
         <Route exact path="/dashboard/ppdb/:id" element={<DetailPPDB />} />
+        {Object.keys(getUserIsLogin()).length > 0 && (
+          <Route exact path="/settings" element={<Setting />} />
+        )}
+        {Object.keys(getUserIsLogin()).length > 0 && (
+          <Route exact path="/admin" element={<Admin />} />
+        )}
         {/* Auth */}
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/register" element={<Register />} />

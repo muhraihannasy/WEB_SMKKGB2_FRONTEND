@@ -4,9 +4,11 @@ import Transition from "../../utils/Transition";
 
 import UserAvatar from "../../images/user-avatar-32.png";
 import { APIBASEURL, FecthData, requestSetting } from "../../service/API";
+import { data } from "autoprefixer";
 
 function UserMenu() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [user, setUser] = useState({});
 
   const navigate = useNavigate();
   const trigger = useRef(null);
@@ -22,6 +24,7 @@ function UserMenu() {
       if (request) {
         localStorage.setItem("logged", false);
         localStorage.removeItem("usr");
+        localStorage.removeItem("menu_permission");
         navigate("/");
       }
     }, 500);
@@ -52,6 +55,23 @@ function UserMenu() {
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
+  useEffect(() => {
+    const getUserIsLogin = async () => {
+      const request = await fetch(
+        `${APIBASEURL}/auth/user`,
+        requestSetting("GET")
+      );
+      const res = await request.json();
+      const data = await res;
+
+      if (data?.user) {
+        setUser(data?.user);
+      }
+    };
+
+    (async () => getUserIsLogin())();
+  }, []);
+
   return (
     <div className="relative inline-flex">
       <button
@@ -70,7 +90,7 @@ function UserMenu() {
         />
         <div className="flex items-center truncate">
           <span className="truncate ml-2 text-sm font-medium group-hover:text-slate-800">
-            Acme Inc.
+            {user?.fullname}
           </span>
           <svg
             className="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400"
@@ -96,15 +116,20 @@ function UserMenu() {
           onFocus={() => setDropdownOpen(true)}
           onBlur={() => setDropdownOpen(false)}
         >
-          <div className="pt-0.5 pb-2 px-3 mb-1 border-b border-slate-200">
-            <div className="font-medium text-slate-800">Acme Inc.</div>
-            <div className="text-xs text-slate-500 italic">Administrator</div>
-          </div>
           <ul>
             <li>
               <Link
                 className="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
                 to="/"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              >
+                Beranda
+              </Link>
+            </li>
+            <li>
+              <Link
+                className="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
+                to="/settings"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               >
                 Settings

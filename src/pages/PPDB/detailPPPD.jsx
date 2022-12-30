@@ -24,17 +24,27 @@ const DetailPPDB = () => {
       );
 
       setTimeout(() => {
-        setIsLoading(false);
+        if (result) {
+          setIsLoading(false);
+        }
         console.log(result);
 
         setData(result.data);
+        console.log(result.data, "DATANy");
         setScholarship([...result.scholarship]);
         setAchievement([...result.achievement]);
       }, 2000);
     })();
   }, []);
 
-  console.log(data, scholarship, achievement);
+  if (isLoading) {
+    return (
+      <div className="fixed left-0 top-0 h-[100%] w-full bg-white flex items-center flex-col justify-center z-[99] ">
+        <Spinner name="line-scale-pulse-out" />
+        Loading....
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -49,13 +59,6 @@ const DetailPPDB = () => {
         <main>
           {/* Welcome banner */}
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto font-poppins">
-            {/* Loading Screen */}
-            {isLoading && (
-              <div className="absolute left-0  h-[100vh] w-full bg-white flex items-center flex-col justify-center z-[99] ">
-                <Spinner name="line-scale-pulse-out" />
-                Loading....
-              </div>
-            )}
             <button
               className="px-4 py-2 text-white bg-primary rounded-lg flex items-center gap-2 text-[0.8rem] mb-[2rem]"
               onClick={() => navigate("/dashboard/ppdb")}
@@ -66,428 +69,338 @@ const DetailPPDB = () => {
             </button>
             <div className="photo-profile w-[5rem] h-[5rem] rounded-2xl overflow-hidden">
               <img src={data?.photo ?? ""} alt="" />
-            </div>
+            </div>{" "}
             <h2 className="font-semibold text-[1.2rem] mt-[1rem]">
               {data?.fullname ?? ""}
             </h2>
-
             <div className="grid lg:grid-cols-2 grid-cols-1 gap-5">
               <div className="shadow-lg py-5 px-6 rounded-lg w-full mt-[0.5rem] overflow-x-auto">
-                <h2 className="font-semibold">Profile Murid</h2>
+                <h2 className="font-semibold mb-[1rem]">Profile Murid</h2>
 
-                <table className="flex gap-[1rem] mt-[0.5rem]">
-                  <thead className="text-[0.8rem]">
-                    <tr className="flex flex-col text-left text-slate-500 gap-1">
-                      <th className="font-normal  whitespace-nowrap">Email</th>
-                      <th className="font-normal  whitespace-nowrap">Phone</th>
-                      <th className="font-normal  whitespace-nowrap">Birth</th>
-                      <th className="font-normal  whitespace-nowrap">Nik</th>
-                      <th className="font-normal  whitespace-nowrap">Agama</th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Akta Lahir
-                      </th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Tinggi{" "}
-                      </th>
-                      <th className="font-normal  whitespace-nowrap">Berat </th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Saudara{" "}
-                      </th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Anak Ke
-                      </th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Berkebutuhan Khusus
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="pr-2 text-[0.8rem]">
-                    <tr className="flex flex-col gap-1 text-slate-800">
-                      <td className="font-normal whitespace-nowrap">
-                        {data?.email ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.phone ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.birth ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.nik ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.religion ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.no_certificate_registration ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.height ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.weight ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.amount_siblings ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.order_family ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.student_special_needs ?? ""}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                <div>
+                  <ul className="flex flex-col gap-3">
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Email : </span>
+                      {data?.email ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Phone</span>
+                      {data?.phone ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Tanggal Lahir : </span>
+                      {data?.birth?.split("|")[0] ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Tempat Lahir : </span>
+                      {data?.birth?.split("|")[1] ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Nik : </span>
+                      {data?.nik ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Agama : </span>
+                      {data?.religion ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Akta Lahir : </span>
+                      {data?.no_certificate_registration ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Tinggi : </span>
+                      {data?.height ?? ""} CM
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Berat : </span>
+                      {data?.weight ?? ""} KG
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Jumlah Saudara : </span>
+                      {data?.amount_siblings ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Anak Ke : </span>
+                      {data?.order_family ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">
+                        Berkebutuhan Khusus :{" "}
+                      </span>
+                      {data?.student_special_needs ?? ""}
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <div className="shadow-lg py-5 px-6 rounded-lg w-full mt-[0.5rem]">
-                <h2 className="font-semibold">Profile Ayah</h2>
-                <table className="flex  gap-[1rem] mt-[0.5rem]">
-                  <thead>
-                    <tr className="flex flex-col text-left text-slate-500 gap-1">
-                      <th className="font-normal  whitespace-nowrap">Name</th>
-                      <th className="font-normal  whitespace-nowrap">Birth</th>
-                      <th className="font-normal  whitespace-nowrap">Nik</th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Pendidikan
-                      </th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Pekerjaan
-                      </th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Pendapatan
-                      </th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Berkebutuhan Khusus
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="flex flex-col gap-1 text-slate-800">
-                      <td className="font-normal whitespace-nowrap">
-                        {data?.father_name ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.father_birth ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.father_nik ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.father_education ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.father_job ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.father_salary ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.father_special_needs ?? ""}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div className="shadow-lg py-5 px-6 rounded-lg w-full mt-[0.5rem] overflow-x-auto">
+                <h2 className="font-semibold mb-[1rem]">Profile Ayah</h2>
+
+                <div>
+                  <ul className="flex flex-col gap-3">
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Nama : </span>
+                      {data?.father_name ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Tanggal Lahir : </span>
+                      {data?.father_birth
+                        ? data.father_birth.split("|")[1]
+                        : "-"}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Tempat Lahir : </span>
+                      {data?.father_birth
+                        ? data.father_birth.split("|")[0]
+                        : "-"}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Nik : </span>
+                      {data?.father_nik ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Pendidikan : </span>
+                      {data?.father_education ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Pekerjaan : </span>
+                      {data?.father_job ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Pendapatan : </span>
+                      {data?.father_salary ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">
+                        Berkebutuhan Khusus :{" "}
+                      </span>
+                      {data?.father_special_needs ?? ""}
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <div className="shadow-lg py-5 px-6 rounded-lg w-full mt-[0.5rem]">
-                <h2 className="font-semibold">Profile Ibu</h2>
-                <table className="flex  gap-[1rem] mt-[0.5rem]">
-                  <thead>
-                    <tr className="flex flex-col text-left text-slate-500 gap-1">
-                      <th className="font-normal  whitespace-nowrap">Name</th>
-                      <th className="font-normal  whitespace-nowrap">Birth</th>
-                      <th className="font-normal  whitespace-nowrap">Nik</th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Pendidikan
-                      </th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Pekerjaan
-                      </th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Pendapatan
-                      </th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Berkebutuhan Khusus
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="flex flex-col gap-1 text-slate-800">
-                      <td className="font-normal whitespace-nowrap">
-                        {data?.mother_name ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.mother_birth ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.mother_nik ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.mother_education ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.mother_job ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.mother_salary ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.mother_special_needs ?? ""}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div className="shadow-lg py-5 px-6 rounded-lg w-full mt-[0.5rem] overflow-x-auto">
+                <h2 className="font-semibold mb-[1rem]">Profile Ibu</h2>
+
+                <div>
+                  <ul className="flex flex-col gap-3">
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Nama : </span>
+                      {data?.mother_name ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Tanggal Lahir : </span>
+                      {data?.mother_birth
+                        ? data.mother_birth.split("|")[1]
+                        : "-"}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Tempat Lahir : </span>
+                      {data?.mother_birth
+                        ? data.mother_birth.split("|")[0]
+                        : "-"}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Nik : </span>
+                      {data?.mother_nik ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Pendidikan : </span>
+                      {data?.mother_education ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Pekerjaan : </span>
+                      {data?.mother_job ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Pendapatan : </span>
+                      {data?.mother_salary ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">
+                        Berkebutuhan Khusus :{" "}
+                      </span>
+                      {data?.mother_special_needs ?? ""}
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <div className="shadow-lg py-5 px-6 rounded-lg w-full mt-[0.5rem]">
-                <h2 className="font-semibold">Profile Wali Murid</h2>
-                <table className="flex  gap-[1rem] mt-[0.5rem]">
-                  <thead>
-                    <tr className="flex flex-col text-left text-slate-500 gap-1">
-                      <th className="font-normal  whitespace-nowrap">Name</th>
-                      <th className="font-normal  whitespace-nowrap">Birth</th>
-                      <th className="font-normal  whitespace-nowrap">Nik</th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Pendidikan
-                      </th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Pekerjaan
-                      </th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Pendapatan
-                      </th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Berkebutuhan Khusus
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="flex flex-col gap-1 text-slate-800">
-                      <td className="font-normal whitespace-nowrap">
-                        {data?.guardian_name ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.guardian_birth ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.guardian_nik ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.guardian_education ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.guardian_job ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.guardian_salary ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.guardian_special_needs ?? ""}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div className="shadow-lg py-5 px-6 rounded-lg w-full mt-[0.5rem] overflow-x-auto">
+                <h2 className="font-semibold mb-[1rem]">Profile Wali</h2>
+
+                <div>
+                  <ul className="flex flex-col gap-3">
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Nama : </span>
+                      {data?.guardian_name ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Tanggal Lahir : </span>
+                      {data?.guardian_birth.split("|")[1]}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Tempat Lahir : </span>
+                      {data?.guardian_birth.split("|")[0]}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Nik : </span>
+                      {data?.guardian_nik ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Pendidikan : </span>
+                      {data?.guardian_education ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Pekerjaan : </span>
+                      {data?.guardian_job ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Pendapatan : </span>
+                      {data?.guardian_salary ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">
+                        Berkebutuhan Khusus :{" "}
+                      </span>
+                      {data?.guardian_special_needs ?? ""}
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <div className="shadow-lg py-5 px-6 rounded-lg w-full mt-[0.5rem]">
-                <table className="flex  gap-[1rem] mt-[0.5rem]">
-                  <tbody>
+              <div className="shadow-lg py-5 px-6 rounded-lg w-full mt-[0.5rem] overflow-x-auto">
+                <div>
+                  <ul className="flex flex-col gap-3">
                     {achievement.map((item, index) => {
                       return (
-                        <tr
+                        <ul
                           className="text-left flex flex-col gap-1 mb-[1rem]"
                           key={index}
                         >
-                          <td className="font-semibold">
+                          <li className="font-semibold">
                             Prestasi {achievement.length <= 1 ? "" : index + 1}
-                          </td>
+                          </li>
 
-                          <td className="grid grid-cols-2 gap-4 w-[25rem] ">
+                          <li className="flex gap-2">
                             <span className="">Nama Prestasi </span>
                             <span className="text-left whitespace-nowrap ">
                               : {item.achievement_name ?? "-"}
                             </span>
-                          </td>
-                          <td className="grid grid-cols-2 gap-4 w-[25rem] ">
+                          </li>
+                          <li className="flex gap-2">
                             <span className="">Jenis Prestasi </span>
                             <span className="text-left whitespace-nowrap ">
                               : {item.type ?? "-"}
                             </span>
-                          </td>
-                          <td className="grid grid-cols-2 gap-4 w-[25rem] ">
+                          </li>
+                          <li className="flex gap-2">
                             <span className="">Tingkat </span>
                             <span className="text-left whitespace-nowrap ">
                               : {item.level ?? "-"}
                             </span>
-                          </td>
-                          <td className="grid grid-cols-2 gap-4 w-[25rem] ">
+                          </li>
+                          <li className="flex gap-2">
                             <span className="">Tahun </span>
                             <span className="text-left whitespace-nowrap ">
                               : {item.year ?? "-"}
                             </span>
-                          </td>
-                          <td className="grid grid-cols-2 gap-4 w-[25rem] ">
+                          </li>
+                          <li className="grid grid-cols-2 gap-4 w-[25rem] ">
                             <span className="">Penyelenggara </span>
                             <span className="text-left whitespace-nowrap ">
                               : {item.organizer_by ?? "-"}
                             </span>
-                          </td>
-                        </tr>
+                          </li>
+                        </ul>
                       );
                     })}
-                  </tbody>
-                </table>
+                  </ul>
+                </div>
               </div>
-              <div className="shadow-lg py-5 px-6 rounded-lg w-full mt-[0.5rem]">
-                <table className="flex  gap-[1rem] mt-[0.5rem]">
-                  <tbody>
-                    {scholarship.map((item, index) => {
+
+              <div className="shadow-lg py-5 px-6 rounded-lg w-full mt-[0.5rem] overflow-x-auto">
+                <div>
+                  {scholarship.map((item, index) => {
+                    return (
+                      <ul className="flex flex-col gap-3 mb-[1rem]" key={index}>
+                        <li className="font-semibold">
+                          Beasiswa {scholarship.length <= 1 ? "" : index + 1}
+                        </li>
+                        <li className="flex gap-2">
+                          <span className="">Jenis Beasiswa </span>
+                          <span className="text-left whitespace-nowrap ">
+                            : {item.type ?? "-"}
+                          </span>
+                        </li>
+                        <li className="flex gap-2">
+                          <span className="">Mulai Tahun </span>
+                          <span className="text-left whitespace-nowrap ">
+                            : {item.year_start_at ?? "-"}
+                          </span>
+                        </li>
+                        <li className="flex gap-2">
+                          <span className="">Selesai 2</span>
+                          <span className="text-left whitespace-nowrap ">
+                            : {item.year_finish_at ?? "-"}
+                          </span>
+                        </li>
+                        <li className="flex gap-2">
+                          <span className="">Keterangan </span>
+                          <span className="text-left whitespace-nowrap ">
+                            : {item.descriptions ?? "-"}
+                          </span>
+                        </li>
+                      </ul>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="shadow-lg py-5 px-6 rounded-lg w-full mt-[0.5rem] overflow-x-auto">
+                <h2 className="font-semibold mb-[1rem]">Registrasi</h2>
+
+                <div>
+                  <ul className="flex flex-col gap-3">
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]">Jenis Pendaftaran : </span>
+                      {data?.type_registration ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]"> Asal Sekolah : </span>
+                      {data?.from_school ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]"> No. Peserta Ujian : </span>
+                      {data?.no_examinee ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]"> No. Seri Ijazah : </span>
+                      {data?.no_serial_diploma ?? ""}
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-[1rem]"> No. Seri SKHUS : </span>
+                      {data?.no_serial_skhus ?? ""}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div className="shadow-lg py-5 px-6 rounded-lg w-full mt-[0.5rem] overflow-x-auto">
+                <div>
+                  <ul className="flex flex-col gap-3 mb-[1rem]">
+                    <li className="font-semibold">Pilihan Kompetensi </li>
+                    {data?.class_pick.split("|").map((item, index) => {
                       return (
-                        <tr
-                          className="text-left flex flex-col gap-1 mb-[1rem]"
-                          key={index}
-                        >
-                          <td className="font-semibold">
-                            Beasiswa {scholarship.length <= 1 ? "" : index + 1}
-                          </td>
-
-                          <td className="grid grid-cols-2 gap-4 w-[25rem] ">
-                            <span className="">Jenis Beasiswa </span>
-                            <span className="text-left whitespace-nowrap ">
-                              : {item.type ?? "-"}
-                            </span>
-                          </td>
-                          <td className="grid grid-cols-2 gap-4 w-[25rem] ">
-                            <span className="">Mulai Tahun </span>
-                            <span className="text-left whitespace-nowrap ">
-                              : {item.year_start_at ?? "-"}
-                            </span>
-                          </td>
-                          <td className="grid grid-cols-2 gap-4 w-[25rem] ">
-                            <span className="">Selesai 2</span>
-                            <span className="text-left whitespace-nowrap ">
-                              : {item.year_finish_at ?? "-"}
-                            </span>
-                          </td>
-                          <td className="grid grid-cols-2 gap-4 w-[25rem] ">
-                            <span className="">Keterangan </span>
-                            <span className="text-left whitespace-nowrap ">
-                              : {item.descriptions ?? "-"}
-                            </span>
-                          </td>
-                        </tr>
+                        <li className="flex gap-2" key={index}>
+                          <span className="">Pilihan {index + 1} </span>
+                          <span className="text-left whitespace-nowrap ">
+                            : {item ?? "-"}
+                          </span>
+                        </li>
                       );
                     })}
-                  </tbody>
-                </table>
+                  </ul>
+                </div>
               </div>
-              <div className="shadow-lg py-5 px-6 rounded-lg w-full mt-[0.5rem]">
-                <h2 className="font-semibold">Registrasi</h2>
-                <table className="flex  gap-[1rem] mt-[0.5rem]">
-                  <thead>
-                    <tr className="flex flex-col text-left text-slate-500 gap-1">
-                      <th className="font-normal  whitespace-nowrap">
-                        Jenis Pendaftaran
-                      </th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Asal Sekolah
-                      </th>
-                      <th className="font-normal  whitespace-nowrap">
-                        No. Peserta Ujian
-                      </th>
-                      <th className="font-normal  whitespace-nowrap">
-                        No. Seri Ijazah
-                      </th>
-                      <th className="font-normal  whitespace-nowrap">
-                        No. Seri SKHUS
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="flex flex-col gap-1 text-slate-800">
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.type_registration ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.from_school ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.no_examinee ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.no_serial_diploma ?? ""}
-                      </td>
-                      <td className="font-normal  whitespace-nowrap">
-                        {data?.no_serial_skhus ?? ""}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div className="shadow-lg py-5 px-6 rounded-lg w-full mt-[0.5rem]">
-                <h2 className="font-semibold">Pilihan Kompetensi</h2>
-                <table className="flex  gap-[1rem] mt-[0.5rem]">
-                  <thead>
-                    <tr className="flex flex-col text-left text-slate-500 gap-1">
-                      <th className="font-normal  whitespace-nowrap">
-                        Pilihan 1
-                      </th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Pilihan 2
-                      </th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Pilihan 3
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="flex flex-col gap-1 text-slate-800">
-                      {data?.class_pick &&
-                        data.class_pick.split("|").map((item, index) => {
-                          return (
-                            <td
-                              className="font-normal whitespace-nowrap"
-                              key={index}
-                            >
-                              {item}
-                            </td>
-                          );
-                        })}
-                    </tr>
-                  </tbody>
-                </table>
-                <h2 className="font-semibold mt-[1.5rem]">
-                  Pilihan Ekstrakurikuler
-                </h2>
 
-                <table className="flex  gap-[1rem] mt-[0.5rem]">
-                  <thead>
-                    <tr className="flex flex-col text-left text-slate-500 gap-1">
-                      <th className="font-normal  whitespace-nowrap">
-                        Pilihan 1
-                      </th>
-                      <th className="font-normal  whitespace-nowrap">
-                        Pilihan 2
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="flex flex-col gap-1 text-slate-800">
-                      {data?.extracurricular &&
-                        data.extracurricular.split("|").map((item, index) => {
-                          return (
-                            <td
-                              className="font-normal whitespace-nowrap"
-                              key={index}
-                            >
-                              {item}
-                            </td>
-                          );
-                        })}
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
               <div className="shadow-lg py-5 px-6 rounded-lg w-full mt-[0.5rem]">
-                <h2 className="font-semibold">Pilihan Kompetensi</h2>
+                <h2 className="font-semibold">Baju </h2>
                 <table className="flex  gap-[1rem] mt-[0.5rem]">
                   <thead>
                     <tr className="flex flex-col text-left text-slate-500 gap-1">

@@ -70,7 +70,7 @@ const PPDB = () => {
     setStatusVerified(!statusVerified);
     setIsLoading(true);
 
-    const registration = { status_registration: "Sudah Terveritifikasi" };
+    const registration = { status_registration: "Sudah Diterima" };
 
     const result = await FecthData(
       `${APIBASEURL}/${user}/registration/update/${id}`,
@@ -79,7 +79,7 @@ const PPDB = () => {
 
     setTimeout(() => {
       if (result.status) {
-        notify("Terveritifikasi", "success");
+        notify("Siswa Diterima", "success");
       }
 
       setIsLoading(false);
@@ -238,12 +238,10 @@ const PPDB = () => {
                     <option value="Belum Melakukan Pembayaran">
                       Belum Bayar
                     </option>
-                    <option value="Belum Terveritifikasi">
-                      Belum Terveritifikasi
-                    </option>
                     <option value="Belum Mengisi Formulir">
                       Belum Mengisi Formulir
                     </option>
+                    <option value="Belum Diterima">Belum Diterima</option>
                   </select>
                 </div>
               </div>
@@ -331,14 +329,8 @@ const PPDB = () => {
                               status == "Belum Mengisi Formulir" &&
                               "text-yellow-500"
                             }
-                            ${
-                              status == "Belum Terveritifikasi" &&
-                              "text-red-500"
-                            }
-                            ${
-                              status == "Sudah Terveritifikasi" &&
-                              "text-green-500"
-                            }
+                            ${status == "Belum Diterima" && "text-red-500"}
+                            ${status == "Sudah Diterima" && "text-green-500"}
                             `}
                               >
                                 {status}
@@ -346,8 +338,8 @@ const PPDB = () => {
                             </td>
                             <td className="p-2 whitespace-nowrap">
                               <div className="text-center font-medium flex items-center justify-center gap-2">
-                                {status == "Belum Terveritifikasi" ||
-                                status == "Sudah Terveritifikasi" ? (
+                                {status == "Belum Diterima" ||
+                                status == "Sudah Diterima" ? (
                                   <button
                                     className="bg-orange-500 text-lg p-1 rounded-xl text-white"
                                     onClick={() => {
@@ -370,8 +362,8 @@ const PPDB = () => {
                                   </Button>
                                 )}
 
-                                {status == "Belum Terveritifikasi" ||
-                                status == "Sudah Terveritifikasi" ? (
+                                {status == "Belum Diterima" ||
+                                status == "Sudah Diterima" ? (
                                   <button
                                     className="bg-blue-500 p-1 rounded-xl text-lg text-white"
                                     onClick={() =>
@@ -384,10 +376,10 @@ const PPDB = () => {
                                   ""
                                 )}
 
-                                {status == "Belum Terveritifikasi" && (
+                                {status == "Belum Diterima" && (
                                   <button
                                     className={`${
-                                      status == "Belum Terveritifikasi"
+                                      status == "Belum Diterima"
                                         ? "bg-green-500"
                                         : "bg-red-500"
                                     } p-1 text-lg rounded-xl text-white`}
@@ -395,11 +387,7 @@ const PPDB = () => {
                                       handleVerified(e, id, status);
                                     }}
                                   >
-                                    {status === "Belum Terveritifikasi" ? (
-                                      <FiCheck />
-                                    ) : (
-                                      <IoClose />
-                                    )}
+                                    {status === "Belum Diterima" && <FiCheck />}
                                   </button>
                                 )}
                               </div>

@@ -35,6 +35,7 @@ import { getUserIsLogin, notify } from "../../../utils/Utils";
 import { json, useNavigate } from "react-router-dom";
 import { IoMdTrash } from "react-icons/io";
 import { Toaster } from "react-hot-toast";
+import TabsComponent from "../../../components/TabsComponent";
 
 const scholarshipInterface = {
   type_scholarship: "",
@@ -65,8 +66,6 @@ const AddRegister = () => {
     foto_kks: "",
     foto_kps: "",
   });
-  const [defaultFileList, setDefaultFileList] = useState([]);
-  const [progress, setProgress] = useState(0);
 
   const {
     register,
@@ -75,6 +74,7 @@ const AddRegister = () => {
     formState: { errors },
   } = useForm();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [currentTab, setCurrentTab] = useState(1);
   const [index, setIndex] = useState(1);
   const [totalForm, setTotalForm] = useState(8);
   const navigate = useNavigate();
@@ -86,7 +86,6 @@ const AddRegister = () => {
       bujur,
       city,
       date,
-      dusun,
       kecamatan,
       kelurahan,
       kodepos,
@@ -119,7 +118,7 @@ const AddRegister = () => {
     } = data;
 
     data.birth = `${date}|${city}`;
-    data.address = `${alamat}|${rt}|${rw}|${dusun}|${kelurahan}|${kecamatan}|${kodepos}|${lintang}|${bujur}`;
+    data.address = `${alamat}|${rt}|${rw}|${kelurahan}|${kecamatan}|${kodepos}|${lintang}|${bujur}`;
     // KKS
     data.kks = `${no_kks == "" ? "-" : no_kks}|${
       imagesUpload.foto_kks == "" ? "-" : imagesUpload.foto_kks
@@ -152,7 +151,6 @@ const AddRegister = () => {
     delete data.date;
     delete data.rt;
     delete data.rw;
-    delete data.dusun;
     delete data.kecamatan;
     delete data.kelurahan;
     delete data.kodepos;
@@ -192,28 +190,25 @@ const AddRegister = () => {
       notify("Berhasil Membuat Formulir", "success");
       setTimeout(() => {
         navigate("/dashboard/ppdb");
-      }, 1200);
+      }, 500);
     }
   };
 
   const handleUpload = async (file, field) => {
+    const token = JSON.parse(localStorage.getItem("usr")).acctkn;
     // Upload Image
     const myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-      "Bearer " + JSON.parse(localStorage.getItem("usr")).acctkn
-    );
+    myHeaders.append("Authorization", "Bearer " + token);
 
     const formdata = new FormData();
     formdata.append("image", file, file.name);
 
     const requestOptions = {
       method: "POST",
+      headers: myHeaders,
       body: formdata,
-      header: myHeaders,
       redirect: "follow",
     };
-
     fetch(`${APIBASEURL}/student/registration/upload`, requestOptions)
       .then((response) => response.json())
       .then((result) =>
@@ -222,6 +217,7 @@ const AddRegister = () => {
       .catch((error) => console.log("error", error));
   };
 
+  // console.log(formdata);
   const handleFormChange = (event, index, type) => {
     let data = [];
 
@@ -283,6 +279,10 @@ const AddRegister = () => {
     }
   }, [errors]);
 
+  useEffect(() => {
+    console.log(imagesUpload);
+  });
+
   if (isLoading) {
     return (
       <div className="fixed left-0 top-0 h-[100%] w-full bg-white flex items-center flex-col justify-center z-[99] ">
@@ -309,7 +309,7 @@ const AddRegister = () => {
           <div className="px-4 sm:px-6 py-8 w-full max-w-9xl mx-auto ">
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="shadow-lg px-6 rounded-xl py-8 "
+              className="shadow-lg px-6 rounded-xl py-8  max-w-[800px] mx-auto overflow-x-hidden"
             >
               <button
                 className="px-4 py-2 text-white bg-primary rounded-lg flex items-center gap-2 text-[0.8rem] mb-[2rem]"
@@ -323,10 +323,13 @@ const AddRegister = () => {
                 Formulir Pendaftaran
               </h2>
 
-              <ProgressBarComponent index={index} pages={totalForm} />
+              <TabsComponent
+                currentTab={currentTab}
+                setCurrentTab={setCurrentTab}
+              />
               <div
-                className={`wrapper-form-group mt-[4rem]  ${
-                  index == 1 ? "active-form" : "non-active-form"
+                className={`wrapper-form-group mt-[2rem]  ${
+                  currentTab == 1 ? "active-form" : "non-active-form"
                 } `}
               >
                 <div className="form-group">
@@ -572,9 +575,12 @@ const AddRegister = () => {
               </div>
               <div
                 className={`wrapper-form-group mt-[4rem]  ${
-                  index == 2 ? "active-form" : "non-active-form"
+                  currentTab == 2 ? "active-form" : "non-active-form"
                 } `}
               >
+                <h2 className="mt-[2rem] mb-[1.5rem] font-semibold border-b-2 border-slate-300 w-max  text-[1.5rem]">
+                  Data Ayah
+                </h2>
                 <div className="form-group">
                   <Input
                     type="text"
@@ -637,12 +643,10 @@ const AddRegister = () => {
                     data={specialNeeds}
                   />
                 </div>
-              </div>
-              <div
-                className={`wrapper-form-group mt-[4rem]  ${
-                  index == 3 ? "active-form" : "non-active-form"
-                } `}
-              >
+
+                <h2 className="mt-[2rem] mb-[1.5rem] font-semibold border-b-2 border-slate-300 w-max  text-[1.5rem]">
+                  Data Ibu
+                </h2>
                 <div className="form-group">
                   <Input
                     type="text"
@@ -705,12 +709,9 @@ const AddRegister = () => {
                     data={specialNeeds}
                   />
                 </div>
-              </div>
-              <div
-                className={`wrapper-form-group mt-[4rem]  ${
-                  index == 4 ? "active-form" : "non-active-form"
-                } `}
-              >
+                <h2 className="mt-[2rem] mb-[1.5rem] font-semibold border-b-2 border-slate-300 w-max  text-[1.5rem]">
+                  Data Wali
+                </h2>
                 <div className="form-group">
                   <Input
                     type="text"
@@ -777,7 +778,7 @@ const AddRegister = () => {
 
               <div
                 className={`wrapper-form-group mt-[4rem]  ${
-                  index == 5 ? "active-form" : "non-active-form"
+                  currentTab == 3 ? "active-form" : "non-active-form"
                 } `}
               >
                 {scholarships.map((input, index) => {
@@ -893,7 +894,7 @@ const AddRegister = () => {
               </div>
               <div
                 className={`wrapper-form-group mt-[4rem]  ${
-                  index == 6 ? "active-form" : "non-active-form"
+                  currentTab == 4 ? "active-form" : "non-active-form"
                 } `}
               >
                 {achievements.map((input, index) => {
@@ -1023,7 +1024,7 @@ const AddRegister = () => {
 
               <div
                 className={`wrapper-form-group mt-[4rem]  ${
-                  index == 7 ? "active-form" : "non-active-form"
+                  currentTab == 5 ? "active-form" : "non-active-form"
                 } `}
               >
                 <div className="form-group">
@@ -1126,7 +1127,7 @@ const AddRegister = () => {
               </div>
               <div
                 className={`wrapper-form-group mt-[4rem]  ${
-                  index == 8 ? "active-form" : "non-active-form"
+                  currentTab == 6 ? "active-form" : "non-active-form"
                 } `}
               >
                 <div className="flex flex-wrap gap-8">
@@ -1196,21 +1197,20 @@ const AddRegister = () => {
               </div>
 
               <div className="flex items-center justify-end gap-2 mt-[1.5rem]">
-                {index > 1 && (
+                {currentTab > 1 && (
                   <button
                     className="px-4 py-2 text-white bg-primary rounded-lg flex items-center gap-2 text-[0.8rem]"
-                    onClick={() => setIndex(index - 1)}
-                    disabled={index < 2 ? true : false}
+                    onClick={() => setCurrentTab((prev) => prev - 1)}
                     type="button"
                   >
                     <IoChevronBackCircleSharp className="text-[1rem]" />
                     Back
                   </button>
                 )}
-                {index < totalForm && (
+                {currentTab < 6 && (
                   <button
                     className={`px-4 py-2 text-white bg-primary rounded-lg flex items-center gap-2 text-[0.8rem]`}
-                    onClick={() => setIndex(index + 1)}
+                    onClick={() => setCurrentTab((prev) => prev + 1)}
                     type="button"
                   >
                     Next

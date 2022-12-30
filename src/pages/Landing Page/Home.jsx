@@ -1,7 +1,8 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper";
-import ReactPlayer from "react-player";
+
+import CardBlog from "../../components/card-blog/CardBlog";
 
 import HeaderLandingPage from "../../partials/HeaderLandingPage";
 
@@ -12,102 +13,20 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 // Images
-import image1 from "../../images/home/image1.png";
 import image2 from "../../images/home/image2.png";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { Link } from "react-router-dom";
+import Footer from "../../partials/landing page/footer";
+import { FaBookReader, FaChalkboardTeacher } from "react-icons/fa";
+import { MdOutlineGroups } from "react-icons/md";
+import { AiOutlineGroup } from "react-icons/ai";
 
 const Home = () => {
   return (
     <>
       <HeaderLandingPage />
       <main>
-        {/* <section className="h-[34rem] relative  ">
-          <Swiper
-            spaceBetween={0}
-            // autoplay={{
-            //   delay: 2500,
-            //   disableOnInteraction: false,
-            // }}
-            navigation={false}
-            modules={[Autoplay, Pagination, Navigation]}
-          >
-            <SwiperSlide>
-              <div
-                className={`w-full h-full flex items-center`}
-                style={{
-                  background: `url(${bg1})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              >
-                <div className="w-[44rem] text-left px-16 flex flex-col gap-3">
-                  <h2 className="text-[1rem] text-white">
-                    SMK Karya Guna Bhakti 2 Kota Bekasi
-                  </h2>
-                  <h2 className="text-white font-bold text-[3rem] leading-[1.1]">
-                    Best Vocational School in Bekasi
-                  </h2>
-                  <p className="text-white">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Consequatur harum, totam voluptatem a nisi eum in repellat
-                    ratione nemo quos!
-                  </p>
-                </div>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div
-                className={`w-full h-full flex items-center`}
-                style={{
-                  background: `url(${bg2})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              >
-                <div className="w-[50rem] text-left px-16 flex flex-col gap-3">
-                  <h2 className="text-[1rem] text-white">
-                    SMK Karya Guna Bhakti 2 Kota Bekasi
-                  </h2>
-                  <h2 className="text-white font-bold text-[3rem] leading-[1.1]">
-                    Best Vocational School in Bekasi
-                  </h2>
-                  <p className="text-white">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Consequatur harum, totam voluptatem a nisi eum in repellat
-                    ratione nemo quos!
-                  </p>
-                </div>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div
-                className={`w-full h-full flex items-center`}
-                style={{
-                  background: `url(${bg3})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              >
-                <div className="w-[50rem] text-left px-16 flex flex-col gap-3">
-                  <h2 className="text-[1rem] text-white">
-                    SMK Karya Guna Bhakti 2 Kota Bekasi
-                  </h2>
-                  <h2 className="text-white font-bold text-[3rem] leading-[1.1]">
-                    Best Vocational School in Bekasi
-                  </h2>
-                  <p className="text-white">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Consequatur harum, totam voluptatem a nisi eum in repellat
-                    ratione nemo quos!
-                  </p>
-                </div>
-              </div>
-            </SwiperSlide>
-          </Swiper>
-        </section> */}
-
-        <section className="relative lg:h-[40rem] h-[55rem] bg-gradient-to-r from-[#2E328B] to-[#4357A0] lg:pt-[10rem] py-[5rem] lg:mb-[18rem] mb-[30rem]">
+        <section className="relative lg:h-[40rem]  bg-gradient-to-r from-[#2E328B] to-[#4357A0] lg:pt-[10rem] py-[5rem] lg:mb-[18rem] mb-[4rem]">
           <div className="container mx-auto grid lg:grid-cols-2 grid-cols-1">
             <div className="h-full text-white lg:text-left text-center">
               <h2 className="font-semibold text-[1rem]">
@@ -167,7 +86,11 @@ const Home = () => {
                   Bidang Keahlian Teknik Informatika dan Komunikasi
                 </p>
               </div>
-              <div className="lg:w-[15rem] ">
+              <div
+                className="lg:w-[15rem] relative xl:before:visible before:invisible before:absolute before:top-0 before:left-[-4.5rem] before:h-full before:w-[1px] before:bg-slate-200
+              xl:after:visible after:invisible after:absolute after:top-0 after:right-[-4rem] after:h-full after:w-[1px] after:bg-slate-200
+              "
+              >
                 <h2 className="bg-[#2E328B] bg-opacity-[40%] w-max px-3 text-white font-medium py-1 rounded-full mb-[0.5rem] text-[12px]">
                   AKL
                 </h2>
@@ -201,11 +124,11 @@ const Home = () => {
               <img
                 src={image2}
                 alt=""
-                className="lg:w-[420.31px] w-[40rem] mx-auto w-full lg:mb-0 mb-[3rem]"
+                className="lg:w-[420.31px]  mx-auto w-full lg:mb-0 mb-[3rem]"
               />
             </div>
             <div className="flex flex-col justify-center">
-              <h2 className="font-bold text-[2rem] mb-[1.8rem]">
+              <h2 className="text-[2rem] font-bold  mb-[1.8rem]">
                 Kenapa Harus SMK Karya Guna Bhakti 2 Bekasi ?
               </h2>
 
@@ -232,13 +155,65 @@ const Home = () => {
         </section>
 
         <section>
-          <div className="container  mt-[10rem]">
+          <div className="container  my-[10rem]">
+            <div className="relative bg-secondary flex items-center flex-wrap justify-center gap-[1.5rem] text-white rounded-[2rem] py-[3rem] px-[2rem] overflow-hidden">
+              <div className="w-[12rem] text-center  flex flex-col items-center gap-2 md:h-[13rem]  md:mb-0 mb-[1rem] justify-evenly">
+                <FaBookReader className="text-[3rem]" />
+                <div className="md:h-[6rem]">
+                  <h2 className="font-semibold text-[1.5rem]">3</h2>
+                  <p>Kejuruan</p>
+                </div>
+              </div>
+              <div className="w-[12rem] text-center  flex items-center flex-col gap-2 md:h-[13rem]  md:mb-0 mb-[1rem] justify-evenly">
+                <MdOutlineGroups className="text-[3rem]" />
+                <div className="md:h-[6rem]">
+                  <h2 className="font-semibold text-[1.5rem]">1500</h2>
+                  <p>Siswa Karya Guna Bhakti 2 Bekasi</p>
+                </div>
+              </div>
+              <div className="w-[12rem] text-center  flex items-center flex-col gap-2 md:h-[13rem]  md:mb-0 mb-[1rem] justify-evenly">
+                <FaChalkboardTeacher className="text-[3rem]" />
+                <div className="md:h-[6rem]">
+                  <h2 className="font-semibold text-[1.5rem]">60+</h2>
+                  <p>Guru Berkompetensi Pada Tiap Bidangnya</p>
+                </div>
+              </div>
+              <div className="w-[12rem] text-center  flex items-center flex-col gap-2 md:h-[13rem]  md:mb-0 mb-[1rem] justify-evenly">
+                <AiOutlineGroup className="text-[3rem]" />
+                <div className="md:h-[6rem]">
+                  <h2 className="font-semibold text-[1.5rem]">30+</h2>
+                  <p>Ruang Kelas</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section>
+          <div className="container mt-[7rem]">
+            <div className="text-center mb-[3rem]">
+              <h2 className="text-[2rem] font-semibold">Artikel</h2>
+              <p>Seluruh informasi mengenai SMK Karya Guna Bhakti 2 Bekasi</p>
+            </div>
+
+            <CardBlog />
+
+            <Link
+              to=""
+              className="block text-center mt-[2.5rem] transition-colors font-semibold hover:text-third"
+            >
+              Lihat Banyak Artikel...
+            </Link>
+          </div>
+        </section>
+
+        <section>
+          <div className="container  mt-[5rem]">
             <div className="relative bg-secondary flex items-centera justify-center text-white rounded-[2rem] h-[403px] overflow-hidden">
               <svg
                 viewBox="0 0 251 281"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="absolute bottom-0 left-0 w-[15rem]"
+                className="absolute sm:bottom-0 sm:left-0 bottom-[-2rem] left-[-2rem] lg:w-[15rem] md:w-[10rem] w-[8rem]"
               >
                 <rect
                   x="-47.0303"
@@ -299,7 +274,7 @@ const Home = () => {
                 viewBox="0 0 283 331"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="absolute top-0 right-0 w-[15rem]"
+                className="absolute sm:top-0 sm:right-0 top-[-2rem] right-[-1.5rem] lg:w-[15rem] md:w-[10rem] w-[8rem]"
               >
                 <rect
                   x="77.9697"
@@ -357,11 +332,11 @@ const Home = () => {
                 </defs>
               </svg>
 
-              <div className="flex flex-col items-center justify-center gap-5 z-[9]">
-                <h2 className="text-[2rem] w-[25rem] text-center font-semibold">
+              <div className="flex flex-col items-center justify-center gap-5 z-[9] px-[1.5rem]">
+                <h2 className="md:text-[2rem] text-[1.2rem] md:w-[25rem] text-center font-semibold">
                   Ayo, Daftar dari Sekarang. Untuk Masa Depan yang Lebih Baik.
                 </h2>
-                <p className="w-[25rem] text-center">
+                <p className="md:w-[25rem] sm:w-[20rem] md:text-[1rem] text-[0.8rem] text-center">
                   Dengan berbagai pilihan program di bidang Coding, Data
                   Science, Digital Marketing, dan UI/UX.
                 </p>
@@ -369,13 +344,15 @@ const Home = () => {
                   to="/register"
                   className="px-4 py-2 text-white bg-third rounded-lg flex items-center gap-2 text-[0.8rem] justify-center"
                 >
-                  Daftar
+                  Daftar Sekarang
                 </Link>
               </div>
             </div>
           </div>
         </section>
       </main>
+
+      <Footer />
     </>
   );
 };

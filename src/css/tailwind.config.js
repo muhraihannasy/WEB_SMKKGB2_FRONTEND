@@ -6,9 +6,11 @@ module.exports = {
     extend: {
       colors: {
         primary: "#1e293b",
-        secondary: "#23408e",
+        secondary: "#28428C",
         third: "#fcc425",
         fourty: "#74BAA9",
+        fifty: "#34364a",
+        sixty: "#999aa4",
         // secondary: "",
       },
       boxShadow: {

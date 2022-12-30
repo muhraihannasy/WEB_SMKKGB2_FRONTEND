@@ -17,16 +17,6 @@ const PPDBStudent = () => {
   const [isNotHaveForm, setIsNotHaveForm] = useState(false);
   const navigate = useNavigate();
 
-  const defaultData = {
-    id: "",
-    student_id: "belum ada",
-    photo: "",
-    from_school: "belum ada",
-    fullname: "belum ada",
-    type_registration: "belum ada",
-    status: 2,
-  };
-
   useEffect(() => {
     const getRegistration = async () => {
       const request = await fetch(
@@ -86,8 +76,8 @@ const PPDBStudent = () => {
                   Kode Pembayaran Anda
                 </h2>
                 <p className="mt-[0.4rem] text-center">
-                  Selesaikan Pembayaran di Gedung A atau Gedung B Untuk Mengisi
-                  Form.
+                  Tunjukan Kode ini di Bagian TU Gedung A atau Gedung B Untuk
+                  Mengisi Form.
                 </p>
               </div>
             </div>
@@ -198,12 +188,9 @@ const PPDBStudent = () => {
                               data.status == "Belum Mengisi Formulir" &&
                               "text-yellow-500"
                             }
+                            ${data.status == "Belum Diterima" && "text-red-500"}
                             ${
-                              data.status == "Belum Terveritifikasi" &&
-                              "text-red-500"
-                            }
-                            ${
-                              data.status == "Sudah Terveritifikasi" &&
+                              data.status == "Sudah Diterima" &&
                               "text-green-500"
                             }
                             `}
@@ -213,8 +200,8 @@ const PPDBStudent = () => {
                       </td>
                       <td className="p-2 whitespace-nowrap">
                         <div className="text-center font-medium flex items-center justify-center gap-2">
-                          {data.status == "Belum Terveritifikasi" ||
-                          data.status == "Sudah Terveritifikasi" ? (
+                          {data.status == "Belum Diterima" ||
+                          data.status == "Sudah Diterima" ? (
                             <button
                               className="bg-blue-500 p-1 rounded-xl text-lg text-white"
                               onClick={() =>

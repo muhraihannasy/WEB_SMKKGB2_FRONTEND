@@ -16,10 +16,10 @@
 * {
   font-family: "Poppins", sans-serif;
 }
-/* 
+
 body {
-  height: 1000rem;
-} */
+  /* height: 1000rem; */
+}
 
 .input-group {
   @apply flex flex-col gap-2;
@@ -90,4 +90,14 @@ body {
 
 .ant-modal-footer .ant-btn:nth-child(2) {
   @apply bg-secondary text-white;
+}
+
+.register-form .form::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.register-form .form {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

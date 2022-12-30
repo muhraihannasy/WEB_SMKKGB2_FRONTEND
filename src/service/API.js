@@ -1,4 +1,4 @@
-const APIBASEURL = "http://api.smkkgb2.sch.id";
+const APIBASEURL = "https://api.smkkgb2.sch.id";
 
 const requestSetting = (type, body = null) => {
   const token =

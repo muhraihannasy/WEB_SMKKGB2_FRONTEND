@@ -5,6 +5,8 @@ import Spinner from "react-spinkit";
 import { APIBASEURL, FecthData, requestSetting } from "../../service/API";
 import { notify } from "../../utils/Utils";
 
+import Logo from "../../images/logo.png";
+
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -42,7 +44,7 @@ const Login = () => {
         return;
       }
 
-      const { access_token, user_type } = result;
+      const { access_token, user_type, menu_permission } = result;
 
       const user = {
         acctkn: access_token,
@@ -50,8 +52,9 @@ const Login = () => {
       };
 
       localStorage.setItem("usr", JSON.stringify(user));
+      localStorage.setItem("menu_permission", menu_permission);
       localStorage.setItem("logged", true);
-      navigate("/dashboard");
+      navigate("/dashboard/ppdb");
     }, 1000);
   };
 
@@ -138,13 +141,9 @@ const Login = () => {
       </div>
       <div className="h-full relative">
         <div className="absolute sm:w-max w-full top-[1rem] left-[0rem] py-3 px-6 ">
-          <div className=" bg-white py-3 px-6 shadow-lg rounded-full flex justify-center gap-[0.5rem]">
-            <img
-              src="https://smkkgb2.sch.id/media_library/images/f8a0a8e489ff3f83cd4663b1da1249a8.png"
-              alt=""
-              className="w-[1.5rem]"
-            />
-            <h2 className="font-medium">SMK Karya Guna Bhakti 2 Bekasi</h2>
+          <div className=" bg-white py-3 px-6 shadow-lg rounded-full flex items-center justify-center gap-[0.5rem]">
+            <img src={Logo} alt="" className="w-[3rem]" />
+            <h2 className="font-medium">SMK Karya Guna Bhakti 2 Kota Bekasi</h2>
           </div>
         </div>
         <img
