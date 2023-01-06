@@ -198,7 +198,7 @@ const Home = () => {
             <CardBlog />
 
             <Link
-              to=""
+              to="/artikel"
               className="block text-center mt-[2.5rem] transition-colors font-semibold hover:text-third"
             >
               Lihat Banyak Artikel...

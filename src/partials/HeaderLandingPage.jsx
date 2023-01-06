@@ -37,27 +37,14 @@ const items = [
     getItem("Akutansi & Keuangan Lembaga", "7"),
     getItem("Otomatisasi & Tata Kelola Perkatoran", "8"),
   ]),
-  getItem("Profile Sekolah", "sub3", <SettingOutlined />, [
-    getItem("Visi & Misi", "9"),
-    getItem("Tata Tertib", "10"),
-    getItem("Sarana & Prasarana", "11"),
-    getItem("Struktur Organisasi", "12"),
-    getItem("Sejarah Organisasi", "13"),
-    getItem("Wakil Kepala Sekolah", "14"),
-  ]),
+  getItem("Profile Sekolah", "9"),
   getItem("BKK", "sub4", <SettingOutlined />, [
-    getItem("Info Lowonagan BKK", "15"),
     getItem("Lowogan Pekerjaan", "16"),
     getItem("Mitra Industri", "17"),
   ]),
   getItem("Berita", "18"),
-  getItem("PPDB", "sub6", <SettingOutlined />, [
-    getItem("Alur PPDB", "19"),
-    getItem("Brosur PPDB", "20"),
-  ]),
+  getItem("PPDB", "19"),
   getItem("Lainnya", "sub7", <SettingOutlined />, [
-    getItem("Galeri", "21"),
-    getItem("PLS", "22"),
     getItem("Foto LDKS", "23"),
     getItem("Hubungi Kami", "24"),
   ]),
@@ -80,8 +67,41 @@ const HeaderLandingPage = () => {
       case 2:
         navigate("/login");
         break;
+      case 3:
+        navigate("/direktori_alumni");
+        break;
+      case 4:
+        navigate("/direktori_guru");
+        break;
+      case 5:
+        navigate("/direktori_siswa");
+        break;
+      case 6:
+        navigate("/tkj");
+        break;
+      case 7:
+        navigate("/akl");
+        break;
+      case 8:
+        navigate("/oktp");
+        break;
       case 9:
-        navigate("/visi&misi");
+        navigate("/profile_sekolah");
+        break;
+      case 23:
+        window.location.href = "http://foto.smkkgb2.sch.id/";
+        break;
+      case 16:
+        navigate("/lowongan");
+        break;
+      case 17:
+        navigate("/mitra");
+        break;
+      case 19:
+        navigate("/ppdb");
+        break;
+      case 24:
+        navigate("/hubungi_kami");
         break;
       default:
         break;
@@ -187,13 +207,15 @@ const HeaderLandingPage = () => {
                     <Link> Pendaftaran Alumni</Link>
                   </Menu.Item>
                   <Menu.Item key="1">
-                    <Link>Direktori Alumni</Link>
+                    <Link to="/direktori_alumni">Direktori Alumni</Link>
                   </Menu.Item>
                   <Menu.Item key="2">
-                    <Link>Direktori Guru & Tenaga Kependidikan</Link>
+                    <Link to="/direktori_guru">
+                      Direktori Guru & Tenaga Kependidikan
+                    </Link>
                   </Menu.Item>
                   <Menu.Item key="3">
-                    <Link>Direktori Peserta Didik</Link>
+                    <Link to="/direktori_siswa">Direktori Peserta Didik</Link>
                   </Menu.Item>
                 </Menu>
               }
@@ -207,18 +229,21 @@ const HeaderLandingPage = () => {
             </Dropdown>
             <span className="block bg-third translate-y-[0.4rem] w-[14rem] h-[0.1px] sm:hidden "></span>
           </li>
+
           <li className="text-primary transition-all hover:text-third sm:ml-0 ml-[3rem] cursor-pointer">
             <Dropdown
               overlay={
                 <Menu>
                   <Menu.Item key="0">
-                    <Link>Teknik Komputer & Jaringan</Link>
+                    <Link to="/tkj">Teknik Komputer & Jaringan</Link>
                   </Menu.Item>
                   <Menu.Item key="1">
-                    <Link>Akutansi & Keuangan Lembaga</Link>
+                    <Link to="/akl">Akutansi & Keuangan Lembaga</Link>
                   </Menu.Item>
                   <Menu.Item key="2">
-                    <Link>Otomatisasi & Tata Kelola Perkantoran</Link>
+                    <Link to="/oktp">
+                      Otomatisasi & Tata Kelola Perkantoran
+                    </Link>
                   </Menu.Item>
                 </Menu>
               }
@@ -227,57 +252,27 @@ const HeaderLandingPage = () => {
                 onClick={(e) => e.preventDefault()}
                 className="font-poppins flex items-center gap-2"
               >
-                jurusan <MdKeyboardArrowDown />
+                Jurusan <MdKeyboardArrowDown />
               </a>
             </Dropdown>
             <span className="block bg-third translate-y-[0.4rem] w-[14rem] h-[0.1px] sm:hidden "></span>
           </li>
-          <li className="text-primary transition-all hover:text-third sm:ml-0 ml-[3rem] cursor-pointer">
-            <Dropdown
-              overlay={
-                <Menu>
-                  <Menu.Item key="0">
-                    <Link to="visi&misi">Visi & Misi</Link>
-                  </Menu.Item>
-                  <Menu.Item key="1">
-                    <Link>Tata Tertib</Link>
-                  </Menu.Item>
-                  <Menu.Item key="2">
-                    <Link>Sarana & Prasarana</Link>
-                  </Menu.Item>
-                  <Menu.Item key="3">
-                    <Link>Struktur Organisasi</Link>
-                  </Menu.Item>
-                  <Menu.Item key="4">
-                    <Link>Sejarah SMK KGB 2</Link>
-                  </Menu.Item>
-                  <Menu.Item key="5">
-                    <Link>Wakil Kepala Sekolah</Link>
-                  </Menu.Item>
-                </Menu>
-              }
-            >
-              <a
-                onClick={(e) => e.preventDefault()}
-                className="font-poppins flex items-center gap-2 w-[8.5rem]"
-              >
-                Profil Sekolah <MdKeyboardArrowDown />
-              </a>
-            </Dropdown>
+          <li className="text-primary transition-all hover:text-third sm:ml-0 ml-[3rem]">
+            <Link className="" to="/profile_sekolah">
+              Profile Sekolah
+            </Link>
             <span className="block bg-third translate-y-[0.4rem] w-[14rem] h-[0.1px] sm:hidden "></span>
           </li>
+
           <li className="text-primary transition-all hover:text-third sm:ml-0 ml-[3rem] cursor-pointer">
             <Dropdown
               overlay={
                 <Menu>
-                  <Menu.Item key="0">
-                    <Link>Info BKK</Link>
-                  </Menu.Item>
                   <Menu.Item key="1">
-                    <Link>Lowongan Pekerjaan</Link>
+                    <Link to="/lowongan">Lowongan Pekerjaan</Link>
                   </Menu.Item>
                   <Menu.Item key="2">
-                    <Link>Mitra Industri</Link>
+                    <Link to="/mitra">Mitra Industri</Link>
                   </Menu.Item>
                 </Menu>
               }
@@ -293,47 +288,26 @@ const HeaderLandingPage = () => {
           </li>
 
           <li className="text-primary transition-all hover:text-third sm:ml-0 ml-[3rem]">
-            <Link>Berita</Link>
+            <Link to="/artikel">Artikel</Link>
+            <span className="block bg-third translate-y-[0.4rem] w-[14rem] h-[0.1px] sm:hidden "></span>
+          </li>
+          <li className="text-primary transition-all hover:text-third sm:ml-0 ml-[3rem]">
+            <Link to="/ppdb">PPDB</Link>
             <span className="block bg-third translate-y-[0.4rem] w-[14rem] h-[0.1px] sm:hidden "></span>
           </li>
           <li className="text-primary transition-all hover:text-third sm:ml-0 ml-[3rem] cursor-pointer">
             <Dropdown
               overlay={
                 <Menu>
-                  <Menu.Item key="0">
-                    <Link>Alur PPDB</Link>
-                  </Menu.Item>
-                  <Menu.Item key="1">
-                    <Link>Brosur PPDB</Link>
-                  </Menu.Item>
-                </Menu>
-              }
-            >
-              <a
-                onClick={(e) => e.preventDefault()}
-                className="font-poppins flex items-center gap-2"
-              >
-                PPDB <MdKeyboardArrowDown />
-              </a>
-            </Dropdown>
-            <span className="block bg-third translate-y-[0.4rem] w-[14rem] h-[0.1px] sm:hidden "></span>
-          </li>
-          <li className="text-primary transition-all hover:text-third sm:ml-0 ml-[3rem] cursor-pointer">
-            <Dropdown
-              overlay={
-                <Menu>
-                  <Menu.Item key="0">
+                  {/* <Menu.Item key="0">
                     <Link>Galeri</Link>
-                  </Menu.Item>
-                  <Menu.Item key="1">
-                    <Link>PLS</Link>
-                  </Menu.Item>
+                  </Menu.Item> */}
                   <Menu.Item key="2">
-                    <Link>Foto LDKS</Link>
+                    <a href="http://foto.smkkgb2.sch.id/">Foto LDKS</a>
                   </Menu.Item>
 
                   <Menu.Item key="3">
-                    <Link>Hubungi Kami</Link>
+                    <Link to="/hubungi_kami">Hubungi Kami</Link>
                   </Menu.Item>
                 </Menu>
               }

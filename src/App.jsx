@@ -37,7 +37,18 @@ import NotLogin from "./pages/notLogin";
 
 // Landing Page
 import Home from "./pages/Landing Page/Home";
-import VisiMisi from "./pages/Landing Page/Profile Sekolah/VisiMisi";
+import ProfileSekolah from "./pages/Landing Page/ProfileSekolah";
+import LowonganPekerjaan from "./pages/Landing Page/LowonganPekerjaan";
+import MitraIndustri from "./pages/Landing Page/MitraIndustri";
+import Artikel from "./pages/Landing Page/artikel/Artikel";
+import DirektoriAlumni from "./pages/Landing Page/siswa/DirektoriAlumni";
+import DirektoriSiswa from "./pages/Landing Page/siswa/DirektoriSiswa";
+import DirektoriGuru from "./pages/Landing Page/siswa/DirektoriGuru";
+import TKJ from "./pages/Landing Page/jurusan/TKJ";
+import AKL from "./pages/Landing Page/jurusan/AKL";
+import OKTP from "./pages/Landing Page/jurusan/OKTP";
+import PPDBLanding from "./pages/Landing Page/PPDB";
+import HubungiKami from "./pages/Landing Page/HubungiKami";
 
 const ProtedtedRoute = ({ user, student = "", admin = "" }) => {
   if (!JSON.parse(localStorage.getItem("logged"))) {
@@ -96,7 +107,18 @@ function App() {
       <Routes>
         {/* Landing Page */}
         <Route exact path="/" element={<Home />} />
-        <Route exact path="/visi&misi" element={<VisiMisi />} />
+        <Route exact path="/profile_sekolah" element={<ProfileSekolah />} />
+        <Route exact path="/lowongan" element={<LowonganPekerjaan />} />
+        <Route exact path="/mitra" element={<MitraIndustri />} />
+        <Route exact path="/artikel" element={<Artikel />} />
+        <Route exact path="/direktori_alumni" element={<DirektoriAlumni />} />
+        <Route exact path="/direktori_siswa" element={<DirektoriSiswa />} />
+        <Route exact path="/direktori_guru" element={<DirektoriGuru />} />
+        <Route exact path="/tkj" element={<TKJ />} />
+        <Route exact path="/akl" element={<AKL />} />
+        <Route exact path="/oktp" element={<OKTP />} />
+        <Route exact path="/ppdb" element={<PPDBLanding />} />
+        <Route exact path="/hubungi_kami" element={<HubungiKami />} />
 
         {/* Dashboard */}
         <Route
