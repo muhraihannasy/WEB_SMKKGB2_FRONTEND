@@ -49,6 +49,8 @@ import AKL from "./pages/Landing Page/jurusan/AKL";
 import OKTP from "./pages/Landing Page/jurusan/OKTP";
 import PPDBLanding from "./pages/Landing Page/PPDB";
 import HubungiKami from "./pages/Landing Page/HubungiKami";
+import AddJobs from "./pages/Dashboard/Jobs/AddJobs";
+import Jobs from "./pages/Dashboard/Jobs/Jobs";
 
 const ProtedtedRoute = ({ user, student = "", admin = "" }) => {
   if (!JSON.parse(localStorage.getItem("logged"))) {
@@ -121,6 +123,9 @@ function App() {
         <Route exact path="/hubungi_kami" element={<HubungiKami />} />
 
         {/* Dashboard */}
+        <Route exact path="/dashboard/lowongan" element={<Jobs />} />
+        <Route exact path="/dashboard/tambah_lowongan" element={<AddJobs />} />
+
         <Route
           exact
           path="/dashboard"

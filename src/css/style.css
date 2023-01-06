@@ -112,3 +112,7 @@ body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.input-style {
+  @apply focus:outline-none focus:ring-0 rounded-[4px] border-slate-300;
+}
