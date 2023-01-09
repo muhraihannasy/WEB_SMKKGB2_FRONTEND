@@ -42,7 +42,7 @@ const items = [
     getItem("Lowogan Pekerjaan", "16"),
     getItem("Mitra Industri", "17"),
   ]),
-  getItem("Berita", "18"),
+  getItem("Artikel", "18"),
   getItem("PPDB", "19"),
   getItem("Lainnya", "sub7", <SettingOutlined />, [
     getItem("Foto LDKS", "23"),
@@ -87,6 +87,9 @@ const HeaderLandingPage = () => {
         break;
       case 9:
         navigate("/profile_sekolah");
+        break;
+      case 18:
+        navigate("/artikel");
         break;
       case 23:
         window.location.href = "http://foto.smkkgb2.sch.id/";

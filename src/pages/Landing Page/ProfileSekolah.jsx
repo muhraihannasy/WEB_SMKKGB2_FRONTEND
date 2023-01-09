@@ -21,7 +21,7 @@ const ProfileSekolah = () => {
               alt=""
               className="w-[150px] mx-auto mt-[6rem] object-cover"
             />
-            <h2 className="text-center md:text-[2.5rem] text-[1.7rem] mx-auto mt-[4rem] font-semibold text-white  md:w-[25rem] max-[498px]:w-full w-[20rem]">
+            <h2 className="text-center md:text-[2.5rem] text-[1.7rem] mx-auto mt-[4rem] font-semibold text-white  md:w-[25rem] max-[498px]:w-full sm:w-[20rem]">
               Profile SMK Karya Guna Bhakti 2 Kota Bekasi
             </h2>
             <img

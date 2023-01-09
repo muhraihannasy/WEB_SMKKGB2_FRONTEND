@@ -14,7 +14,7 @@ const HubungiKami = () => {
 
       <main>
         <section>
-          <div className="container mt-[2rem]">
+          <div className="container mt-[2rem] ">
             <h2 className="text-[2rem]  font-semibold mb-[0.2rem] text-center">
               Hubungi Kami
             </h2>
@@ -55,7 +55,7 @@ const HubungiKami = () => {
               </div>
               <div className="bg-white px-8 py-8">
                 <form action="">
-                  <div className="flex gap-4 flex-wrap">
+                  <div className="flex flex-col gap-4 flex-wrap">
                     <div className="flex flex-col gap-2 w-full">
                       <label htmlFor="" className="text-[1.2rem]">
                         Nama
@@ -63,7 +63,7 @@ const HubungiKami = () => {
                       <input
                         type="text"
                         placeholder="nama kamu..."
-                        className="focus:ring-0 focus:border-slate-400 border-slate-300 rounded-md "
+                        className="focus:ring-0 focus:border-slate-400 border-slate-300 rounded-md w-full"
                       />
                     </div>
                     <div className="flex flex-col gap-2 w-full">
@@ -73,7 +73,7 @@ const HubungiKami = () => {
                       <input
                         type="email"
                         placeholder="email kamu..."
-                        className="focus:ring-0 focus:border-slate-400 border-slate-300 rounded-md"
+                        className="focus:ring-0 focus:border-slate-400 border-slate-300 rounded-md w-full"
                       />
                     </div>
                   </div>

@@ -51,6 +51,13 @@ import PPDBLanding from "./pages/Landing Page/PPDB";
 import HubungiKami from "./pages/Landing Page/HubungiKami";
 import AddJobs from "./pages/Dashboard/Jobs/AddJobs";
 import Jobs from "./pages/Dashboard/Jobs/Jobs";
+import EditJobs from "./pages/Dashboard/Jobs/EditJob";
+import JobCategories from "./pages/Dashboard/Jobs/JobCategories";
+import BlogCategories from "./pages/Dashboard/blogs/BlogCategories";
+import Blogs from "./pages/Dashboard/blogs/Blogs";
+import AddBlog from "./pages/Dashboard/blogs/AddBlog";
+import EditBlog from "./pages/Dashboard/blogs/EditBlog";
+import ArtikelDetail from "./pages/Landing Page/artikel/ArtikelDetail";
 
 const ProtedtedRoute = ({ user, student = "", admin = "" }) => {
   if (!JSON.parse(localStorage.getItem("logged"))) {
@@ -113,6 +120,7 @@ function App() {
         <Route exact path="/lowongan" element={<LowonganPekerjaan />} />
         <Route exact path="/mitra" element={<MitraIndustri />} />
         <Route exact path="/artikel" element={<Artikel />} />
+        <Route exact path="/artikel/detail/:id" element={<ArtikelDetail />} />
         <Route exact path="/direktori_alumni" element={<DirektoriAlumni />} />
         <Route exact path="/direktori_siswa" element={<DirektoriSiswa />} />
         <Route exact path="/direktori_guru" element={<DirektoriGuru />} />
@@ -121,11 +129,32 @@ function App() {
         <Route exact path="/oktp" element={<OKTP />} />
         <Route exact path="/ppdb" element={<PPDBLanding />} />
         <Route exact path="/hubungi_kami" element={<HubungiKami />} />
-
-        {/* Dashboard */}
+        {/* Dashboard Jobs */}
         <Route exact path="/dashboard/lowongan" element={<Jobs />} />
         <Route exact path="/dashboard/tambah_lowongan" element={<AddJobs />} />
-
+        <Route
+          exact
+          path="/dashboard/edit_lowongan/:id"
+          element={<EditJobs />}
+        />{" "}
+        <Route
+          exact
+          path="/dashboard/kategori_lowongan"
+          element={<JobCategories />}
+        />
+        {/* Dashboard Jobs */}
+        <Route exact path="/dashboard/artikel" element={<Blogs />} />
+        <Route exact path="/dashboard/tambah_artikel" element={<AddBlog />} />
+        <Route
+          exact
+          path="/dashboard/edit_artikel/:id"
+          element={<EditBlog />}
+        />{" "}
+        <Route
+          exact
+          path="/dashboard/kategori_artikel"
+          element={<BlogCategories />}
+        />
         <Route
           exact
           path="/dashboard"

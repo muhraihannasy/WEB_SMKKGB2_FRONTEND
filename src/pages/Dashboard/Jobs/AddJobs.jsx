@@ -1,12 +1,14 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import JoditEditor from "jodit-react";
-import Header from "../../../partials/Header";
-import Sidebar from "../../../partials/Sidebar";
+import { Link, useNavigate } from "react-router-dom";
+
 import { MdDelete, MdError } from "react-icons/md";
 import { IoIosAddCircle } from "react-icons/io";
+import { IoChevronBackCircleSharp } from "react-icons/io5";
 import Spinner from "react-spinkit";
 import { FecthData, APIBASEURL, requestSetting } from "../../../service/API";
-import { useNavigate } from "react-router-dom";
+import Header from "../../../partials/Header";
+import Sidebar from "../../../partials/Sidebar";
 
 const AddJobs = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -109,6 +111,15 @@ function Form({
       className="bg-white shadow-lg rounded-[10px] px-[2rem] py-[2rem] xl:w-[60rem] mx-auto"
       onSubmit={(e) => onSubmit(e, qualifications)}
     >
+      <Link
+        className="w-max h-[2.5rem] text-white pt-2 px-5 bg-orange-400 block rounded-[4px] mb-[30px]"
+        to="/dashboard/lowongan"
+      >
+        <div className="flex items-center gap-2">
+          <IoChevronBackCircleSharp className="text-[1.2rem]" />
+          <span>Kembali</span>
+        </div>
+      </Link>
       <h2 className="font text-[1.3rem] mb-[1.5rem]">
         Tambah Lowongan Pekerjaan
       </h2>

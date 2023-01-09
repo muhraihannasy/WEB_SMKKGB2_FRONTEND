@@ -1217,7 +1217,7 @@ const AddRegister = () => {
                     <IoChevronBackCircleSharp className="text-[1rem] rotate-[180deg]" />
                   </button>
                 )}
-                {index == totalForm && (
+                {currentTab == 6 && (
                   <button
                     className="px-4 py-2 text-white bg-primary rounded-lg text-[0.8rem]"
                     type="submit"

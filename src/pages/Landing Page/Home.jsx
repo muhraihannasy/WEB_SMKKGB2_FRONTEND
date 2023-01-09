@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper";
 
@@ -18,13 +18,49 @@ import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { Link } from "react-router-dom";
 import Footer from "../../partials/landing page/footer";
 import { FaBookReader, FaChalkboardTeacher } from "react-icons/fa";
+import Spinner from "react-spinkit";
 import { MdOutlineGroups } from "react-icons/md";
 import { AiOutlineGroup } from "react-icons/ai";
+import { APIBASEURL, FecthData, requestSetting } from "../../service/API";
 
 const Home = () => {
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function getData() {
+      const setting = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+      };
+      const req = await FecthData(`${APIBASEURL}/blogs`, setting);
+      const res = req;
+
+      setTimeout(() => {
+        if (res) {
+          setData(res);
+        }
+        setIsLoading(false);
+      }, 1000);
+    }
+
+    ((async) => getData())();
+  }, []);
   return (
     <>
       <HeaderLandingPage />
+
+      {/* Loading */}
+      {isLoading && (
+        <div className="fixed left-0 top-0 h-[100%] w-full bg-white flex items-center flex-col justify-center z-[99] ">
+          <Spinner name="line-scale-pulse-out" />
+          Loading....
+        </div>
+      )}
+
       <main>
         <section className="relative lg:h-[40rem]  bg-gradient-to-r from-[#2E328B] to-[#4357A0] lg:pt-[10rem] py-[5rem] lg:mb-[18rem] mb-[4rem]">
           <div className="container mx-auto grid lg:grid-cols-2 grid-cols-1">
@@ -188,6 +224,7 @@ const Home = () => {
             </div>
           </div>
         </section>
+
         <section>
           <div className="container mt-[7rem]">
             <div className="text-center mb-[3rem]">
@@ -195,7 +232,7 @@ const Home = () => {
               <p>Seluruh informasi mengenai SMK Karya Guna Bhakti 2 Bekasi</p>
             </div>
 
-            <CardBlog />
+            <CardBlog data={data} />
 
             <Link
               to="/artikel"
