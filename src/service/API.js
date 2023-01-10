@@ -45,6 +45,7 @@ const FecthData = async (url = "", optionsObj = null) => {
     const request = await fetch(url, optionsObj);
     if (request.status == 401) {
       localStorage.removeItem("usr");
+      console.log(request);
       window.location.href = "/login";
       return;
     }

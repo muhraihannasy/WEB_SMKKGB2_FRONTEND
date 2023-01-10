@@ -47,6 +47,76 @@ export const Input = ({
         </div>
       );
       break;
+    case "email":
+      return (
+        <div className="input-group">
+          <label htmlFor={field}>{label} </label>
+          {require ? (
+            <input
+              {...register(field, {
+                required: "Tidak Boleh Kosong",
+              })}
+              id={field}
+              type="email"
+              placeholder="..."
+              className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg   ${
+                errors[`${field}`]
+                  ? "border-red-300 focus:border-red-300"
+                  : "border-slate-300 focus:border-slate-400"
+              }`}
+            />
+          ) : (
+            <input
+              {...register(field, { require: false })}
+              id={field}
+              type="email"
+              placeholder="..."
+              className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg   ${
+                errors[`${field}`]
+                  ? "border-red-300 focus:border-red-300"
+                  : "border-slate-300 focus:border-slate-400"
+              }`}
+            />
+          )}
+          <AlertInputError field={field} errors={errors} />
+        </div>
+      );
+      break;
+    case "password":
+      return (
+        <div className="input-group">
+          <label htmlFor={field}>{label} </label>
+          {require ? (
+            <input
+              {...register(field, {
+                required: "Tidak Boleh Kosong",
+              })}
+              id={field}
+              type="password"
+              placeholder="..."
+              className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg   ${
+                errors[`${field}`]
+                  ? "border-red-300 focus:border-red-300"
+                  : "border-slate-300 focus:border-slate-400"
+              }`}
+            />
+          ) : (
+            <input
+              {...register(field, { require: false })}
+              id={field}
+              type="password"
+              placeholder="..."
+              className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg   ${
+                errors[`${field}`]
+                  ? "border-red-300 focus:border-red-300"
+                  : "border-slate-300 focus:border-slate-400"
+              }`}
+            />
+          )}
+          <AlertInputError field={field} errors={errors} />
+        </div>
+      );
+      break;
 
     case "number":
       return (

@@ -58,6 +58,7 @@ import Blogs from "./pages/Dashboard/blogs/Blogs";
 import AddBlog from "./pages/Dashboard/blogs/AddBlog";
 import EditBlog from "./pages/Dashboard/blogs/EditBlog";
 import ArtikelDetail from "./pages/Landing Page/artikel/ArtikelDetail";
+import AddRegisterStudent from "./pages/PPDB/admin/AddRegisterStudent";
 
 const ProtedtedRoute = ({ user, student = "", admin = "" }) => {
   if (!JSON.parse(localStorage.getItem("logged"))) {
@@ -164,7 +165,7 @@ function App() {
             </IsNotLogged>
           }
         />
-        {/* PPDB */}
+        {/* Dashboard PPDB Student */}
         <Route
           exact
           path="/dashboard/ppdb"
@@ -188,8 +189,21 @@ function App() {
           <Route exact path="/settings" element={<Setting />} />
         )}
         {Object.keys(getUserIsLogin()).length > 0 && (
-          <Route exact path="/admin" element={<Admin />} />
+          <Route exact path="/dashboard/admin" element={<Admin />} />
         )}
+        {/* Dashboard PPDB Student */}
+        <Route exact path="/dashboard/ppdb/student" element={<PPDBStudent />} />
+        <Route
+          exact
+          path="/dashboard/ppdb/student/add"
+          element={<AddRegister />}
+        />
+        {/* Dashboard PPDB Admin */}
+        <Route
+          exact
+          path="/dashboard/ppdb/admin/student/add"
+          element={<AddRegisterStudent />}
+        />
         {/* Auth */}
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/register" element={<Register />} />

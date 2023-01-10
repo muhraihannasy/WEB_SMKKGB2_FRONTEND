@@ -401,34 +401,39 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 <li className={`px-3 py-2 rounded-sm mb-[0.5rem] last:mb-0 `}>
                   <NavLink
                     end
-                    to="/admin"
+                    to="/dashboard/admin"
                     className={`block text-slate-200 hover:text-white truncate transition duration-150 ${
-                      pathname.includes("admin") && "hover:text-slate-200"
+                      pathname.includes("dashboard/admin") &&
+                      "hover:text-slate-200"
                     }`}
                   >
                     <div className="flex items-center">
                       <svg className="shrink-0 h-6 w-6" viewBox="0 0 24 24">
                         <path
                           className={`fill-current text-slate-600 ${
-                            pathname.includes("admin") && "text-indigo-500"
+                            pathname.includes("dashboard/admin") &&
+                            "text-indigo-500"
                           }`}
                           d="M19.714 14.7l-7.007 7.007-1.414-1.414 7.007-7.007c-.195-.4-.298-.84-.3-1.286a3 3 0 113 3 2.969 2.969 0 01-1.286-.3z"
                         />
                         <path
                           className={`fill-current text-slate-400 ${
-                            pathname.includes("admin") && "text-indigo-300"
+                            pathname.includes("dashboard/admin") &&
+                            "text-indigo-300"
                           }`}
                           d="M10.714 18.3c.4-.195.84-.298 1.286-.3a3 3 0 11-3 3c.002-.446.105-.885.3-1.286l-6.007-6.007 1.414-1.414 6.007 6.007z"
                         />
                         <path
                           className={`fill-current text-slate-600 ${
-                            pathname.includes("admin") && "text-indigo-500"
+                            pathname.includes("dashboard/admin") &&
+                            "text-indigo-500"
                           }`}
                           d="M5.7 10.714c.195.4.298.84.3 1.286a3 3 0 11-3-3c.446.002.885.105 1.286.3l7.007-7.007 1.414 1.414L5.7 10.714z"
                         />
                         <path
                           className={`fill-current text-slate-400 ${
-                            pathname.includes("admin") && "text-indigo-300"
+                            pathname.includes("dashboard/admin") &&
+                            "text-indigo-300"
                           }`}
                           d="M19.707 9.292a3.012 3.012 0 00-1.415 1.415L13.286 5.7c-.4.195-.84.298-1.286.3a3 3 0 113-3 2.969 2.969 0 01-.3 1.286l5.007 5.006z"
                         />

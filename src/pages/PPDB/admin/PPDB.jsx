@@ -16,6 +16,7 @@ import { APIBASEURL, FecthData, requestSetting } from "../../../service/API";
 import { getUserIsLogin, notify } from "../../../utils/Utils";
 import { useReactToPrint } from "react-to-print";
 import Example from "../../../components/PrintComponent";
+import { IoMdAddCircle } from "react-icons/io";
 
 const PPDB = () => {
   const [page, setPage] = useState(1);
@@ -205,6 +206,15 @@ const PPDB = () => {
             {/* Main Content */}
 
             <div className=" pb-[1rem]">
+              <Link
+                className="w-max h-[2.5rem] text-white pt-2 px-5 bg-orange-400 block rounded-[4px] mb-[30px] ml-auto mt-[2.5rem]"
+                to="/dashboard/ppdb/admin/student/add"
+              >
+                <div className="flex items-center gap-2">
+                  <span>Tambah Peserta</span>
+                  <IoMdAddCircle className="text-[1.2rem]" />
+                </div>
+              </Link>
               <div className="flex items-center sm:flex-auto flex-wrap justify-end gap-2">
                 <div className="flex border justify-between rounded-xl overflow-hidden sm:w-[18rem] w-full">
                   <input

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoAddCircleSharp, IoChevronBackCircleSharp } from "react-icons/io5";
 import Spinner from "react-spinkit";
-import { UploadOutlined } from "@ant-design/icons";
-import { Button, Upload, Progress } from "antd";
 
 // Utils
 import {
@@ -24,6 +22,7 @@ import {
   uniform,
   year,
   transport,
+  competency,
 } from "../../../utils/Data";
 
 // Component
@@ -32,7 +31,7 @@ import Header from "../../../partials/Header";
 import Sidebar from "../../../partials/Sidebar";
 import { APIBASEURL, FecthData, requestSetting } from "../../../service/API";
 import { getUserIsLogin, notify } from "../../../utils/Utils";
-import { json, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoMdTrash } from "react-icons/io";
 import { Toaster } from "react-hot-toast";
 import TabsComponent from "../../../components/TabsComponent";
@@ -51,7 +50,7 @@ const achievementInterface = {
   organinizer_achievement: "",
 };
 
-const AddRegister = () => {
+const AddRegisterStudent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [scholarships, setScholarships] = useState([
     { ...scholarshipInterface },
@@ -311,14 +310,17 @@ const AddRegister = () => {
               onSubmit={handleSubmit(onSubmit)}
               className="shadow-lg px-6 rounded-xl py-8  max-w-[800px] mx-auto overflow-x-hidden"
             >
-              <button
-                className="px-4 py-2 text-white bg-primary rounded-lg flex items-center gap-2 text-[0.8rem] mb-[2rem]"
-                onClick={() => navigate("/dashboard/ppdb")}
-                type="button"
+              <Link
+                className="w-max h-[2.5rem] text-white pt-2 px-5 bg-orange-400 block rounded-[4px] mb-[30px] mt-[2.5rem]"
+                to="/dashboard/ppdb"
               >
-                <IoChevronBackCircleSharp className="text-[1rem]" />
-                Back
-              </button>
+                <div className="flex items-center gap-2">
+                  <IoChevronBackCircleSharp className="text-[1rem]" />
+
+                  <span> Back</span>
+                </div>
+              </Link>
+
               <h2 className="font-semibold text-[1.5rem] mb-[2rem]">
                 Formulir Pendaftaran
               </h2>
@@ -330,6 +332,42 @@ const AddRegister = () => {
               <div
                 className={`wrapper-form-group mt-[2rem]  ${
                   currentTab == 1 ? "active-form" : "non-active-form"
+                } `}
+              >
+                <div className="form-group">
+                  <Input
+                    type="text"
+                    field="fullname"
+                    label="Nama Lengkap"
+                    register={register}
+                    errors={errors}
+                  />
+                  <Input
+                    type="number"
+                    field="phone"
+                    label="No Telepon"
+                    register={register}
+                    errors={errors}
+                  />
+                  <Input
+                    type="email"
+                    field="email"
+                    label="Email"
+                    register={register}
+                    errors={errors}
+                  />
+                  <Input
+                    type="password"
+                    field="password"
+                    label="Password"
+                    register={register}
+                    errors={errors}
+                  />
+                </div>
+              </div>
+              <div
+                className={`wrapper-form-group mt-[2rem]  ${
+                  currentTab == 2 ? "active-form" : "non-active-form"
                 } `}
               >
                 <div className="form-group">
@@ -515,7 +553,7 @@ const AddRegister = () => {
               </div>
               <div
                 className={`wrapper-form-group mt-[4rem]  ${
-                  currentTab == 2 ? "active-form" : "non-active-form"
+                  currentTab == 3 ? "active-form" : "non-active-form"
                 } `}
               >
                 <h2 className="mt-[2rem] mb-[1.5rem] font-semibold border-b-2 border-slate-300 w-max  text-[1.5rem]">
@@ -718,7 +756,7 @@ const AddRegister = () => {
 
               <div
                 className={`wrapper-form-group mt-[4rem]  ${
-                  currentTab == 3 ? "active-form" : "non-active-form"
+                  currentTab == 4 ? "active-form" : "non-active-form"
                 } `}
               >
                 {scholarships.map((input, index) => {
@@ -904,7 +942,7 @@ const AddRegister = () => {
               </div>
               <div
                 className={`wrapper-form-group mt-[4rem]  ${
-                  currentTab == 4 ? "active-form" : "non-active-form"
+                  currentTab == 5 ? "active-form" : "non-active-form"
                 } `}
               >
                 {achievements.map((input, index) => {
@@ -1034,7 +1072,7 @@ const AddRegister = () => {
 
               <div
                 className={`wrapper-form-group mt-[4rem]  ${
-                  currentTab == 5 ? "active-form" : "non-active-form"
+                  currentTab == 6 ? "active-form" : "non-active-form"
                 } `}
               >
                 <div className="form-group">
@@ -1084,6 +1122,30 @@ const AddRegister = () => {
                     label="No. SKHUS"
                     register={register}
                     errors={errors}
+                  />
+                  <Input
+                    type="select"
+                    field="class1"
+                    label="Pilihan Kompetensi 1"
+                    register={register}
+                    errors={errors}
+                    data={competency}
+                  />
+                  <Input
+                    type="select"
+                    field="class2"
+                    label="Pilihan Kompetensi 2"
+                    register={register}
+                    errors={errors}
+                    data={competency}
+                  />
+                  <Input
+                    type="select"
+                    field="class3"
+                    label="Pilihan Kompetensi 3"
+                    register={register}
+                    errors={errors}
+                    data={competency}
                   />
                   <Input
                     type="select"
@@ -1137,7 +1199,7 @@ const AddRegister = () => {
               </div>
               <div
                 className={`wrapper-form-group mt-[4rem]  ${
-                  currentTab == 6 ? "active-form" : "non-active-form"
+                  currentTab == 7 ? "active-form" : "non-active-form"
                 } `}
               >
                 <div className="flex flex-wrap gap-8">
@@ -1244,4 +1306,4 @@ const AddRegister = () => {
   );
 };
 
-export default AddRegister;
+export default AddRegisterStudent;
