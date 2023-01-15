@@ -1,5 +1,5 @@
-const APIBASEURL = "https://api.smkkgb2.sch.id";
-// const APIBASEURL = "http://127.0.0.1:8000";
+// const APIBASEURL = "https://api.smkkgb2.sch.id";
+const APIBASEURL = "http://127.0.0.1:8000";
 
 const requestSetting = (type, body = null) => {
   const token =
@@ -45,7 +45,6 @@ const FecthData = async (url = "", optionsObj = null) => {
     const request = await fetch(url, optionsObj);
     if (request.status == 401) {
       localStorage.removeItem("usr");
-      console.log(request);
       window.location.href = "/login";
       return;
     }

@@ -31,7 +31,7 @@ import Header from "../../../partials/Header";
 import Sidebar from "../../../partials/Sidebar";
 import { APIBASEURL, FecthData, requestSetting } from "../../../service/API";
 import { getUserIsLogin, notify } from "../../../utils/Utils";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoMdTrash } from "react-icons/io";
 import { Toaster } from "react-hot-toast";
 import TabsComponent from "../../../components/TabsComponent";
@@ -50,7 +50,7 @@ const achievementInterface = {
   organinizer_achievement: "",
 };
 
-const AddRegisterStudent = () => {
+const EditRegisterStudent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [scholarships, setScholarships] = useState([
     { ...scholarshipInterface },
@@ -65,19 +65,21 @@ const AddRegisterStudent = () => {
     foto_kks: "",
     foto_kps: "",
   });
-
   const {
     register,
     handleSubmit,
     getValues,
     setValue,
     formState: { errors },
-  } = useForm();
+  } = useForm({ defaultValues: { religion: "" } });
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState(1);
   const [index, setIndex] = useState(1);
   const [totalForm, setTotalForm] = useState(8);
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  console.log(id);
 
   const onSubmit = async (data) => {
     // setData(data);
@@ -287,8 +289,105 @@ const AddRegisterStudent = () => {
   }, [errors]);
 
   useEffect(() => {
-    console.log(imagesUpload);
-  });
+    async function getData() {
+      const req = await FecthData(
+        `${APIBASEURL}/admin/ppdb/${id}`,
+        requestSetting("GET")
+      );
+
+      setTimeout(() => {
+        const {
+          id,
+          fullname,
+          phone,
+          email,
+          registration,
+          student,
+          scholarship,
+          achievement,
+        } = req;
+
+        const {
+          registration_id,
+          user_id,
+          student_id,
+          payment_id,
+          type_registration,
+          from_school,
+          no_examinee,
+          no_serial_diploma,
+          no_serial_skhus,
+          class_pickn,
+          extracurricular,
+          uniform,
+          code_registration,
+          is_paid,
+          statusa,
+          active,
+        } = registration;
+
+        const {
+          student_achievement_id,
+          student_scholarship_id,
+          nisn,
+          nisn_image,
+          nik,
+          nik_image,
+          kartu_keluarga_image,
+          no_certificate_registration,
+          kks,
+          kps,
+          kip,
+          address,
+          residence,
+          residence_distance,
+          time_to_school,
+          religion,
+          birth,
+          height,
+          weight,
+          amount_siblings,
+          gender,
+          special_needs,
+          order_family,
+          father_name,
+          father_nik,
+          father_birth,
+          father_education,
+          father_job,
+          father_income,
+          father_special_needs,
+          mother_name,
+          mother_nik,
+          mother_birth,
+          mother_education,
+          mother_job,
+          mother_income,
+          mother_special_needs,
+          guardian_name,
+          guardian_nik,
+          guardian_birth,
+          guardian_education,
+          guardian_job,
+          guardian_income,
+          guardian_special_needs,
+        } = student;
+
+        setValue("fullname", fullname);
+        setValue("phone", phone);
+        setValue("email", email);
+        setValue("nisn", nisn);
+        setValue("nik", nik);
+        setValue("no_certificate_registration", no_certificate_registration);
+        console.log(religion);
+        setValue("religion", religion);
+        // setValue("fullname", fullname);
+        // setValue("fullname", fullname);
+      }, 1000);
+    }
+
+    (async () => getData())();
+  }, []);
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -405,7 +504,9 @@ const AddRegisterStudent = () => {
                     register={register}
                     errors={errors}
                     data={religion}
+                    value="khonghucu"
                   />
+                  {/* {console.log()} */}
                   <Input
                     type="number"
                     field="weight"
@@ -1332,4 +1433,4 @@ const AddRegisterStudent = () => {
   );
 };
 
-export default AddRegisterStudent;
+export default EditRegisterStudent;

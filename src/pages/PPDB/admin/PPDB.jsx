@@ -8,7 +8,7 @@ import { FiCheck } from "react-icons/fi";
 import { IoChevronBackCircleSharp, IoClose } from "react-icons/io5";
 import { BiSearchAlt } from "react-icons/bi";
 import { AiFillPrinter } from "react-icons/ai";
-import { BsFillPersonPlusFill } from "react-icons/bs";
+import { BiEdit } from "react-icons/bi";
 import { FaMoneyCheck } from "react-icons/fa";
 import Header from "../../../partials/Header";
 import Sidebar from "../../../partials/Sidebar";
@@ -261,7 +261,9 @@ const PPDB = () => {
                   <thead className="text-xs font-semibold uppercase text-slate-400 bg-slate-50">
                     <tr>
                       <th className="p-2 whitespace-nowrap">
-                        <div className="font-semibold text-left">Photo</div>
+                        <div className="font-semibold text-left">
+                          ID Pendaftar
+                        </div>
                       </th>
                       <th className="p-2 whitespace-nowrap">
                         <div className="font-semibold text-left">
@@ -289,8 +291,9 @@ const PPDB = () => {
                       data.map((item) => {
                         const {
                           id,
+                          user_id,
+                          registration_id,
                           student_id,
-                          photo,
                           from_school,
                           fullname,
                           type_registration,
@@ -300,18 +303,8 @@ const PPDB = () => {
 
                         return (
                           <tr key={id}>
-                            <td className="p-2 whitespace-nowrap">
-                              <div className="w-[3.5rem] h-[3.5rem] shrink-0 mr-2 sm:mr-3 rounded-full overflow-hidden">
-                                <img
-                                  className=""
-                                  src={
-                                    !photo
-                                      ? "https://t3.ftcdn.net/jpg/04/51/93/48/360_F_451934847_V7rc18Ibs9UNU5sSihQBY0MzSDgei4Cr.jpg"
-                                      : photo
-                                  }
-                                  alt={fullname}
-                                />
-                              </div>
+                            <td className="p-2 whitespace-nowrap font-semibold h-[4rem]">
+                              {registration_id}
                             </td>
                             <td className="p-2 whitespace-nowrap font-semibold">
                               {fullname}
@@ -361,7 +354,6 @@ const PPDB = () => {
                                 ) : (
                                   ""
                                 )}
-
                                 {is_paid == false && (
                                   <Button
                                     type="primary"
@@ -385,7 +377,16 @@ const PPDB = () => {
                                 ) : (
                                   ""
                                 )}
-
+                                <button
+                                  className="bg-yellow-500 p-1 text-lg rounded-xl text-white"
+                                  onClick={() =>
+                                    navigate(
+                                      `/dashboard/ppdb/admin/student/edit/${user_id}`
+                                    )
+                                  }
+                                >
+                                  <BiEdit />
+                                </button>
                                 {status == "Belum Diterima" && (
                                   <button
                                     className={`${

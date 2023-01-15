@@ -10,6 +10,7 @@ export const Input = ({
   register,
   require = true,
   data = [],
+  value,
 }) => {
   switch (type) {
     case "text":
@@ -221,6 +222,7 @@ export const Input = ({
               })}
               id={field}
               placeholder="..."
+              value={value}
               className={`border-1  focus:ring-0 focus:outline-none rounded-lg   ${
                 errors[`${field}`]
                   ? "border-red-300 focus:border-red-300"
@@ -242,6 +244,7 @@ export const Input = ({
                 required: false,
               })}
               id={field}
+              value={value}
               placeholder="..."
               className={`border-1  focus:ring-0 focus:outline-none rounded-lg   ${
                 errors[`${field}`]

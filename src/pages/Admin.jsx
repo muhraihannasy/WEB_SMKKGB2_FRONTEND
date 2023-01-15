@@ -7,11 +7,12 @@ import { Modal } from "antd";
 import { APIBASEURL, FecthData, requestSetting } from "../service/API";
 import { notify } from "../utils/Utils";
 import { Toaster } from "react-hot-toast";
-import useItems from "antd/es/menu/hooks/useItems";
 import { FiEdit } from "react-icons/fi";
 import Spinner from "react-spinkit";
 
 import { FaTrash } from "react-icons/fa";
+
+const menu = ["ppdb", "loker", "dashboard", "admin"];
 
 const Admin = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -29,7 +30,22 @@ const Admin = () => {
     photo: "",
     password: "",
   });
+  const [menuPermission, setMenuPermission] = useState([]);
   const photoInput = useRef();
+  const checkedRef = useRef();
+
+  function handleChangeMenuPermission(checked, menu) {
+    let menus = [...menuPermission];
+
+    if (checked) menus.push(menu);
+    if (!checked) {
+      setMenuPermission(menus.filter((item) => item !== menu));
+      menus.push(menu);
+      return;
+    }
+
+    setMenuPermission(menus);
+  }
 
   const handleUploadImage = async (file) => {
     const token = JSON.parse(localStorage.getItem("usr")).acctkn;
@@ -61,26 +77,34 @@ const Admin = () => {
   };
 
   const handleOkModal = async () => {
-    setConfirmLoadingModal(true);
-
+    // setConfirmLoadingModal(true);
+    console.log(checkedRef.current);
+    return;
     if (
       formData.email == "" ||
       formData.password == "" ||
       formData.phone == "" ||
       formData.fullname == ""
     ) {
+      setConfirmLoadingModal(false);
       notify("Form Tidak Boleh Kosong", "error");
       return;
     }
 
-    setIsLoading(true);
+    // setIsLoading(true);
     formData.user_type_id = 2;
+    formData.menu_permission = menuPermission.join("|");
 
     const request = await FecthData(
       `${APIBASEURL}/user/store`,
       requestSetting("POST", formData)
     );
     const response = request;
+
+    if (response.errors?.email) {
+      notify("Email Sudah Digunakan", "error");
+      // return;
+    }
 
     setTimeout(() => {
       if (response.status == 200) {
@@ -186,19 +210,18 @@ const Admin = () => {
     (async () => getAdmin())();
   }, [isLoading, updateData]);
 
-  if (isLoading) {
-    return (
-      <div className="fixed left-0 top-0 h-[100%] w-full bg-white flex items-center flex-col justify-center z-[99] ">
-        <Spinner name="line-scale-pulse-out" />
-        Loading....
-      </div>
-    );
-  }
-
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Sidebar  */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
+      {/* Loading */}
+      {isLoading && (
+        <div className="fixed left-0 top-0 h-[100%] w-full bg-white flex items-center flex-col justify-center z-[99] ">
+          <Spinner name="line-scale-pulse-out" />
+          Loading....
+        </div>
+      )}
 
       {/* Toast */}
       <Toaster position="top-right" reverseOrder={false} />
@@ -293,6 +316,33 @@ const Admin = () => {
             }
             value={formData.password}
           />
+        </div>
+        <label
+          htmlFor="password"
+          className="block font-regular mb-[1rem] mt-[1rem]"
+        >
+          Menu Permission
+        </label>
+
+        <div className="flex items-center gap-4">
+          {menu.map((item) => {
+            return (
+              <div className="flex items-center gap-2 mb-[1rem]">
+                <input
+                  type="checkbox"
+                  className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
+                  id={item}
+                  ref={checkedRef}
+                  onChange={(e) =>
+                    handleChangeMenuPermission(e.target.checked, item)
+                  }
+                />
+                <label htmlFor={item} className="font-regular">
+                  {item}
+                </label>
+              </div>
+            );
+          })}
         </div>
       </Modal>
 
