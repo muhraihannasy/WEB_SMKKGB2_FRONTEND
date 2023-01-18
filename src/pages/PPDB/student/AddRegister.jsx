@@ -62,6 +62,7 @@ const fieldRequire = [
   "gender",
   "foto_nisn",
   "foto_kartu_keluarga",
+
   "special_needs",
   "date",
   "city",
@@ -72,15 +73,18 @@ const fieldRequire = [
   "kecamatan",
   "father_name",
   "father_nik",
+
   "father_date",
   "father_city",
   "father_education",
   "father_job",
   "father_income",
+  "mother_name",
   "mother_nik",
   "mother_date",
   "mother_city",
   "mother_education",
+
   "mother_job",
   "mother_income",
   "type_registration",
@@ -91,6 +95,7 @@ const fieldRequire = [
   "extra2",
   "uniform1",
   "uniform2",
+
   "uniform3",
   "uniform4",
 ];
@@ -107,6 +112,9 @@ const AddRegister = () => {
     gender: "",
     foto_nisn: "",
     foto_kartu_keluarga: "",
+    foto_kps: "",
+    foto_kks: "",
+    foto_kip: "",
     special_needs: "",
 
     // Birth
@@ -178,17 +186,28 @@ const AddRegister = () => {
   const [totalForm, setTotalForm] = useState(8);
   const [isSubmit, setIsSubmit] = useState(false);
   const navigate = useNavigate();
-  console.log(errors.length);
+  let errorsTemp = [];
+  // console.log(errors.length);
 
   async function onSubmit(e) {
+    errorsTemp = [];
     e.preventDefault();
     setIsSubmit(true);
-    setErrors([]);
 
-    if (errors.length > 0) return;
-    console.log(errors.length);
+    for (const propFormData in formData) {
+      let propToString = propFormData.toString();
+      if (formData[propFormData] == "" && fieldRequire.includes(propToString)) {
+        errorsTemp.push(propToString);
+      }
+    }
 
-    return;
+    setErrors(errorsTemp);
+
+    if (errorsTemp.length > 0) {
+      console.log("erorr");
+      return;
+    }
+
     setIsLoading(true);
 
     const data = { ...formData };
@@ -279,26 +298,28 @@ const AddRegister = () => {
       requestSetting("POST", data)
     );
 
-    console.log(request);
-
     if (request.success) {
       setIsLoading(false);
       notify(request.message, "success");
 
-      // setTimeout(() => {
-      //   navigate("/dashboard/ppdb");
-      // }, 1000);
+      setTimeout(() => {
+        navigate("/dashboard/ppdb");
+      }, 1000);
     }
   }
 
-  const handleUpload = async (file, field) => {
+  async function handleUpload(file, field) {
     const token = JSON.parse(localStorage.getItem("usr")).acctkn;
     // Upload Image
     const myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer " + token);
 
+    const temp = imagesUpload[field].split("/");
+    const imageOld = temp[3] + "/" + temp[4];
+
     const formdata = new FormData();
     formdata.append("image", file, file.name);
+    formdata.append("image_old", imageOld);
 
     const requestOptions = {
       method: "POST",
@@ -306,15 +327,15 @@ const AddRegister = () => {
       body: formdata,
       redirect: "follow",
     };
-    fetch(`${APIBASEURL}/student/registration/upload`, requestOptions)
+    fetch(`${APIBASEURL}/upload_image`, requestOptions)
       .then((response) => response.json())
-      .then((result) =>
-        setImagesUpload({ ...imagesUpload, [field]: result.path })
-      )
+      .then((result) => {
+        setImagesUpload({ ...imagesUpload, [field]: result.url });
+        setFormData((prev) => ({ ...prev, [field]: result.url }));
+      })
       .catch((error) => console.log("error", error));
-  };
+  }
 
-  // console.log(formdata);
   const handleFormChange = (event, index, type) => {
     let data = [];
 
@@ -370,16 +391,7 @@ const AddRegister = () => {
     }
   };
 
-  useEffect(() => {}, [errors]);
-
   useEffect(() => {
-    for (const propFormData in formData) {
-      let propToString = propFormData.toString();
-      if (formData[propFormData] == "" && fieldRequire.includes(propToString)) {
-        setErrors((prev) => [...prev, propToString]);
-      }
-    }
-
     if (Object.keys(errors).length > 0) {
       notify("Upss, Masih ada data yang kosong. Coba Cek Kembali", "error");
     }
