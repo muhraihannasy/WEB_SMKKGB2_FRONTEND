@@ -51,8 +51,114 @@ const achievementInterface = {
   organinizer_achievement: "",
 };
 
+const fieldRequire = [
+  "nisn",
+  "nik",
+  "gender",
+  "no_certificate_registration",
+  "religion",
+  "weight",
+  "height",
+  "gender",
+  "foto_nisn",
+  "foto_kartu_keluarga",
+  "special_needs",
+  "date",
+  "city",
+  "alamat",
+  "rt",
+  "rw",
+  "kelurahan",
+  "kecamatan",
+  "father_name",
+  "father_nik",
+  "father_date",
+  "father_city",
+  "father_education",
+  "father_job",
+  "father_income",
+  "mother_nik",
+  "mother_date",
+  "mother_city",
+  "mother_education",
+  "mother_job",
+  "mother_income",
+  "type_registration",
+  "no_examinee",
+  "no_serial_diploma",
+  "no_serial_skhus",
+  "extra1",
+  "extra2",
+  "uniform1",
+  "uniform2",
+  "uniform3",
+  "uniform4",
+];
+
 const AddRegister = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    nisn: "",
+    nik: "",
+    no_certificate_registration: "",
+    religion: "",
+    weight: "",
+    height: "",
+    gender: "",
+    foto_nisn: "",
+    foto_kartu_keluarga: "",
+    special_needs: "",
+
+    // Birth
+    date: "",
+    city: "",
+
+    // Address
+    alamat: "",
+    rt: "",
+    rw: "",
+    kelurahan: "",
+    kecamatan: "",
+    kodepos: "",
+
+    // Father
+    father_name: "",
+    father_nik: "",
+    father_date: "",
+    father_city: "",
+    father_education: "",
+    father_job: "",
+    father_income: "",
+
+    // Mother
+    mother_name: "",
+    mother_nik: "",
+    mother_date: "",
+    mother_city: "",
+    mother_education: "",
+    mother_job: "",
+    mother_income: "",
+
+    // Register
+    type_registration: "",
+    no_examinee: "",
+    no_serial_diploma: "",
+    no_serial_skhus: "",
+    extra1: "",
+    extra2: "",
+    uniform1: "",
+    uniform2: "",
+    uniform3: "",
+    uniform4: "",
+
+    receiver_kip: "",
+    receiver_kps: "",
+    no_kip: "",
+    no_kps: "",
+    no_kks: "",
+    name_kip: "",
+    reason_kip: "",
+  });
   const [scholarships, setScholarships] = useState([
     { ...scholarshipInterface },
   ]);
@@ -66,30 +172,33 @@ const AddRegister = () => {
     foto_kks: "",
     foto_kps: "",
   });
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
+  const [errors, setErrors] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState(1);
-  const [index, setIndex] = useState(1);
   const [totalForm, setTotalForm] = useState(8);
+  const [isSubmit, setIsSubmit] = useState(false);
   const navigate = useNavigate();
+  console.log(errors.length);
 
-  const onSubmit = async (data) => {
-    // setData(data);
+  async function onSubmit(e) {
+    e.preventDefault();
+    setIsSubmit(true);
+    setErrors([]);
+
+    if (errors.length > 0) return;
+    console.log(errors.length);
+
+    return;
+    setIsLoading(true);
+
+    const data = { ...formData };
     const {
       alamat,
-      bujur,
       city,
       date,
       kecamatan,
       kelurahan,
       kodepos,
-      lintang,
       rt,
       rw,
       receiver_kip,
@@ -104,21 +213,15 @@ const AddRegister = () => {
       uniform4,
       extra1,
       extra2,
-      komp1,
-      komp2,
       father_city,
       father_date,
       mother_city,
       mother_date,
-      guardian_city,
-      guardian_date,
-      hours,
       no_kks,
-      minute,
     } = data;
 
     data.birth = `${date}|${city}`;
-    data.address = `${alamat}|${rt}|${rw}|${kelurahan}|${kecamatan}|${kodepos}|${lintang}|${bujur}`;
+    data.address = `${alamat}|${rt}|${rw}|${kelurahan}|${kecamatan}|${kodepos}`;
     // KKS
     data.kks = `${no_kks == "" ? "-" : no_kks}|${
       imagesUpload.foto_kks == "" ? "-" : imagesUpload.foto_kks
@@ -135,11 +238,8 @@ const AddRegister = () => {
     }`;
     data.uniform = `${uniform1}|${uniform2}|${uniform3}|${uniform4}`;
     data.extracurricular = `${extra1}|${extra2}`;
-    data.class_pick = `${komp1}|${komp2}`;
     data.father_birth = `${father_city}|${father_date}`;
     data.mother_birth = `${mother_city}|${mother_date}`;
-    data.guardian_birth = `${guardian_city}|${guardian_date}`;
-    data.time_to_school = `${hours}|${minute}`;
     data.status_registration = 0;
     data.scholarships = scholarships;
     data.achievements = achievements;
@@ -154,12 +254,11 @@ const AddRegister = () => {
     delete data.kecamatan;
     delete data.kelurahan;
     delete data.kodepos;
-    delete data.lintang;
-    delete data.bujur;
     delete data.receiver_kip;
     delete data.receiver_kps;
     delete data.no_kip;
     delete data.no_kps;
+    delete data.no_kks;
     delete data.name_kip;
     delete data.reason_kip;
     delete data.uniform1;
@@ -174,25 +273,23 @@ const AddRegister = () => {
     delete data.father_city;
     delete data.mother_date;
     delete data.mother_city;
-    delete data.guardian_date;
-    delete data.guardian_city;
-    delete data.hours;
-    delete data.minute;
 
-    setIsLoading(true);
     const request = await FecthData(
       `${APIBASEURL}/student/ppdb/store`,
       requestSetting("POST", data)
     );
 
+    console.log(request);
+
     if (request.success) {
       setIsLoading(false);
-      notify("Berhasil Membuat Formulir", "success");
-      setTimeout(() => {
-        navigate("/dashboard/ppdb");
-      }, 500);
+      notify(request.message, "success");
+
+      // setTimeout(() => {
+      //   navigate("/dashboard/ppdb");
+      // }, 1000);
     }
-  };
+  }
 
   const handleUpload = async (file, field) => {
     const token = JSON.parse(localStorage.getItem("usr")).acctkn;
@@ -273,42 +370,50 @@ const AddRegister = () => {
     }
   };
 
+  useEffect(() => {}, [errors]);
+
   useEffect(() => {
+    for (const propFormData in formData) {
+      let propToString = propFormData.toString();
+      if (formData[propFormData] == "" && fieldRequire.includes(propToString)) {
+        setErrors((prev) => [...prev, propToString]);
+      }
+    }
+
     if (Object.keys(errors).length > 0) {
       notify("Upss, Masih ada data yang kosong. Coba Cek Kembali", "error");
     }
-  }, [errors]);
+    setIsSubmit(false);
+  }, [isSubmit]);
 
   useEffect(() => {
-    console.log(imagesUpload);
-  });
-
-  if (isLoading) {
-    return (
-      <div className="fixed left-0 top-0 h-[100%] w-full bg-white flex items-center flex-col justify-center z-[99] ">
-        <Spinner name="line-scale-pulse-out" />
-        Loading....
-      </div>
-    );
-  }
+    setErrors([]);
+  }, []);
 
   return (
     <div className="flex h-screen overflow-hidden">
-      {/* Sidebar  */}
-      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
       {/* Toast */}
       <Toaster position="top-right" reverseOrder={false} />
 
-      {/* Content Area */}
+      {/* Loading */}
+      {isLoading && (
+        <div className="fixed left-0 top-0 h-[100%] w-full bg-white flex items-center flex-col justify-center z-[99] ">
+          <Spinner name="line-scale-pulse-out" />
+          Loading....
+        </div>
+      )}
 
+      {/* Sidebar  */}
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
+      {/* Content Area */}
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <main>
           {/* Welcome banner */}
           <div className="px-4 sm:px-6 py-8 w-full max-w-9xl mx-auto ">
             <form
-              onSubmit={handleSubmit(onSubmit)}
+              onSubmit={onSubmit}
               className="shadow-lg px-6 rounded-xl py-8  max-w-[800px] mx-auto overflow-x-hidden"
             >
               <button
@@ -326,6 +431,7 @@ const AddRegister = () => {
               <TabsComponent
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
+                type="student"
               />
               <div
                 className={`wrapper-form-group mt-[2rem]  ${
@@ -337,179 +443,137 @@ const AddRegister = () => {
                     type="text"
                     field="nisn"
                     label="NISN"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                   <Input
                     type="number"
                     field="nik"
                     label="NIK"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                   <Input
                     type="text"
                     field="no_certificate_registration"
                     label="No. Registrasi Akta Lahir"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                   <Input
                     type="select"
                     field="religion"
                     label="Agama"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     data={religion}
                   />
                   <Input
                     type="number"
                     field="weight"
                     label="Berat Badan"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     data={religion}
                   />
                   <Input
                     type="number"
                     field="height"
                     label="Tinggi Badan"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     data={religion}
                   />
                   <Input
                     type="select"
                     field="gender"
                     label="Jenis Kelamin"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     data={gender}
                   />
                   <Input
                     type="select"
                     field="special_needs"
                     label="Berkebutuhan Khusus"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     data={specialNeeds}
                   />
                   <Input
                     type="date"
                     field="date"
                     label="Tanggal Lahir"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                   <Input
                     type="text"
                     field="city"
                     label="Tempat Lahir"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                   <Input
                     type="text"
                     field="alamat"
                     label="Alamat"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                   <div className="grid grid-cols-2 items-center gap-2">
                     <Input
                       type="text"
                       field="rt"
                       label="RT"
-                      register={register}
                       errors={errors}
+                      formData={formData}
+                      setFormData={setFormData}
                     />
                     <Input
                       type="text"
                       field="rw"
                       label="RW"
-                      register={register}
                       errors={errors}
+                      formData={formData}
+                      setFormData={setFormData}
                     />
                   </div>
-                  <Input
-                    type="text"
-                    field="dusun"
-                    label="Dusun"
-                    register={register}
-                    errors={errors}
-                  />
+
                   <Input
                     type="text"
                     field="kelurahan"
                     label="Kelurahan"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                   <Input
                     type="text"
                     field="kecamatan"
                     label="Kecamatan"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                   <Input
                     type="number"
                     field="kodepos"
                     label="Kode Pos"
-                    register={register}
                     errors={errors}
-                  />
-                  <Input
-                    type="text"
-                    field="lintang"
-                    label="Lintang"
-                    register={register}
-                    errors={errors}
-                  />
-                  <Input
-                    type="text"
-                    field="bujur"
-                    label="Bujur"
-                    register={register}
-                    errors={errors}
-                  />
-                  <Input
-                    type="select"
-                    field="residence_distance"
-                    label="Jarak Tempat Tinggal"
-                    register={register}
-                    errors={errors}
-                    data={distance}
-                  />
-                  <Input
-                    type="select"
-                    field="residence"
-                    label="Tempat Tinggal"
-                    register={register}
-                    errors={errors}
-                    data={residence}
-                  />
-                  <Input
-                    type="select"
-                    field="transport"
-                    label="Transportasi"
-                    register={register}
-                    errors={errors}
-                    data={transport}
-                  />
-                  <Input
-                    type="text"
-                    field="amount_siblings"
-                    label="Jumlah Saudara Kandung"
-                    register={register}
-                    errors={errors}
-                  />
-                  <Input
-                    type="text"
-                    field="order_family"
-                    label="Anak Ke"
-                    register={register}
-                    errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                 </div>
               </div>
@@ -526,61 +590,60 @@ const AddRegister = () => {
                     type="text"
                     field="father_name"
                     label="Nama Ayah Kandung"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                   <Input
                     type="number"
                     field="father_nik"
                     label="NIK Ayah"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                   <Input
                     type="date"
                     field="father_date"
                     label="Tanggal Lahir"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                   <Input
                     type="text"
                     field="father_city"
                     label="Tempat Lahir"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                   <Input
                     type="select"
                     field="father_education"
                     label="Pendidikan"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     data={education}
                   />
                   <Input
                     type="select"
                     field="father_job"
                     label="Pekerjaan"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     data={profession}
                   />
                   <Input
                     type="select"
                     field="father_income"
                     label="Penghasilan Bulanan"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     data={income}
-                  />
-                  <Input
-                    type="select"
-                    field="father_special_needs"
-                    label="Berkebutuhan Khusus"
-                    register={register}
-                    errors={errors}
-                    data={specialNeeds}
                   />
                 </div>
 
@@ -592,126 +655,60 @@ const AddRegister = () => {
                     type="text"
                     field="mother_name"
                     label="Nama Ibu Kandung"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                   <Input
                     type="number"
                     field="mother_nik"
                     label="NIK Ibu"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                   <Input
                     type="date"
                     field="mother_date"
                     label="Tanggal Lahir"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                   <Input
                     type="text"
                     field="mother_city"
                     label="Tempat Lahir"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                   <Input
                     type="select"
                     field="mother_education"
                     label="Pendidikan"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     data={education}
                   />
                   <Input
                     type="select"
                     field="mother_job"
                     label="Pekerjaan"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     data={profession}
                   />
                   <Input
                     type="select"
                     field="mother_income"
                     label="Penghasilan Bulanan"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     data={income}
-                  />
-                  <Input
-                    type="select"
-                    field="mother_special_needs"
-                    label="Berkebutuhan Khusus"
-                    register={register}
-                    errors={errors}
-                    data={specialNeeds}
-                  />
-                </div>
-                <h2 className="mt-[2rem] mb-[1.5rem] font-semibold border-b-2 border-slate-300 w-max  text-[1.5rem]">
-                  Data Wali
-                </h2>
-                <div className="form-group">
-                  <Input
-                    type="text"
-                    field="guardian_name"
-                    label="Nama Wali"
-                    register={register}
-                    errors={errors}
-                  />
-                  <Input
-                    type="number"
-                    field="guardian_nik"
-                    label="NIK Wali"
-                    register={register}
-                    errors={errors}
-                  />
-                  <Input
-                    type="date"
-                    field="guardian_date"
-                    label="Tanggal Lahir"
-                    register={register}
-                    errors={errors}
-                  />
-                  <Input
-                    type="text"
-                    field="guardian_city"
-                    label="Tempat Lahir"
-                    register={register}
-                    errors={errors}
-                  />
-                  <Input
-                    type="select"
-                    field="guardian_education"
-                    label="Pendidikan"
-                    register={register}
-                    errors={errors}
-                    data={education}
-                  />
-                  <Input
-                    type="select"
-                    field="guardian_job"
-                    label="Pekerjaan"
-                    register={register}
-                    errors={errors}
-                    data={profession}
-                  />
-                  <Input
-                    type="select"
-                    field="guardian_income"
-                    label="Penghasilan Bulanan"
-                    register={register}
-                    errors={errors}
-                    data={income}
-                  />
-                  <Input
-                    type="select"
-                    field="guardian_special_needs"
-                    label="Berkebutuhan Khusus"
-                    register={register}
-                    errors={errors}
-                    data={specialNeeds}
                   />
                 </div>
               </div>
@@ -721,6 +718,7 @@ const AddRegister = () => {
                   currentTab == 3 ? "active-form" : "non-active-form"
                 } `}
               >
+                <p className="mb-[10px]">*Kosongkan Jika Tidak Ada</p>
                 {scholarships.map((input, index) => {
                   return (
                     <div key={index} className="mb-[2rem]">
@@ -844,16 +842,18 @@ const AddRegister = () => {
                     type="number"
                     field="no_kks"
                     label="No KKS"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     require={false}
                   />
                   <Input
                     type="select"
                     field="receiver_kps"
                     label="Penerima KPS"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     data={receiver}
                     require={false}
                   />
@@ -862,16 +862,18 @@ const AddRegister = () => {
                     type="number"
                     field="no_kps"
                     label="No KPS"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     require={false}
                   />
                   <Input
                     type="select"
                     field="receiver_kip"
                     label="Penerima KIP"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     data={receiver}
                     require={false}
                   />
@@ -880,24 +882,27 @@ const AddRegister = () => {
                     type="text"
                     field="name_kip"
                     label="Nama Tertera di KIP"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     require={false}
                   />
                   <Input
                     type="number"
                     field="no_kip"
                     label="No KIP"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     require={false}
                   />
                   <Input
                     type="textarea"
                     field="reason_kip"
                     label="Alasan Layak KIP"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     require={false}
                   />
                 </div>
@@ -907,6 +912,7 @@ const AddRegister = () => {
                   currentTab == 4 ? "active-form" : "non-active-form"
                 } `}
               >
+                <p className="mb-[10px]">*Kosongkan Jika Tidak Ada</p>
                 {achievements.map((input, index) => {
                   return (
                     <div key={index} className="mb-[2rem]">
@@ -1042,95 +1048,88 @@ const AddRegister = () => {
                     type="select"
                     field="type_registration"
                     label="Jenis Pendaftaran"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     data={typeRegistration}
                   />
 
-                  <div className="grid grid-cols-2 gap-2">
-                    <Input
-                      type="number"
-                      field="hours"
-                      label="Jam
-                     "
-                      register={register}
-                      errors={errors}
-                    />
-                    <Input
-                      type="number"
-                      field="minute"
-                      label="Menit"
-                      register={register}
-                      errors={errors}
-                    />
-                  </div>
                   <Input
                     type="number"
                     field="no_examinee"
                     label="No Perserta Ujian"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                   <Input
                     type="text"
                     field="no_serial_diploma"
                     label="No. Seri Ijazah"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                   <Input
                     type="text"
                     field="no_serial_skhus"
                     label="No. SKHUS"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                   <Input
                     type="select"
                     field="extra1"
                     label="Ekstrakurikuler 1"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     data={extracurriculer}
                   />
                   <Input
                     type="select"
                     field="extra2"
                     label="Ekstrakurikuler 2"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     data={extracurriculer}
                   />
                   <Input
                     type="select"
                     field="uniform1"
                     label="Baju Olahraga"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     data={uniform}
                   />
                   <Input
                     type="select"
                     field="uniform2"
                     label="Baju Wear Pack (Khusus Jurusan TKJ)"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     data={uniform}
                   />
                   <Input
                     type="select"
                     field="uniform3"
                     label="Baju Kotak-Kotak"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     data={uniform}
                   />
                   <Input
                     type="select"
                     field="uniform4"
                     label="Jaz Alamamater"
-                    register={register}
                     errors={errors}
+                    formData={formData}
+                    setFormData={setFormData}
                     data={uniform}
                   />
                 </div>
@@ -1151,7 +1150,7 @@ const AddRegister = () => {
                         handleUpload(e.target.files[0], "foto_nisn")
                       }
                       className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400  `}
-                      required
+                      // required
                     />
                   </div>
                   <div className="flex items-start flex-col">
@@ -1164,7 +1163,7 @@ const AddRegister = () => {
                       onChange={(e) =>
                         handleUpload(e.target.files[0], "foto_kartu_keluarga")
                       }
-                      required
+                      // required
                     />
                   </div>
                   <div className="flex items-start flex-col">
@@ -1227,14 +1226,14 @@ const AddRegister = () => {
                     <IoChevronBackCircleSharp className="text-[1rem] rotate-[180deg]" />
                   </button>
                 )}
-                {currentTab == 6 && (
-                  <button
-                    className="px-4 py-2 text-white bg-primary rounded-lg text-[0.8rem]"
-                    type="submit"
-                  >
-                    Submit
-                  </button>
-                )}
+                {/* {currentTab == 6 && ( */}
+                <button
+                  className="px-4 py-2 text-white bg-primary rounded-lg text-[0.8rem]"
+                  type="submit"
+                >
+                  Submit
+                </button>
+                {/* )} */}
               </div>
             </form>
           </div>

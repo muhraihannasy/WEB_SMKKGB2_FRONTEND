@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Toaster } from "react-hot-toast";
 import { BsFillPersonPlusFill } from "react-icons/bs";
 import { IoNewspaperSharp } from "react-icons/io5";
 import { RiEyeFill } from "react-icons/ri";
@@ -47,20 +48,21 @@ const PPDBStudent = () => {
     (async () => getRegistration())();
   }, []);
 
-  if (isLoading) {
-    return (
-      <div className="fixed left-0 top-0 h-[100%] w-full bg-white flex items-center flex-col justify-center z-[99] ">
-        <Spinner name="line-scale-pulse-out" />
-        Loading....
-      </div>
-    );
-  }
-
   if (data && data.is_paid == 0) {
     return (
       <div className="flex h-screen overflow-hidden">
-        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        {/* Toast */}
+        <Toaster position="top-right" reverseOrder={false} />
 
+        {/* Loading */}
+        {isLoading && (
+          <div className="fixed left-0 top-0 h-[100%] w-full bg-white flex items-center flex-col justify-center z-[99] ">
+            <Spinner name="line-scale-pulse-out" />
+            Loading....
+          </div>
+        )}
+
+        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         {/* Content Area */}
 
         <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
