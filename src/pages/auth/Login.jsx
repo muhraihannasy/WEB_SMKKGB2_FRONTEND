@@ -51,6 +51,8 @@ const Login = () => {
         user: user_type,
       };
 
+      sessionStorage.removeItem("info");
+
       localStorage.setItem("usr", JSON.stringify(user));
       localStorage.setItem("menu_permission", menu_permission);
       localStorage.setItem("logged", true);
@@ -76,26 +78,31 @@ const Login = () => {
     }
   }, [isLoading]);
 
-  if (isLoading) {
-    return (
-      <div className="fixed left-0 top-0 h-[100%] w-full bg-white flex items-center flex-col justify-center z-[99] ">
-        <Spinner name="line-scale-pulse-out" />
-        Loading....
-      </div>
-    );
-  }
-
   return (
     <div className=" h-full w-full my-auto bg-white grid lg:grid-cols-2 grid-cols-1 font-poppins">
       {/* Toast */}
       <Toaster position="top-right" reverseOrder={false} />
+
+      {isLoading && (
+        <div className="fixed left-0 top-0 h-[100%] w-full bg-white flex items-center flex-col justify-center z-[99] ">
+          <Spinner name="line-scale-pulse-out" />
+          Loading....
+        </div>
+      )}
 
       <div className="px-6 py-10 order-2">
         <form
           className="lg:w-[70%] sm:w-[50%] sm:mx-auto lg:mt-[4.5rem]"
           onSubmit={(e) => handleSubmit(e)}
         >
-          <h2 className="mb-[1.5rem] font-bold text-[1.5rem]">Login</h2>
+          <h2 className="mb-[6px] font-bold text-[1.5rem]">Login</h2>
+          <p
+            className={`mb-[1.5rem] ${
+              !sessionStorage.getItem("info") && "hidden"
+            }`}
+          >
+            {sessionStorage.getItem("info")}
+          </p>
 
           <div className="flex flex-col mb-[1.5rem]">
             <label htmlFor="">Email</label>

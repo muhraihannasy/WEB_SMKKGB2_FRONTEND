@@ -34,7 +34,7 @@ const PPDB = () => {
     id: "",
     code_registration: "",
   });
-  const [updatedData, setUpdatedData] = useState(false);
+  const [lastRefresh, setLastRefresh] = useState(new Date());
   const [statusVerified, setStatusVerified] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [confirmLoadingModal, setConfirmLoadingModal] = useState(false);
@@ -49,11 +49,12 @@ const PPDB = () => {
 
   const componentRef = useRef();
 
-  const handleGetData = async (student_id) => {
-    setIsLoading(true);
+  const handleGetData = async (id) => {
+    // setIsLoading(true);
+    console.log(id);
 
     const result = await FecthData(
-      `${APIBASEURL}/admin/ppdb/${student_id}`,
+      `${APIBASEURL}/admin/ppdb/${id}`,
       requestSetting("GET")
     );
 
@@ -81,10 +82,11 @@ const PPDB = () => {
     setTimeout(() => {
       if (result.status) {
         notify("Siswa Diterima", "success");
+        setLastRefresh(new Date());
       }
 
       setIsLoading(false);
-    }, 2200);
+    }, 1000);
   };
 
   useEffect(() => {
@@ -107,7 +109,7 @@ const PPDB = () => {
         setTotalPage(result.total_page);
       }, 1000);
     })();
-  }, [statusVerified, filter, updatedData, page, limit, endPage, isPaid]);
+  }, [statusVerified, filter, page, limit, endPage, isPaid, lastRefresh]);
 
   useEffect(() => {
     if (readyToPrint) {
@@ -122,7 +124,6 @@ const PPDB = () => {
 
   const handleOkModal = async () => {
     setConfirmLoadingModal(true);
-    setUpdatedData(true);
     const user = getUserIsLogin();
     const request = await FecthData(
       `${APIBASEURL}/${user}/registration/code`,
@@ -263,6 +264,9 @@ const PPDB = () => {
                         </div>
                       </th>
                       <th className="p-2 whitespace-nowrap">
+                        <div className="font-semibold text-left">Admin</div>
+                      </th>
+                      <th className="p-2 whitespace-nowrap">
                         <div className="font-semibold text-left">
                           Nama Lengkap
                         </div>
@@ -289,6 +293,7 @@ const PPDB = () => {
                         const {
                           id,
                           user_id,
+                          maker,
                           registration_id,
                           student_id,
                           from_school,
@@ -302,6 +307,9 @@ const PPDB = () => {
                           <tr key={id}>
                             <td className="p-2 whitespace-nowrap font-semibold h-[4rem]">
                               {registration_id}
+                            </td>
+                            <td className="p-2 whitespace-nowrap font-semibold h-[4rem]">
+                              {maker ?? "-"}
                             </td>
                             <td className="p-2 whitespace-nowrap font-semibold">
                               {fullname}
@@ -343,7 +351,7 @@ const PPDB = () => {
                                   <button
                                     className="bg-orange-500 text-lg p-1 rounded-xl text-white"
                                     onClick={() => {
-                                      handleGetData(student_id);
+                                      handleGetData(user_id);
                                     }}
                                   >
                                     <AiFillPrinter />

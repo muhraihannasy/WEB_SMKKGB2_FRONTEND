@@ -60,6 +60,7 @@ import EditBlog from "./pages/Dashboard/blogs/EditBlog";
 import ArtikelDetail from "./pages/Landing Page/artikel/ArtikelDetail";
 import AddRegisterStudent from "./pages/PPDB/admin/AddRegisterStudent";
 import EditRegisterStudent from "./pages/PPDB/admin/EditRegisterStudent";
+import EditRegister from "./pages/PPDB/student/EditRegister";
 
 const ProtedtedRoute = ({ user, student = "", admin = "" }) => {
   if (!JSON.parse(localStorage.getItem("logged"))) {
@@ -183,6 +184,16 @@ function App() {
           path="/dashboard/ppdb/add"
           element={
             <ProtedtedRoute user={getUserIsLogin()} student={<AddRegister />} />
+          }
+        />
+        <Route
+          exact
+          path="/dashboard/ppdb/edit/:id"
+          element={
+            <ProtedtedRoute
+              user={getUserIsLogin()}
+              student={<EditRegister />}
+            />
           }
         />
         <Route exact path="/dashboard/ppdb/:id" element={<DetailPPDB />} />

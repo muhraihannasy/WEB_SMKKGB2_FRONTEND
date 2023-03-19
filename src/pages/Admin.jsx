@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Header from "../partials/Header";
 import Sidebar from "../partials/Sidebar";
-import { BiUserPlus } from "react-icons/bi";
+import { BiEdit, BiUserPlus } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { Modal } from "antd";
 import { APIBASEURL, FecthData, requestSetting } from "../service/API";
@@ -12,16 +12,20 @@ import Spinner from "react-spinkit";
 
 import { FaTrash } from "react-icons/fa";
 
-const menu = ["ppdb", "loker", "dashboard", "admin"];
+const menu = ["ppdb", "loker", "dashboard", "admin", "artikel"];
 
 const Admin = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const [confirmLoadingModal, setConfirmLoadingModal] = useState(false);
+  const [openModalEdit, setOpenModalEdit] = useState(false);
+  const [confirmLoadingModalEdit, setConfirmLoadingModalEdit] = useState(false);
+  const [isModeEdit, setIsModeEdit] = useState(false);
   const [updateData, setUpdateData] = useState(false);
   const [data, setData] = useState([]);
   const [photoProfile, setPhotoProfile] = useState("");
+  const [lastRefresh, setLastRefresh] = useState(new Date());
   const [formData, setFormData] = useState({
     user_type_id: 2,
     fullname: "",
@@ -30,6 +34,7 @@ const Admin = () => {
     photo: "",
     password: "",
   });
+  const [userId, setUserId] = useState(0);
   const [menuPermission, setMenuPermission] = useState([]);
   const photoInput = useRef();
   const checkedRef = useRef();
@@ -71,87 +76,6 @@ const Admin = () => {
       })
       .catch((error) => console.log("error", error));
   };
-
-  const showModal = (id) => {
-    setOpenModal(true);
-  };
-
-  const handleOkModal = async () => {
-    // setConfirmLoadingModal(true);
-    console.log(checkedRef.current);
-    return;
-    if (
-      formData.email == "" ||
-      formData.password == "" ||
-      formData.phone == "" ||
-      formData.fullname == ""
-    ) {
-      setConfirmLoadingModal(false);
-      notify("Form Tidak Boleh Kosong", "error");
-      return;
-    }
-
-    // setIsLoading(true);
-    formData.user_type_id = 2;
-    formData.menu_permission = menuPermission.join("|");
-
-    const request = await FecthData(
-      `${APIBASEURL}/user/store`,
-      requestSetting("POST", formData)
-    );
-    const response = request;
-
-    if (response.errors?.email) {
-      notify("Email Sudah Digunakan", "error");
-      // return;
-    }
-
-    setTimeout(() => {
-      if (response.status == 200) {
-        sessionStorage.setItem("success", "Berhasil Membuat Admin");
-      }
-
-      if (response.status == 400) {
-        sessionStorage.setItem("error", "Gagal Membuat Admin");
-      }
-
-      setUpdateData(true);
-
-      setIsLoading(false);
-      setOpenModal(false);
-      setConfirmLoadingModal(false);
-
-      //   Reset Form
-      setFormData({
-        user_type_id: 2,
-        fullname: "",
-        phone: "",
-        email: "",
-        photo: "",
-        password: "",
-      });
-      setPhotoProfile("");
-      photoInput.current.value = null;
-    }, 1000);
-  };
-
-  const handleCancelModal = () => {
-    console.log("Clicked cancel button");
-
-    //   Reset Form
-    setFormData({
-      user_type_id: 2,
-      fullname: "",
-      phone: "",
-      email: "",
-      photo: "",
-      password: "",
-    });
-    setPhotoProfile("");
-    photoInput.current.value = null;
-    setOpenModal(false);
-  };
-
   const handleDelete = async (id) => {
     setIsLoading(true);
     setUpdateData(true);
@@ -174,23 +98,160 @@ const Admin = () => {
     }, 1000);
   };
 
-  useEffect(() => {
-    if (sessionStorage.getItem("success")) {
-      notify(sessionStorage.getItem("success"), "success");
+  const showModal = (id) => {
+    setOpenModal(true);
+  };
 
-      setTimeout(() => {
-        sessionStorage.removeItem("success");
-      }, 1000);
+  const handleOkModal = async () => {
+    setConfirmLoadingModal(true);
+    console.log(checkedRef.current);
+
+    if (
+      formData.email == "" ||
+      formData.password == "" ||
+      formData.phone == "" ||
+      formData.fullname == ""
+    ) {
+      setConfirmLoadingModal(false);
+      notify("Form Tidak Boleh Kosong", "error");
+      return;
     }
 
-    if (sessionStorage.getItem("error")) {
-      notify(sessionStorage.getItem("error"), "error");
+    formData.user_type_id = 2;
+    formData.menu_permission = menuPermission.join("|");
 
-      setTimeout(() => {
-        sessionStorage.removeItem("error");
-      }, 1000);
+    const request = await FecthData(
+      `${APIBASEURL}/user/store`,
+      requestSetting("POST", formData)
+    );
+    const response = request;
+
+    if (response.errors?.email) {
+      notify("Email Sudah Digunakan", "error");
+      // return;
     }
-  }, [isLoading]);
+
+    setTimeout(() => {
+      if (response.status == 200) {
+        setConfirmLoadingModal(false);
+        setLastRefresh(new Date());
+        setOpenModal(false);
+        notify("Berhasil Membuat Admin Baru", "success");
+      }
+
+      if (response.status == 400) {
+        notify("Gagal Membuat Admin Baru", "error");
+        setConfirmLoadingModal(false);
+        setOpenModal(false);
+      }
+
+      //   Reset Form
+      setFormData({
+        user_type_id: 2,
+        fullname: "",
+        phone: "",
+        email: "",
+        photo: "",
+        password: "",
+      });
+      setPhotoProfile("");
+      photoInput.current.value = null;
+      setMenuPermission([]);
+    }, 1000);
+  };
+
+  const handleCancelModal = () => {
+    //   Reset Form
+    setFormData({
+      user_type_id: 2,
+      fullname: "",
+      phone: "",
+      email: "",
+      photo: "",
+      password: "",
+    });
+    setPhotoProfile("");
+    photoInput.current.value = null;
+    setOpenModal(false);
+    setMenuPermission([]);
+  };
+
+  const showModalEdit = () => {
+    setOpenModalEdit(true);
+  };
+
+  const handleOkModalEdit = async () => {
+    setConfirmLoadingModalEdit(true);
+    console.log(checkedRef.current);
+
+    if (
+      formData.email == "" ||
+      formData.password == "" ||
+      formData.phone == "" ||
+      formData.fullname == ""
+    ) {
+      setConfirmLoadingModalEdit(false);
+      notify("Form Tidak Boleh Kosong", "error");
+      return;
+    }
+
+    formData.menu_permission = menuPermission.join("|");
+
+    const request = await FecthData(
+      `${APIBASEURL}/admin/user/update/${userId}`,
+      requestSetting("PUT", formData)
+    );
+    const response = request;
+
+    if (response.errors?.email) {
+      notify("Email Sudah Digunakan", "error");
+    }
+
+    setTimeout(() => {
+      if (response.status == 200) {
+        setConfirmLoadingModalEdit(false);
+        setLastRefresh(new Date());
+        setOpenModalEdit(false);
+        notify("Berhasil Mengubah Admin", "success");
+      }
+
+      if (response.status == 400) {
+        notify("Gagal Membuat Admin Baru", "error");
+        setConfirmLoadingModalEdit(false);
+        setOpenModalEdit(false);
+      }
+
+      //   Reset Form
+      setFormData({
+        user_type_id: 2,
+        fullname: "",
+        phone: "",
+        email: "",
+        photo: "",
+        password: "",
+      });
+      setPhotoProfile("");
+      photoInput.current.value = null;
+      setMenuPermission([]);
+    }, 1000);
+  };
+
+  const handleCancelModalEdit = () => {
+    //   Reset Form
+    setFormData({
+      user_type_id: 2,
+      fullname: "",
+      phone: "",
+      email: "",
+      photo: "",
+      password: "",
+    });
+    setPhotoProfile("");
+    photoInput.current.value = null;
+    setOpenModalEdit(false);
+    setIsModeEdit(false);
+    setMenuPermission([]);
+  };
 
   useEffect(() => {
     const getAdmin = async () => {
@@ -203,12 +264,11 @@ const Admin = () => {
       setTimeout(() => {
         setData(response);
         setIsLoading(false);
-        setUpdateData(false);
       }, 1000);
     };
 
     (async () => getAdmin())();
-  }, [isLoading, updateData]);
+  }, [isLoading, lastRefresh]);
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -229,122 +289,244 @@ const Admin = () => {
       {/* Content Area */}
 
       {/* Modal */}
-      <Modal
-        open={openModal}
-        onOk={handleOkModal}
-        confirmLoading={confirmLoadingModal}
-        onCancel={handleCancelModal}
-      >
-        <div className="flex flex-col gap-2 mb-[1rem]">
-          <div className="w-[5rem] h-[5rem] rounded-full overflow-hidden">
-            <img
-              src={
-                photoProfile == ""
-                  ? "https://static.vecteezy.com/system/resources/thumbnails/009/734/564/small/default-avatar-profile-icon-of-social-media-user-vector.jpg"
-                  : photoProfile
-              }
-              className="w-full object-cover"
-              alt=""
+      {isModeEdit ? (
+        <Modal
+          open={openModalEdit}
+          onOk={handleOkModalEdit}
+          confirmLoading={confirmLoadingModalEdit}
+          onCancel={handleCancelModalEdit}
+        >
+          <div className="flex flex-col gap-2 mb-[1rem]">
+            <div className="w-[5rem] h-[5rem] rounded-full overflow-hidden">
+              <img
+                src={
+                  photoProfile == ""
+                    ? "https://static.vecteezy.com/system/resources/thumbnails/009/734/564/small/default-avatar-profile-icon-of-social-media-user-vector.jpg"
+                    : photoProfile
+                }
+                className="w-full object-cover"
+                alt=""
+              />
+            </div>
+            <label htmlFor="fullname" className="font-regular">
+              Photo
+            </label>
+            <input
+              type="file"
+              className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
+              onChange={(e) => handleUploadImage(e.target.files[0])}
+              ref={photoInput}
             />
           </div>
-          <label htmlFor="fullname" className="font-regular">
-            Photo
+          <div className="flex flex-col gap-2 mb-[1rem]">
+            <label htmlFor="fullname" className="font-regular">
+              Nama Lengkap
+            </label>
+            <input
+              type="text"
+              className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
+              name="fullname"
+              id="fullname"
+              onChange={(e) =>
+                setFormData({ ...formData, fullname: e.target.value })
+              }
+              value={formData.fullname}
+            />
+          </div>
+          <div className="flex flex-col gap-2 mb-[1rem]">
+            <label htmlFor="phone" className="font-regular">
+              No Telepon
+            </label>
+            <input
+              type="number"
+              className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
+              name="phone"
+              id="phone"
+              onChange={(e) =>
+                setFormData({ ...formData, phone: e.target.value })
+              }
+              value={formData.phone}
+            />
+          </div>
+          <div className="flex flex-col gap-2 mb-[1rem]">
+            <label htmlFor="email" className="font-regular">
+              Email
+            </label>
+            <input
+              type="email"
+              className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
+              name="email"
+              id="email"
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+              value={formData.email}
+            />
+          </div>
+          <div className="flex flex-col gap-2 mb-[1rem]">
+            <label htmlFor="password" className="font-regular">
+              Password
+            </label>
+            <input
+              type="password"
+              className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
+              name="password"
+              id="password"
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+              value={formData.password}
+            />
+            <p className="text-sm">*Kosongkan jika tidak ingin diubah</p>
+          </div>
+          <label
+            htmlFor="password"
+            className="block font-regular mb-[1rem] mt-[1rem]"
+          >
+            Menu Permission
           </label>
-          <input
-            type="file"
-            className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
-            onChange={(e) => handleUploadImage(e.target.files[0])}
-            ref={photoInput}
-          />
-        </div>
-        <div className="flex flex-col gap-2 mb-[1rem]">
-          <label htmlFor="fullname" className="font-regular">
-            Nama Lengkap
-          </label>
-          <input
-            type="text"
-            className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
-            name="fullname"
-            id="fullname"
-            onChange={(e) =>
-              setFormData({ ...formData, fullname: e.target.value })
-            }
-            value={formData.fullname}
-          />
-        </div>
-        <div className="flex flex-col gap-2 mb-[1rem]">
-          <label htmlFor="phone" className="font-regular">
-            No Telepon
-          </label>
-          <input
-            type="number"
-            className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
-            name="phone"
-            id="phone"
-            onChange={(e) =>
-              setFormData({ ...formData, phone: e.target.value })
-            }
-            value={formData.phone}
-          />
-        </div>
-        <div className="flex flex-col gap-2 mb-[1rem]">
-          <label htmlFor="email" className="font-regular">
-            Email
-          </label>
-          <input
-            type="email"
-            className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
-            name="email"
-            id="email"
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
-            value={formData.email}
-          />
-        </div>
-        <div className="flex flex-col gap-2 mb-[1rem]">
-          <label htmlFor="password" className="font-regular">
-            Password
-          </label>
-          <input
-            type="password"
-            className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
-            name="password"
-            id="password"
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
-            value={formData.password}
-          />
-        </div>
-        <label
-          htmlFor="password"
-          className="block font-regular mb-[1rem] mt-[1rem]"
-        >
-          Menu Permission
-        </label>
 
-        <div className="flex items-center gap-4">
-          {menu.map((item) => {
-            return (
-              <div className="flex items-center gap-2 mb-[1rem]">
-                <input
-                  type="checkbox"
-                  className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
-                  id={item}
-                  ref={checkedRef}
-                  onChange={(e) =>
-                    handleChangeMenuPermission(e.target.checked, item)
-                  }
-                />
-                <label htmlFor={item} className="font-regular">
-                  {item}
-                </label>
-              </div>
-            );
-          })}
-        </div>
-      </Modal>
+          <div className="flex items-center gap-4">
+            {menu.map((item) => {
+              return (
+                <div className="flex items-center gap-2 mb-[1rem]">
+                  <input
+                    type="checkbox"
+                    className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
+                    id={item}
+                    ref={checkedRef}
+                    onChange={(e) =>
+                      handleChangeMenuPermission(e.target.checked, item)
+                    }
+                    checked={menuPermission.includes(item)}
+                  />
+                  <label htmlFor={item} className="font-regular">
+                    {item}
+                  </label>
+                </div>
+              );
+            })}
+          </div>
+        </Modal>
+      ) : (
+        <Modal
+          open={openModal}
+          onOk={handleOkModal}
+          confirmLoading={confirmLoadingModal}
+          onCancel={handleCancelModal}
+        >
+          <div className="flex flex-col gap-2 mb-[1rem]">
+            <div className="w-[5rem] h-[5rem] rounded-full overflow-hidden">
+              <img
+                src={
+                  photoProfile == ""
+                    ? "https://static.vecteezy.com/system/resources/thumbnails/009/734/564/small/default-avatar-profile-icon-of-social-media-user-vector.jpg"
+                    : photoProfile
+                }
+                className="w-full object-cover"
+                alt=""
+              />
+            </div>
+            <label htmlFor="fullname" className="font-regular">
+              Photo
+            </label>
+            <input
+              type="file"
+              className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
+              onChange={(e) => handleUploadImage(e.target.files[0])}
+              ref={photoInput}
+            />
+          </div>
+          <div className="flex flex-col gap-2 mb-[1rem]">
+            <label htmlFor="fullname" className="font-regular">
+              Nama Lengkap
+            </label>
+            <input
+              type="text"
+              className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
+              name="fullname"
+              id="fullname"
+              onChange={(e) =>
+                setFormData({ ...formData, fullname: e.target.value })
+              }
+              value={formData.fullname}
+            />
+          </div>
+          <div className="flex flex-col gap-2 mb-[1rem]">
+            <label htmlFor="phone" className="font-regular">
+              No Telepon
+            </label>
+            <input
+              type="number"
+              className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
+              name="phone"
+              id="phone"
+              onChange={(e) =>
+                setFormData({ ...formData, phone: e.target.value })
+              }
+              value={formData.phone}
+            />
+          </div>
+          <div className="flex flex-col gap-2 mb-[1rem]">
+            <label htmlFor="email" className="font-regular">
+              Email
+            </label>
+            <input
+              type="email"
+              className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
+              name="email"
+              id="email"
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+              value={formData.email}
+            />
+          </div>
+          <div className="flex flex-col gap-2 mb-[1rem]">
+            <label htmlFor="password" className="font-regular">
+              Password
+            </label>
+            <input
+              type="password"
+              className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
+              name="password"
+              id="password"
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+              value={formData.password}
+            />
+          </div>
+          <label
+            htmlFor="password"
+            className="block font-regular mb-[1rem] mt-[1rem]"
+          >
+            Menu Permission
+          </label>
+
+          <div className="flex items-center gap-4">
+            {menu.map((item) => {
+              return (
+                <div className="flex items-center gap-2 mb-[1rem]">
+                  <input
+                    type="checkbox"
+                    className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
+                    id={item}
+                    ref={checkedRef}
+                    onChange={(e) =>
+                      handleChangeMenuPermission(e.target.checked, item)
+                    }
+                    checked={menuPermission.includes(item)}
+                  />
+                  <label htmlFor={item} className="font-regular">
+                    {item}
+                  </label>
+                </div>
+              );
+            })}
+          </div>
+        </Modal>
+      )}
 
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -397,13 +579,35 @@ const Admin = () => {
                           </td>
                           <td>{item.fullname}</td>
                           <td>{item.email}</td>
-                          <td className="flex justify-center pt-[1.5rem]">
-                            <button className="flex items-center w-[2rem] h-[2rem] rounded-full bg-third justify-center">
-                              <FaTrash
-                                className="text-white"
-                                onClick={() => handleDelete(item.id)}
-                              />
-                            </button>
+                          <td className="p-2 whitespace-nowrap flex justify-center">
+                            <div className="flex items-center gap-2 pt-3">
+                              <button className="flex items-center p-1.5 rounded-xl text-md bg-third justify-center">
+                                <FaTrash
+                                  className="text-white"
+                                  onClick={() => handleDelete(item.id)}
+                                />
+                              </button>
+                              <button
+                                className="bg-yellow-500 p-1 rounded-xl text-lg text-white"
+                                onClick={() => {
+                                  setIsModeEdit(true);
+                                  showModalEdit();
+                                  setFormData({
+                                    fullname: item.fullname,
+                                    email: item.email,
+                                    photo: item.photo,
+                                    menu_permission: item.menu_permission,
+                                    phone: item.phone,
+                                  });
+                                  setMenuPermission(
+                                    item.menu_permission.split("|")
+                                  );
+                                  setUserId(item.id);
+                                }}
+                              >
+                                <BiEdit />
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       );

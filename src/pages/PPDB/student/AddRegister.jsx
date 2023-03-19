@@ -95,7 +95,6 @@ const fieldRequire = [
   "extra2",
   "uniform1",
   "uniform2",
-
   "uniform3",
   "uniform4",
 ];
@@ -300,7 +299,7 @@ const AddRegister = () => {
 
     if (request.success) {
       setIsLoading(false);
-      notify(request.message, "success");
+      notify("Berhasil Mengubah Data", "success");
 
       setTimeout(() => {
         navigate("/dashboard/ppdb");

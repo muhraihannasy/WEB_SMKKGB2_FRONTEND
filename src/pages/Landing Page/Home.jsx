@@ -70,7 +70,7 @@ const Home = () => {
               </h2>
               <h2 className="font-bold leading-[115.9%] sm:text-[3rem] text-[2.5rem] mb-[1rem] mt-[0.5rem]">
                 <span className="text-third">Best </span> Vocational <br />
-                School <span className="text-fourty">in</span> Bekasi
+              High School <span className="text-fourty">in</span> Bekasi
               </h2>
               <p className="font-medium leading-relaxed sm:w-[24rem] w-[18rem] lg:mx-[0] text-[0.9rem] mx-auto  ">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque,

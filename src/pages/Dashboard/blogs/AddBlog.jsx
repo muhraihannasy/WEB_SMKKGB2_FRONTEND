@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import JoditEditor from "jodit-react";
 import { Link, useNavigate } from "react-router-dom";
 import { MdError } from "react-icons/md";
@@ -12,8 +12,9 @@ import { notify } from "../../../utils/Utils";
 
 const AddBlog = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isLoading, setIsloading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     blog_category_id: "",
     title: "",
@@ -26,7 +27,7 @@ const AddBlog = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setIsloading(true);
+    setIsLoading(true);
 
     const req = await FecthData(
       `${APIBASEURL}/admin/blogs`,
@@ -39,8 +40,9 @@ const AddBlog = () => {
         setErrors(res.errors);
       if (res.status == 200) {
         setErrors({});
+        notify("Berhasil Membuat Blog", "success");
       }
-      setIsloading(false);
+      setIsLoading(false);
     }, 1000);
 
     setTimeout(() => {
@@ -78,14 +80,35 @@ const AddBlog = () => {
       .catch((error) => console.log("error", error));
   }
 
+  async function getCategories() {
+    const req = await FecthData(
+      `${APIBASEURL}/admin/blog_categories`,
+      requestSetting("GET")
+    );
+    const res = req;
+
+    setTimeout(() => {
+      setCategories(res);
+      setIsLoading(false);
+    }, 1000);
+  }
+
+  useEffect(() => {
+    (async () => getCategories())();
+  }, []);
+
   return (
     <div className="flex h-screen overflow-hidden">
+      {/* Toast */}
+      <Toaster position="top-right" reverseOrder={false} />
+
       {isLoading && (
         <div className="fixed left-0 top-0 h-[100%] w-full bg-white flex items-center flex-col justify-center z-[99] ">
           <Spinner name="line-scale-pulse-out" />
           Loading....
         </div>
       )}
+
       {/* Sidebar  */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       {/* Toast */}
@@ -102,6 +125,7 @@ const AddBlog = () => {
               formData={formData}
               setFormData={setFormData}
               errors={errors}
+              categories={categories}
               onSubmit={(e) => handleSubmit(e)}
               onUpload={(file) => handleUpload(file)}
             />
@@ -112,7 +136,15 @@ const AddBlog = () => {
   );
 };
 
-function Form({ formData, setFormData, ref, onSubmit, errors, onUpload }) {
+function Form({
+  formData,
+  setFormData,
+  ref,
+  onSubmit,
+  errors,
+  onUpload,
+  categories,
+}) {
   return (
     <form
       className="bg-white shadow-lg rounded-[10px] px-[2rem] py-[2rem] xl:w-[60rem] mx-auto"
@@ -202,9 +234,11 @@ function Form({ formData, setFormData, ref, onSubmit, errors, onUpload }) {
             }
           >
             <option value="">Pilih Kategori</option>
-            <option value="1">Coding</option>
-            <option value="2">Consultant</option>
-            <option value="3">Perpajakan</option>
+            {categories.map((item) => (
+              <option value={item.id} key={item.id}>
+                {item.name}
+              </option>
+            ))}
           </select>
           <span
             className={`text-red-500 text-[0.7rem] mt-2 flex items-center ${

@@ -84,6 +84,10 @@ const Register = () => {
 
       if (result.success) {
         sessionStorage.setItem("success", result.success);
+        sessionStorage.setItem(
+          "info",
+          "*Silahkan Login untuk melihat kode pembayaran"
+        );
       }
     }, 1000);
   };
@@ -102,18 +106,18 @@ const Register = () => {
     }
   }, [isLoading]);
 
-  if (isLoading) {
-    return (
-      <div className="fixed left-0 top-0 h-[100%] w-full bg-white flex items-center flex-col justify-center z-[99] ">
-        <Spinner name="line-scale-pulse-out" />
-        Loading....
-      </div>
-    );
-  }
   return (
     <div className=" h-full w-full my-auto bg-white grid lg:grid-cols-2 font-poppins ">
       {/* Toast */}
       <Toaster position="top-right" reverseOrder={false} />
+
+      {isLoading && (
+        <div className="fixed left-0 top-0 h-[100%] w-full bg-white flex items-center flex-col justify-center z-[99] ">
+          <Spinner name="line-scale-pulse-out" />
+          Loading....
+        </div>
+      )}
+
       <div className="lg:fixed relative flex lg:flex-row flex-col w-full h-[100%] lg:h-[100vh] register-form">
         <div className="relative h-max lg:w-[50%]">
           <div className="absolute sm:w-max w-full top-[1rem] left-[0rem] py-3 px-6 ">

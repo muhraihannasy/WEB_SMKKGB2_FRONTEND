@@ -38,6 +38,7 @@ const Jobs = () => {
         `${APIBASEURL}/admin/jobs`,
         requestSetting("GET")
       );
+
       const res = req.data;
 
       setTimeout(() => {
@@ -49,19 +50,18 @@ const Jobs = () => {
     (async () => getData())();
   }, [lastRefresh]);
 
-  if (isLoading) {
-    return (
-      <div className="fixed left-0 top-0 h-[100%] w-full bg-white flex items-center flex-col justify-center z-[99] ">
-        <Spinner name="line-scale-pulse-out" />
-        Loading....
-      </div>
-    );
-  }
-
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Sidebar  */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
+      {/* Loading */}
+      {isLoading && (
+        <div className="fixed left-0 top-0 h-[100%] w-full bg-white flex items-center flex-col justify-center z-[99] ">
+          <Spinner name="line-scale-pulse-out" />
+          Loading....
+        </div>
+      )}
 
       {/* Content Area */}
 
@@ -103,6 +103,9 @@ function Table({ navigate, items, handleDelete }) {
             <div className="font-semibold text-left">Lowongan</div>
           </th>
           <th className="p-2 whitespace-nowrap">
+            <div className="font-semibold text-left">kategori</div>
+          </th>
+          <th className="p-2 whitespace-nowrap">
             <div className="font-semibold text-left">Perusahaan</div>
           </th>
           <th className="p-2 whitespace-nowrap">
@@ -118,10 +121,13 @@ function Table({ navigate, items, handleDelete }) {
       </thead>
       <tbody className="text-sm divide-y divide-slate-100 pt-2">
         {items.map((item, i) => {
-          const { id, name, maker, company_name, location } = item;
+          const { id, name, maker, company_name, location, category } = item;
           return (
             <tr className="h-[4rem]" key={i}>
               <td className="p-2 whitespace-nowrap">{name}</td>
+              <td className="p-2 whitespace-nowrap font-semibold">
+                {category}
+              </td>
               <td className="p-2 whitespace-nowrap font-semibold">
                 {company_name}
               </td>

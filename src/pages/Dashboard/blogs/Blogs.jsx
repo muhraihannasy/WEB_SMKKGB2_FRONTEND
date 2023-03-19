@@ -110,6 +110,9 @@ function Table({ navigate, items, handleDelete }) {
           <th className="p-2 whitespace-nowrap">
             <div className="font-semibold text-left">Title</div>
           </th>
+          <th className="p-2 whitespace-nowrap">
+            <div className="font-semibold text-left">kategori</div>
+          </th>
 
           <th className="p-2 whitespace-nowrap">
             <div className="font-semibold text-left">Pembuat</div>
@@ -121,13 +124,14 @@ function Table({ navigate, items, handleDelete }) {
       </thead>
       <tbody className="text-sm divide-y divide-slate-100 pt-2">
         {items.map((item, i) => {
-          const { id, title, maker } = item;
+          const { id, title, maker, category } = item;
           return (
             <tr className="h-[4rem]" key={i}>
-              <td className="p-2 whitespace-nowrap">
+              <td className="p-2 whitespace-nowrap sm:w-[24rem]">
                 {title.length > 30 ? title.slice(0, 40) + "..." : title}
               </td>
 
+              <td className="p-2 whitespace-nowrap">{category}</td>
               <td className="p-2 whitespace-nowrap">{maker}</td>
               <td className="p-2 whitespace-nowrap flex justify-center">
                 <div className="flex items-center gap-2 pt-3">

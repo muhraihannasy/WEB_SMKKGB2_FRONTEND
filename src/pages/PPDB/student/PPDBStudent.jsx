@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
+import { BiEdit } from "react-icons/bi";
 import { BsFillPersonPlusFill } from "react-icons/bs";
 import { IoNewspaperSharp } from "react-icons/io5";
 import { RiEyeFill } from "react-icons/ri";
@@ -13,7 +14,6 @@ import { APIBASEURL, FecthData, requestSetting } from "../../../service/API";
 const PPDBStudent = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState({});
   const [data, setData] = useState({});
   const [isNotHaveForm, setIsNotHaveForm] = useState(false);
   const navigate = useNavigate();
@@ -28,19 +28,18 @@ const PPDBStudent = () => {
       const dataStudent = res;
 
       const result = await FecthData(
-        `${APIBASEURL}/student/registration/${dataStudent.student_id}`,
+        `${APIBASEURL}/student/registration`,
         requestSetting("GET")
       );
 
       setTimeout(() => {
-        if (result && result.status === "Belum Mengisi Formulir") {
+        if (result[0] && result[0].status === "Belum Mengisi Formulir") {
           setIsNotHaveForm(true);
         } else {
           setIsNotHaveForm(false);
         }
 
-        setUser(data);
-        setData(result);
+        setData(result[0]);
         setIsLoading(false);
       }, 500);
     };
@@ -215,6 +214,14 @@ const PPDBStudent = () => {
                           ) : (
                             ""
                           )}
+                          <button
+                            className="bg-yellow-500 p-1 text-lg rounded-xl text-white"
+                            onClick={() =>
+                              navigate(`/dashboard/ppdb/edit/${data.id}`)
+                            }
+                          >
+                            <BiEdit />
+                          </button>
                         </div>
                       </td>
                     </tr>

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import JoditEditor from "jodit-react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -9,12 +9,15 @@ import Spinner from "react-spinkit";
 import { FecthData, APIBASEURL, requestSetting } from "../../../service/API";
 import Header from "../../../partials/Header";
 import Sidebar from "../../../partials/Sidebar";
+import { Toaster } from "react-hot-toast";
+import { notify } from "../../../utils/Utils";
 
 const AddJobs = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isLoading, setIsloading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [qualifications, setQualifications] = useState([""]);
   const [errors, setErrors] = useState({});
+  const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     job_category_id: "",
     name: "",
@@ -29,7 +32,7 @@ const AddJobs = () => {
 
   async function handleSubmit(e, qualifications) {
     e.preventDefault();
-    setIsloading(true);
+    setIsLoading(true);
 
     const data = { ...formData };
     data.qualification = qualifications.join("|");
@@ -41,29 +44,48 @@ const AddJobs = () => {
     const res = req;
 
     setTimeout(() => {
-      if (res.errors && Object.keys(res.errors).length > 0)
-        setErrors(res.errors);
       if (res.status == 200) {
         setErrors({});
         navigate("/dashboard/lowongan");
+        notify("Berhasil Membuat lowongan", "success");
       }
 
-      setIsloading(false);
+      setIsLoading(false);
     }, 1000);
   }
 
-  if (isLoading) {
-    return (
-      <div className="fixed left-0 top-0 h-[100%] w-full bg-white flex items-center flex-col justify-center z-[99] ">
-        <Spinner name="line-scale-pulse-out" />
-        Loading....
-      </div>
+  async function getCategories() {
+    const req = await FecthData(
+      `${APIBASEURL}/admin/job_categories`,
+      requestSetting("GET")
     );
+    const res = req;
+
+    setTimeout(() => {
+      setCategories(res);
+      setIsLoading(false);
+    }, 1000);
   }
+
+  useEffect(() => {
+    (async () => getCategories())();
+  }, []);
+
   return (
     <div className="flex h-screen overflow-hidden">
+      {/* Toast */}
+      <Toaster position="top-right" reverseOrder={false} />
+
       {/* Sidebar  */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
+      {/* Loading */}
+      {isLoading && (
+        <div className="fixed left-0 top-0 h-[100%] w-full bg-white flex items-center flex-col justify-center z-[99] ">
+          <Spinner name="line-scale-pulse-out" />
+          Loading....
+        </div>
+      )}
 
       {/* Content Area */}
 
@@ -79,6 +101,7 @@ const AddJobs = () => {
               errors={errors}
               qualifications={qualifications}
               setQualifications={setQualifications}
+              categories={categories}
               onSubmit={(e) => handleSubmit(e, qualifications)}
             />
           </div>
@@ -96,6 +119,7 @@ function Form({
   setQualifications,
   onSubmit,
   errors,
+  categories,
 }) {
   let newArrQualification = [...qualifications];
 
@@ -195,9 +219,11 @@ function Form({
             }
           >
             <option value="">Pilih Kategori</option>
-            <option value="1">Sofware Enginner</option>
-            <option value="2">IT</option>
-            <option value="3">Accounting</option>
+            {categories.map((item) => (
+              <option value={item.id} key={item.id}>
+                {item.name}
+              </option>
+            ))}
           </select>
           <span
             className={`text-red-500 text-[0.7rem] mt-2 flex items-center ${

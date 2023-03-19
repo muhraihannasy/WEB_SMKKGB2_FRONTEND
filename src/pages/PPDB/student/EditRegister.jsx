@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { IoAddCircleSharp, IoChevronBackCircleSharp } from "react-icons/io5";
 import Spinner from "react-spinkit";
+import { UploadOutlined } from "@ant-design/icons";
+import { Button, Upload, Progress } from "antd";
 
 // Utils
 import {
@@ -20,20 +23,20 @@ import {
   extracurriculer,
   uniform,
   year,
-  competency,
   transport,
 } from "../../../utils/Data";
 
 // Component
-import { Input } from "../../../components";
+import { Input, ProgressBarComponent } from "../../../components";
 import Header from "../../../partials/Header";
 import Sidebar from "../../../partials/Sidebar";
 import { APIBASEURL, FecthData, requestSetting } from "../../../service/API";
-import { notify } from "../../../utils/Utils";
-import { useNavigate, useParams } from "react-router-dom";
+import { getUserIsLogin, notify } from "../../../utils/Utils";
+import { json, useNavigate, useParams } from "react-router-dom";
 import { IoMdTrash } from "react-icons/io";
 import { Toaster } from "react-hot-toast";
 import TabsComponent from "../../../components/TabsComponent";
+import { formatStrategyValues } from "rc-tree-select/lib/utils/strategyUtil";
 
 const scholarshipInterface = {
   id: "",
@@ -52,11 +55,6 @@ const achievementInterface = {
 };
 
 const fieldRequire = [
-  "from_school",
-  "fullname",
-  "phone",
-  "email",
-  "password",
   "nisn",
   "nik",
   "gender",
@@ -67,10 +65,6 @@ const fieldRequire = [
   "gender",
   "foto_nisn",
   "foto_kartu_keluarga",
-
-  "class1",
-  "class2",
-  "class3",
 
   "special_needs",
   "date",
@@ -109,14 +103,9 @@ const fieldRequire = [
   "uniform4",
 ];
 
-const EditRegisterStudent = () => {
-  const [isLoading, setIsLoading] = useState(true);
+const EditRegister = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    id: "",
-    fullname: "",
-    phone: "",
-    email: "",
-    password: "",
     nisn: "",
     nik: "",
     no_certificate_registration: "",
@@ -130,7 +119,6 @@ const EditRegisterStudent = () => {
     foto_kks: "",
     foto_kip: "",
     special_needs: "",
-    from_school: "",
 
     // Birth
     date: "",
@@ -152,10 +140,6 @@ const EditRegisterStudent = () => {
     father_education: "",
     father_job: "",
     father_income: "",
-
-    class1: "",
-    class2: "",
-    class3: "",
 
     // Mother
     mother_name: "",
@@ -254,9 +238,6 @@ const EditRegisterStudent = () => {
       uniform4,
       extra1,
       extra2,
-      class1,
-      class2,
-      class3,
       father_city,
       father_date,
       mother_city,
@@ -289,7 +270,6 @@ const EditRegisterStudent = () => {
     data.achievements = achievements;
     data.foto_kartu_keluarga = imagesUpload.foto_kartu_keluarga;
     data.foto_nisn = imagesUpload.foto_nisn;
-    data.class_pick = `${class1}|${class2}|${class3}`;
 
     delete data.city;
     delete data.alamat;
@@ -320,13 +300,13 @@ const EditRegisterStudent = () => {
     delete data.mother_city;
 
     const request = await FecthData(
-      `${APIBASEURL}/admin/ppdb/update`,
+      `${APIBASEURL}/student/ppdb/update`,
       requestSetting("PUT", data)
     );
 
     if (request.success) {
       setIsLoading(false);
-      notify("Berhasil Mengubah Data", "success");
+      notify(request.message, "success");
 
       setTimeout(() => {
         navigate("/dashboard/ppdb");
@@ -427,21 +407,12 @@ const EditRegisterStudent = () => {
   useEffect(() => {
     async function getData() {
       const result = await FecthData(
-        `${APIBASEURL}/admin/ppdb/${id}`,
+        `${APIBASEURL}/student/registration/detail`,
         requestSetting("GET")
       );
 
       setTimeout(() => {
-        const {
-          achievement,
-          scholarship,
-          student,
-          registration,
-          fullname,
-          email,
-          phone,
-          id,
-        } = result;
+        const { achievement, scholarship, student, registration } = result;
 
         const {
           gender,
@@ -481,8 +452,6 @@ const EditRegisterStudent = () => {
           no_serial_skhus,
           type_registration,
           uniform,
-          class_pick,
-          from_school,
         } = registration;
 
         const extra = extracurricular.split("|");
@@ -494,7 +463,6 @@ const EditRegisterStudent = () => {
         const s_kip = kip.split("|");
         const s_kps = kps.split("|");
         const s_kks = kks.split("|");
-        const s_class = class_pick.split("|");
 
         scholarship.map((item) => {
           schArr.push({
@@ -528,17 +496,10 @@ const EditRegisterStudent = () => {
           foto_kps: s_kps[2],
         });
 
+        console.log(uniforms);
         setFormData({
-          id,
           scholarships: schArr,
           achievements: achArr,
-          class1: s_class[0],
-          class2: s_class[1],
-          class3: s_class[2],
-          from_school,
-          phone,
-          fullname,
-          email,
           receiver_kip: s_kip[0] == "-" ? "" : s_kip[0],
           name_kip: s_kip[1] == "-" ? "" : s_kip[1],
           no_kip: s_kip[2] == "-" ? "" : s_kip[2],
@@ -597,8 +558,6 @@ const EditRegisterStudent = () => {
           uniform3: uniforms[2],
           uniform4: uniforms[3],
         });
-
-        setIsLoading(false);
       }, 1000);
     }
 
@@ -647,84 +606,11 @@ const EditRegisterStudent = () => {
               <TabsComponent
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
-                type="admin"
+                type="student"
               />
               <div
                 className={`wrapper-form-group mt-[2rem]  ${
                   currentTab == 1 ? "active-form" : "non-active-form"
-                } `}
-              >
-                <div className="form-group">
-                  <Input
-                    type="text"
-                    field="fullname"
-                    label="Nama Lengkap"
-                    errors={errors}
-                    formData={formData}
-                    setFormData={setFormData}
-                  />
-                  <Input
-                    type="text"
-                    field="from_school"
-                    label="Asal Sekolah"
-                    errors={errors}
-                    formData={formData}
-                    setFormData={setFormData}
-                  />
-                  <Input
-                    type="number"
-                    field="phone"
-                    label="No Telepon"
-                    errors={errors}
-                    formData={formData}
-                    setFormData={setFormData}
-                  />
-                  <Input
-                    type="select"
-                    field="class1"
-                    label="Pilihan Kompetensi 1"
-                    errors={errors}
-                    formData={formData}
-                    setFormData={setFormData}
-                    data={competency}
-                  />
-                  <Input
-                    type="select"
-                    field="class2"
-                    label="Pilihan Kompetensi 2"
-                    errors={errors}
-                    formData={formData}
-                    setFormData={setFormData}
-                    data={competency}
-                  />
-                  <Input
-                    type="select"
-                    field="class3"
-                    label="Pilihan Kompetensi 3"
-                    errors={errors}
-                    formData={formData}
-                    setFormData={setFormData}
-                    data={competency}
-                  />
-
-                  <div>
-                    <Input
-                      type="password"
-                      field="password"
-                      label="Password"
-                      errors={errors}
-                      formData={formData}
-                      setFormData={setFormData}
-                    />
-                    <p className="text-[0.8rem] mt-[10px]">
-                      (Kosongkan Jika Tidak ingin diubah)
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div
-                className={`wrapper-form-group mt-[2rem]  ${
-                  currentTab == 2 ? "active-form" : "non-active-form"
                 } `}
               >
                 <div className="form-group">
@@ -868,7 +754,7 @@ const EditRegisterStudent = () => {
               </div>
               <div
                 className={`wrapper-form-group mt-[4rem]  ${
-                  currentTab == 3 ? "active-form" : "non-active-form"
+                  currentTab == 2 ? "active-form" : "non-active-form"
                 } `}
               >
                 <h2 className="mt-[2rem] mb-[1.5rem] font-semibold border-b-2 border-slate-300 w-max  text-[1.5rem]">
@@ -1004,7 +890,7 @@ const EditRegisterStudent = () => {
 
               <div
                 className={`wrapper-form-group mt-[4rem]  ${
-                  currentTab == 4 ? "active-form" : "non-active-form"
+                  currentTab == 3 ? "active-form" : "non-active-form"
                 } `}
               >
                 <p className="mb-[10px]">*Kosongkan Jika Tidak Ada</p>
@@ -1198,7 +1084,7 @@ const EditRegisterStudent = () => {
               </div>
               <div
                 className={`wrapper-form-group mt-[4rem]  ${
-                  currentTab == 5 ? "active-form" : "non-active-form"
+                  currentTab == 4 ? "active-form" : "non-active-form"
                 } `}
               >
                 <p className="mb-[10px]">*Kosongkan Jika Tidak Ada</p>
@@ -1329,7 +1215,7 @@ const EditRegisterStudent = () => {
 
               <div
                 className={`wrapper-form-group mt-[4rem]  ${
-                  currentTab == 6 ? "active-form" : "non-active-form"
+                  currentTab == 5 ? "active-form" : "non-active-form"
                 } `}
               >
                 <div className="form-group">
@@ -1425,7 +1311,7 @@ const EditRegisterStudent = () => {
               </div>
               <div
                 className={`wrapper-form-group mt-[4rem]  ${
-                  currentTab == 7 ? "active-form" : "non-active-form"
+                  currentTab == 6 ? "active-form" : "non-active-form"
                 } `}
               >
                 <div className="flex flex-wrap gap-8">
@@ -1532,4 +1418,4 @@ const EditRegisterStudent = () => {
   );
 };
 
-export default EditRegisterStudent;
+export default EditRegister;
