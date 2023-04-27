@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { IoAddCircleSharp, IoChevronBackCircleSharp } from "react-icons/io5";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import Spinner from "react-spinkit";
-import { UploadOutlined } from "@ant-design/icons";
-import { Button, Upload, Progress } from "antd";
+
+// Icon
+import { IoAddCircleSharp, IoChevronBackCircleSharp } from "react-icons/io5";
+import { IoMdTrash } from "react-icons/io";
+
+// Service
+import { APIBASEURL, FecthData, requestSetting } from "../../../service/API";
 
 // Utils
 import {
@@ -25,147 +30,32 @@ import {
   year,
   transport,
 } from "../../../utils/Data";
+import { notify } from "../../../utils/Utils";
 
-// Component
-import { Input, ProgressBarComponent } from "../../../components";
+// Partials
 import Header from "../../../partials/Header";
 import Sidebar from "../../../partials/Sidebar";
-import { APIBASEURL, FecthData, requestSetting } from "../../../service/API";
-import { getUserIsLogin, notify } from "../../../utils/Utils";
-import { json, useNavigate } from "react-router-dom";
-import { IoMdTrash } from "react-icons/io";
-import { Toaster } from "react-hot-toast";
+
+// Component
+import { Input } from "../../../components";
 import TabsComponent from "../../../components/TabsComponent";
 import Preview from "../../../components/Preview";
 
-const scholarshipInterface = {
-  type_scholarship: "",
-  year_start_at_scholarship: "",
-  year_finish_at_scholarship: "",
-  descriptions_scholarship: "",
-};
-const achievementInterface = {
-  name_achievement: "",
-  year_achievement: "",
-  type_achievement: "",
-  level_achievement: "",
-  organinizer_achievement: "",
-};
+// Interfaces
+import {
+  scholarshipInterface,
+  achievementInterface,
+  formPPDBStudentInterface,
+  imagesUploadPPDBInterface,
+} from "../../../interfaces";
 
-const fieldRequire = [
-  "nisn",
-  "nik",
-  "gender",
-  "no_certificate_registration",
-  "religion",
-  "weight",
-  "height",
-  "gender",
-  "foto_nisn",
-  "foto_kartu_keluarga",
-
-  "special_needs",
-  "date",
-  "city",
-  "alamat",
-  "rt",
-  "rw",
-  "kelurahan",
-  "kecamatan",
-  "father_name",
-  "father_nik",
-
-  "father_date",
-  "father_city",
-  "father_education",
-  "father_job",
-  "father_income",
-  "mother_name",
-  "mother_nik",
-  "mother_date",
-  "mother_city",
-  "mother_education",
-
-  "mother_job",
-  "mother_income",
-  "type_registration",
-  "no_examinee",
-  "no_serial_diploma",
-  "no_serial_skhus",
-  "extra1",
-  "extra2",
-  "uniform1",
-  "uniform2",
-  "uniform3",
-  "uniform4",
-];
+// Field Require
+import { fieldRequireFormPPDBStudent } from "../../../Field Require/index";
 
 const AddRegister = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    nisn: "",
-    nik: "",
-    no_certificate_registration: "",
-    religion: "",
-    weight: "",
-    height: "",
-    gender: "",
-    foto_nisn: "",
-    foto_kartu_keluarga: "",
-    foto_kps: "",
-    foto_kks: "",
-    foto_kip: "",
-    special_needs: "",
-
-    // Birth
-    date: "",
-    city: "",
-
-    // Address
-    alamat: "",
-    rt: "",
-    rw: "",
-    kelurahan: "",
-    kecamatan: "",
-    kodepos: "",
-
-    // Father
-    father_name: "",
-    father_nik: "",
-    father_date: "",
-    father_city: "",
-    father_education: "",
-    father_job: "",
-    father_income: "",
-
-    // Mother
-    mother_name: "",
-    mother_nik: "",
-    mother_date: "",
-    mother_city: "",
-    mother_education: "",
-    mother_job: "",
-    mother_income: "",
-
-    // Register
-    type_registration: "",
-    no_examinee: "",
-    no_serial_diploma: "",
-    no_serial_skhus: "",
-    extra1: "",
-    extra2: "",
-    uniform1: "",
-    uniform2: "",
-    uniform3: "",
-    uniform4: "",
-
-    receiver_kip: "",
-    receiver_kps: "",
-    no_kip: "",
-    no_kps: "",
-    no_kks: "",
-    name_kip: "",
-    reason_kip: "",
+    ...formPPDBStudentInterface,
   });
   const [scholarships, setScholarships] = useState([
     { ...scholarshipInterface },
@@ -174,16 +64,11 @@ const AddRegister = () => {
     { ...achievementInterface },
   ]);
   const [imagesUpload, setImagesUpload] = useState({
-    foto_nisn: " ",
-    foto_kartu_keluarga: "",
-    foto_kip: "",
-    foto_kks: "",
-    foto_kps: "",
+    ...imagesUploadPPDBInterface,
   });
   const [errors, setErrors] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState(1);
-  const [totalForm, setTotalForm] = useState(8);
   const [isSubmit, setIsSubmit] = useState(false);
   const navigate = useNavigate();
   let errorsTemp = [];
@@ -196,7 +81,10 @@ const AddRegister = () => {
 
     for (const propFormData in formData) {
       let propToString = propFormData.toString();
-      if (formData[propFormData] == "" && fieldRequire.includes(propToString)) {
+      if (
+        formData[propFormData] == "" &&
+        fieldRequireFormPPDBStudent.includes(propToString)
+      ) {
         errorsTemp.push(propToString);
       }
     }

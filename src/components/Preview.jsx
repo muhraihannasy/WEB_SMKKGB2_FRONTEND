@@ -1,6 +1,6 @@
 const Preview = ({ src }) => {
   let content = "";
-
+  console.log(src, "src ni box");
   if (src !== "") {
     content = <img src={src} alt="" className="w-full" />;
   } else {
