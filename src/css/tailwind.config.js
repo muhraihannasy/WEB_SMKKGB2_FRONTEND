@@ -11,6 +11,7 @@ module.exports = {
         fourty: "#74BAA9",
         fifty: "#34364a",
         sixty: "#999aa4",
+        seventy: "#99cdf2",
         // secondary: "",
       },
       boxShadow: {

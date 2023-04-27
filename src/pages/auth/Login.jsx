@@ -5,7 +5,10 @@ import Spinner from "react-spinkit";
 import { APIBASEURL, FecthData, requestSetting } from "../../service/API";
 import { notify } from "../../utils/Utils";
 
+// Images
 import Logo from "../../images/logo.png";
+import Teacher from "../../images/svg/Mathematics-rafiki.svg";
+import squircle2 from "../../images/svg/squircle2.svg";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -79,7 +82,7 @@ const Login = () => {
   }, [isLoading]);
 
   return (
-    <div className=" h-full w-full my-auto bg-white grid lg:grid-cols-2 grid-cols-1 font-poppins">
+    <div className="fixed h-full w-full bg-white font-poppins overflow-y-auto">
       {/* Toast */}
       <Toaster position="top-right" reverseOrder={false} />
 
@@ -90,74 +93,84 @@ const Login = () => {
         </div>
       )}
 
-      <div className="px-6 py-10 order-2">
-        <form
-          className="lg:w-[70%] sm:w-[50%] sm:mx-auto lg:mt-[4.5rem]"
-          onSubmit={(e) => handleSubmit(e)}
-        >
-          <h2 className="mb-[6px] font-bold text-[1.5rem]">Login</h2>
-          <p
-            className={`mb-[1.5rem] ${
-              !sessionStorage.getItem("info") && "hidden"
-            }`}
-          >
-            {sessionStorage.getItem("info")}
-          </p>
-
-          <div className="flex flex-col mb-[1.5rem]">
-            <label htmlFor="">Email</label>
-            <input
-              type="text"
-              className="rounded-full border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
-              placeholder="example@gmail.com"
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              value={formData.email}
-            />
+      <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
+        <div className="relative w-full flex items-center justify-center flex-col bg-[#28288b] pb-[2em] rounded-bl-[2em] rounded-br-[2em] lg:rounded-none lg:overflow-hidden z-10 px-3">
+          <img
+            src={Teacher}
+            alt=""
+            className="w-[20em] lg:w-[25em]
+          "
+          />
+          <div className="text-white text-center">
+            <h1 className="text-[1em] font-semibold mx-auto mt-5 mb-3">
+              PPDB SMK Karya Guna Bhakti 2 2023
+            </h1>
+            <p className="text-[0.9em] w-[90%] lg:w-[30em] mx-auto">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
+              nisi praesentium dicta ducimus cum ab illo,
+            </p>
           </div>
 
-          <div className="flex flex-col ">
-            <label htmlFor="">Password</label>
-            <input
-              type="password"
-              className="rounded-full mt-[0.5rem] border-[#b3b3b3] py-3 px-5"
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-            />
-          </div>
-
-          <button
-            className="mt-[2.5rem] mb-[1.6rem] w-full bg-primary text-white  py-3 px-5 rounded-full transition-colors hover:bg-orange-400"
-            type="submit"
-          >
-            Log in
-          </button>
-
-          <p className="text-center">
-            Belum Memiliki Akun ?{" "}
-            <a
-              href="/register"
-              className="font-semibold transition-all hover:text-orange-400"
-            >
-              Daftar Sekarang
-            </a>
-          </p>
-        </form>
-      </div>
-      <div className="h-full relative">
-        <div className="absolute sm:w-max w-full top-[1rem] left-[0rem] py-3 px-6 ">
-          <div className=" bg-white py-3 px-6 shadow-lg rounded-full flex items-center justify-center gap-[0.5rem]">
-            <img src={Logo} alt="" className="w-[3rem]" />
-            <h2 className="font-medium">SMK Karya Guna Bhakti 2 Kota Bekasi</h2>
-          </div>
+          {/* Partials */}
+          {/* <img src={squircle2} alt="" className="absolute z-[-1]" /> */}
         </div>
-        <img
-          src="https://lh3.googleusercontent.com/p/AF1QipNnW8dvox9Le4CbnskVW30Y-n0IWXCXaUizh7Tn=w768-h768-n-o-v1"
-          className="object-cover lg:h-[100vh] h-[30rem] w-full lg:rounded-tr-[3.5rem] ;lg:rounded-br-[3.5rem] rounded-br-[2rem] lg:rounded-bl-[0] rounded-bl-[2rem]"
-          alt=""
-        />
+
+        <div className="w-full px-6 lg:py-[6em] py-[3em]">
+          <form
+            className="md:w-[25em] mx-auto "
+            onSubmit={(e) => handleSubmit(e)}
+          >
+            <h2 className="font-bold text-[1.5rem] mb-6">Login</h2>
+            <p
+              className={`mb-[1.5rem] ${
+                !sessionStorage.getItem("info") && "hidden"
+              }`}
+            >
+              {sessionStorage.getItem("info")}
+            </p>
+
+            <div className="flex flex-col mb-[1.5rem]">
+              <label htmlFor="">Email</label>
+              <input
+                type="text"
+                className="rounded-[0.5em] border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
+                placeholder="example@gmail.com"
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
+                value={formData.email}
+              />
+            </div>
+
+            <div className="flex flex-col ">
+              <label htmlFor="">Password</label>
+              <input
+                type="password"
+                className="rounded-[0.5em] mt-[0.5rem] border-[#b3b3b3] py-3 px-5"
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+              />
+            </div>
+
+            <button
+              className="mt-[2.5rem] mb-[1.6rem] w-full bg-secondary text-white  py-3 px-5 rounded-[0.5em] transition-colors hover:bg-[#1e2f57] border-2 border-secondary font-medium"
+              type="submit"
+            >
+              Login
+            </button>
+
+            <p className="text-center">
+              Belum Memiliki Akun ?{" "}
+              <a
+                href="/register"
+                className="font-semibold transition-all hover:text-orange-400"
+              >
+                Daftar Sekarang
+              </a>
+            </p>
+          </form>
+        </div>
       </div>
     </div>
   );

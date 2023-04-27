@@ -37,6 +37,7 @@ import { json, useNavigate } from "react-router-dom";
 import { IoMdTrash } from "react-icons/io";
 import { Toaster } from "react-hot-toast";
 import TabsComponent from "../../../components/TabsComponent";
+import Preview from "../../../components/Preview";
 
 const scholarshipInterface = {
   type_scholarship: "",
@@ -356,9 +357,15 @@ const AddRegisterStudent = () => {
       body: formdata,
       redirect: "follow",
     };
+
     fetch(`${APIBASEURL}/upload_image`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
+        if (result?.image) {
+          notify(result?.image[0], "error");
+          return;
+        }
+
         setImagesUpload({ ...imagesUpload, [field]: result.url });
         setFormData((prev) => ({ ...prev, [field]: result.url }));
       })
@@ -1256,9 +1263,10 @@ const AddRegisterStudent = () => {
                   currentTab == 7 ? "active-form" : "non-active-form"
                 } `}
               >
-                <div className="flex flex-wrap gap-8">
-                  <div className="flex items-start flex-col">
-                    <label htmlFor="" className="pl-3 mb-[0.2em] font-semibold">
+                <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-y-8 gap-x-5">
+                  <div className="flex items-start flex-col overflow-hidden">
+                    <Preview src={formData.foto_nisn} />
+                    <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan Nisn
                     </label>
                     <input
@@ -1266,54 +1274,55 @@ const AddRegisterStudent = () => {
                       onChange={(e) =>
                         handleUpload(e.target.files[0], "foto_nisn")
                       }
-                      className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400  `}
+
                       // required
                     />
                   </div>
-                  <div className="flex items-start flex-col">
-                    <label htmlFor="" className="pl-3 mb-[0.2em] font-semibold">
+                  <div className="flex items-start flex-col overflow-hidden">
+                    <Preview src={formData.foto_kartu_keluarga} />
+
+                    <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan kartu Keluarga
                     </label>
                     <input
                       type="file"
-                      className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400  `}
                       onChange={(e) =>
                         handleUpload(e.target.files[0], "foto_kartu_keluarga")
                       }
                       // required
                     />
                   </div>
-                  <div className="flex items-start flex-col">
-                    <label htmlFor="" className="pl-3 mb-[0.2em] font-semibold">
+                  <div className="flex items-start flex-col overflow-hidden">
+                    <Preview src={formData.foto_kip} />
+                    <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan KIP
                     </label>
                     <input
                       type="file"
-                      className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400  `}
                       onChange={(e) =>
                         handleUpload(e.target.files[0], "foto_kip")
                       }
                     />
                   </div>
                   <div className="flex items-start flex-col">
-                    <label htmlFor="" className="pl-3 mb-[0.2em] font-semibold">
+                    <Preview src={formData.foto_kps} />
+                    <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan KPS
                     </label>
                     <input
                       type="file"
-                      className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400  `}
                       onChange={(e) =>
                         handleUpload(e.target.files[0], "foto_kps")
                       }
                     />
                   </div>
                   <div className="flex items-start flex-col">
-                    <label htmlFor="" className="pl-3 mb-[0.2em] font-semibold">
+                    <Preview src={formData.foto_kks} />
+                    <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan KKS
                     </label>
                     <input
                       type="file"
-                      className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400  `}
                       onChange={(e) =>
                         handleUpload(e.target.files[0], "foto_kks")
                       }

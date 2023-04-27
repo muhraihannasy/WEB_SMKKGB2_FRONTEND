@@ -36,6 +36,7 @@ import { json, useNavigate } from "react-router-dom";
 import { IoMdTrash } from "react-icons/io";
 import { Toaster } from "react-hot-toast";
 import TabsComponent from "../../../components/TabsComponent";
+import Preview from "../../../components/Preview";
 
 const scholarshipInterface = {
   type_scholarship: "",
@@ -329,6 +330,10 @@ const AddRegister = () => {
     fetch(`${APIBASEURL}/upload_image`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
+        if (result?.image) {
+          notify(result?.image[0], "error");
+          return;
+        }
         setImagesUpload({ ...imagesUpload, [field]: result.url });
         setFormData((prev) => ({ ...prev, [field]: result.url }));
       })
@@ -1152,6 +1157,7 @@ const AddRegister = () => {
               >
                 <div className="flex flex-wrap gap-8">
                   <div className="flex items-start flex-col">
+                    <Preview />
                     <label htmlFor="" className="pl-3 mb-[0.2em] font-semibold">
                       Foto Scan Nisn
                     </label>

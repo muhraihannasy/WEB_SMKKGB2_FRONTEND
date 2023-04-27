@@ -353,9 +353,15 @@ const EditRegisterStudent = () => {
       body: formdata,
       redirect: "follow",
     };
+
     fetch(`${APIBASEURL}/upload_image`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
+        if (result?.image) {
+          notify(result?.image[0], "error");
+          return;
+        }
+        console.log(imagesUpload);
         setImagesUpload({ ...imagesUpload, [field]: result.url });
         setFormData((prev) => ({ ...prev, [field]: result.url }));
       })
@@ -521,11 +527,11 @@ const EditRegisterStudent = () => {
         setAchievements(achArr);
 
         setImagesUpload({
-          foto_nisn: nisn_image,
-          foto_kartu_keluarga: kartu_keluarga_image,
-          foto_kip: s_kip[4],
-          foto_kks: s_kks[1],
-          foto_kps: s_kps[2],
+          foto_nisn: nisn_image ?? "",
+          foto_kartu_keluarga: kartu_keluarga_image ?? "",
+          foto_kip: s_kip[4] == "undefined" ? "" : s_kip[4],
+          foto_kks: s_kks[1] == "undefined" ? "" : s_kks[1],
+          foto_kps: s_kps[2] == "undefined" ? "" : s_kps[2],
         });
 
         setFormData({

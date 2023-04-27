@@ -61,6 +61,7 @@ import ArtikelDetail from "./pages/Landing Page/artikel/ArtikelDetail";
 import AddRegisterStudent from "./pages/PPDB/admin/AddRegisterStudent";
 import EditRegisterStudent from "./pages/PPDB/admin/EditRegisterStudent";
 import EditRegister from "./pages/PPDB/student/EditRegister";
+import Beranda from "./pages/Beranda/Beranda";
 
 const ProtedtedRoute = ({ user, student = "", admin = "" }) => {
   if (!JSON.parse(localStorage.getItem("logged"))) {
@@ -118,7 +119,7 @@ function App() {
     <>
       <Routes>
         {/* Landing Page */}
-        <Route exact path="/" element={<Home />} />
+        <Route exact path="/" element={<Beranda />} />
         <Route exact path="/profile_sekolah" element={<ProfileSekolah />} />
         <Route exact path="/lowongan" element={<LowonganPekerjaan />} />
         <Route exact path="/mitra" element={<MitraIndustri />} />

@@ -369,7 +369,7 @@ const PPDB = () => {
                                   </Button>
                                 )}
 
-                                {status == "Belum Diterima" ||
+                                {/* {status == "Belum Diterima" ||
                                 status == "Sudah Diterima" ? (
                                   <button
                                     className="bg-blue-500 p-1 rounded-xl text-lg text-white"
@@ -381,30 +381,34 @@ const PPDB = () => {
                                   </button>
                                 ) : (
                                   ""
-                                )}
-                                <button
-                                  className="bg-yellow-500 p-1 text-lg rounded-xl text-white"
-                                  onClick={() =>
-                                    navigate(
-                                      `/dashboard/ppdb/admin/student/edit/${user_id}`
-                                    )
-                                  }
-                                >
-                                  <BiEdit />
-                                </button>
+                                )} */}
                                 {status == "Belum Diterima" && (
-                                  <button
-                                    className={`${
-                                      status == "Belum Diterima"
-                                        ? "bg-green-500"
-                                        : "bg-red-500"
-                                    } p-1 text-lg rounded-xl text-white`}
-                                    onClick={(e) => {
-                                      handleVerified(e, id, status);
-                                    }}
-                                  >
-                                    {status === "Belum Diterima" && <FiCheck />}
-                                  </button>
+                                  <>
+                                    <button
+                                      className={`${
+                                        status == "Belum Diterima"
+                                          ? "bg-green-500"
+                                          : "bg-red-500"
+                                      } p-1 text-lg rounded-xl text-white`}
+                                      onClick={(e) => {
+                                        handleVerified(e, id, status);
+                                      }}
+                                    >
+                                      {status === "Belum Diterima" && (
+                                        <FiCheck />
+                                      )}
+                                    </button>
+                                    <button
+                                      className="bg-yellow-500 p-1 text-lg rounded-xl text-white"
+                                      onClick={() =>
+                                        navigate(
+                                          `/dashboard/ppdb/admin/student/edit/${user_id}`
+                                        )
+                                      }
+                                    >
+                                      <BiEdit />
+                                    </button>
+                                  </>
                                 )}
                               </div>
                             </td>

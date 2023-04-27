@@ -320,7 +320,8 @@ const EditRegister = () => {
     const myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer " + token);
 
-    const temp = imagesUpload[field].split("/");
+    console.log(field);
+    // const temp = imagesUpload[field].split("/");
     const imageOld = temp[3] + "/" + temp[4];
 
     const formdata = new FormData();
@@ -336,6 +337,11 @@ const EditRegister = () => {
     fetch(`${APIBASEURL}/upload_image`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
+        if (result?.image) {
+          notify(result?.image[0], "error");
+          return;
+        }
+
         setImagesUpload({ ...imagesUpload, [field]: result.url });
         setFormData((prev) => ({ ...prev, [field]: result.url }));
       })

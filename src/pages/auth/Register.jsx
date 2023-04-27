@@ -5,7 +5,9 @@ import Spinner from "react-spinkit";
 import { APIBASEURL, FecthData, requestSetting } from "../../service/API";
 import { notify } from "../../utils/Utils";
 import { competency } from "../../utils/Data";
+
 import Logo from "../../images/logo.png";
+import Teacher from "../../images/svg/Mathematics-rafiki.svg";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -107,7 +109,7 @@ const Register = () => {
   }, [isLoading]);
 
   return (
-    <div className=" h-full w-full my-auto bg-white grid lg:grid-cols-2 font-poppins ">
+    <div className="fixed h-full w-full bg-white font-poppins overflow-y-auto">
       {/* Toast */}
       <Toaster position="top-right" reverseOrder={false} />
 
@@ -118,34 +120,39 @@ const Register = () => {
         </div>
       )}
 
-      <div className="lg:fixed relative flex lg:flex-row flex-col w-full h-[100%] lg:h-[100vh] register-form">
-        <div className="relative h-max lg:w-[50%]">
-          <div className="absolute sm:w-max w-full top-[1rem] left-[0rem] py-3 px-6 ">
-            <div className=" bg-white py-3 px-6 shadow-lg rounded-full flex items-center justify-center gap-[0.5rem]">
-              <img src={Logo} alt="" className="w-[3rem]" />
-              <h2 className="font-medium">
-                SMK Karya Guna Bhakti 2 Kota Bekasi
-              </h2>
-            </div>
-          </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
+        <div className="relative w-full flex items-center justify-center flex-col bg-[#28288b] pb-[2em] rounded-bl-[2em] rounded-br-[2em] lg:rounded-none lg:overflow-hidden z-10 px-3">
           <img
-            src="https://lh3.googleusercontent.com/p/AF1QipNnW8dvox9Le4CbnskVW30Y-n0IWXCXaUizh7Tn=w768-h768-n-o-v1"
-            className="object-cover lg:h-[100vh] h-[30rem] w-full lg:rounded-tr-[3.5rem] ;lg:rounded-br-[3.5rem] rounded-br-[2rem] lg:rounded-bl-[0] rounded-bl-[2rem]"
+            src={Teacher}
             alt=""
+            className="w-[20em] lg:w-[25em]
+          "
           />
+          <div className="text-white text-center">
+            <h1 className="text-[1em] font-semibold mx-auto mt-5 mb-3">
+              PPDB SMK Karya Guna Bhakti 2 2023
+            </h1>
+            <p className="text-[0.9em] w-[90%] lg:w-[30em] mx-auto">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
+              nisi praesentium dicta ducimus cum ab illo,
+            </p>
+          </div>
+
+          {/* Partials */}
+          {/* <img src={squircle2} alt="" className="absolute z-[-1]" /> */}
         </div>
-        <div className="px-6 py-10 lg:w-[50%] overflow-y-auto form">
+
+        <div className="w-full px-6 lg:py-[6em] py-[3em]  lg:overflow-y-scroll">
           <form
-            className="lg:w-[70%] sm:w-[50%] sm:mx-auto lg:mt-[4.5rem]"
+            className="md:w-[25em] mx-auto "
             onSubmit={(e) => handleSubmit(e)}
           >
-            <h2 className="mb-[1.5rem] font-bold text-[1.5rem]">Daftar</h2>
-
+            <h2 className="font-bold text-[1.5rem] mb-6">Register</h2>
             <div className="flex flex-col mb-[1.5rem]">
               <label htmlFor="">Nama Lengkap</label>
               <input
                 type="text"
-                className="rounded-full border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
+                className="rounded-[0.5em] border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
                 placeholder="..."
                 onChange={(e) =>
                   setFormData({ ...formData, fullname: e.target.value })
@@ -157,7 +164,7 @@ const Register = () => {
               <label htmlFor="">Asal Sekolah</label>
               <input
                 type="text"
-                className="rounded-full border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
+                className="rounded-[0.5em] border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
                 placeholder="..."
                 onChange={(e) =>
                   setFormData({ ...formData, from_school: e.target.value })
@@ -171,7 +178,7 @@ const Register = () => {
                 id="kompetensi1"
                 name="kompetensi1"
                 placeholder="..."
-                className="rounded-full border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
+                className="rounded-[0.5em] border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
                 onChange={(e) =>
                   setFormData({ ...formData, kompetensi1: e.target.value })
                 }
@@ -195,7 +202,7 @@ const Register = () => {
                 id="kompetensi2"
                 name="kompetensi2"
                 placeholder="..."
-                className="rounded-full border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
+                className="rounded-[0.5em] border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
                 onChange={(e) =>
                   setFormData({ ...formData, kompetensi2: e.target.value })
                 }
@@ -217,7 +224,7 @@ const Register = () => {
                 id="kompetensi3"
                 name="kompetensi3"
                 placeholder="..."
-                className="rounded-full border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
+                className="rounded-[0.5em] border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
                 onChange={(e) =>
                   setFormData({ ...formData, kompetensi3: e.target.value })
                 }
@@ -237,7 +244,7 @@ const Register = () => {
               <label htmlFor="">Phone</label>
               <input
                 type="number"
-                className="rounded-full border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
+                className="rounded-[0.5em] border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
                 placeholder="..."
                 onChange={(e) =>
                   setFormData({ ...formData, phone: e.target.value })
@@ -249,7 +256,7 @@ const Register = () => {
               <label htmlFor="">Email</label>
               <input
                 type="text"
-                className="rounded-full border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
+                className="rounded-[0.5em] border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
                 placeholder="example@gmail.com"
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
@@ -262,7 +269,7 @@ const Register = () => {
               <label htmlFor="">Password</label>
               <input
                 type="password"
-                className="rounded-full mt-[0.5rem] border-[#b3b3b3] py-3 px-5"
+                className="rounded-[0.5em] mt-[0.5rem] border-[#b3b3b3] py-3 px-5"
                 onChange={(e) =>
                   setFormData({ ...formData, password: e.target.value })
                 }
@@ -270,7 +277,7 @@ const Register = () => {
             </div>
 
             <button
-              className="mt-[2.5rem] mb-[1.6rem] w-full bg-primary text-white  py-3 px-5 rounded-full transition-colors hover:bg-orange-400"
+              className="mt-[2.5rem] mb-[1.6rem] w-full bg-secondary text-white  py-3 px-5 rounded-[0.5em] transition-colors hover:bg-[#1e2f57] border-2 border-secondary font-medium"
               type="submit"
             >
               Daftar
@@ -291,5 +298,186 @@ const Register = () => {
     </div>
   );
 };
+
+// {/* <div className=" h-full w-full my-auto bg-white grid lg:grid-cols-2 font-poppins ">
+//   {/* Toast */}
+//   <Toaster position="top-right" reverseOrder={false} />
+
+//   {isLoading && (
+//     <div className="fixed left-0 top-0 h-[100%] w-full bg-white flex items-center flex-col justify-center z-[99] ">
+//       <Spinner name="line-scale-pulse-out" />
+//       Loading....
+//     </div>
+//   )}
+
+//   <div className="lg:fixed relative flex lg:flex-row flex-col w-full h-[100%] lg:h-[100vh] register-form">
+//     <div className="relative h-max lg:w-[50%]">
+//       <div className="absolute sm:w-max w-full top-[1rem] left-[0rem] py-3 px-6 ">
+//         <div className=" bg-white py-3 px-6 shadow-lg rounded-full flex items-center justify-center gap-[0.5rem]">
+//           <img src={Logo} alt="" className="w-[3rem]" />
+//           <h2 className="font-medium">SMK Karya Guna Bhakti 2 Kota Bekasi</h2>
+//         </div>
+//       </div>
+//       <img
+//         src="https://lh3.googleusercontent.com/p/AF1QipNnW8dvox9Le4CbnskVW30Y-n0IWXCXaUizh7Tn=w768-h768-n-o-v1"
+//         className="object-cover lg:h-[100vh] h-[30rem] w-full lg:rounded-tr-[3.5rem] ;lg:rounded-br-[3.5rem] rounded-br-[2rem] lg:rounded-bl-[0] rounded-bl-[2rem]"
+//         alt=""
+//       />
+//     </div>
+//     <div className="px-6 py-10 lg:w-[50%] overflow-y-auto form">
+//       <form
+//         className="lg:w-[70%] sm:w-[50%] sm:mx-auto lg:mt-[4.5rem]"
+//         onSubmit={(e) => handleSubmit(e)}
+//       >
+//         <h2 className="mb-[1.5rem] font-bold text-[1.5rem]">Daftar</h2>
+
+//         <div className="flex flex-col mb-[1.5rem]">
+//           <label htmlFor="">Nama Lengkap</label>
+//           <input
+//             type="text"
+//             className="rounded-full border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
+//             placeholder="..."
+//             onChange={(e) =>
+//               setFormData({ ...formData, fullname: e.target.value })
+//             }
+//             value={formData.fullname}
+//           />
+//         </div>
+//         <div className="flex flex-col mb-[1.5rem]">
+//           <label htmlFor="">Asal Sekolah</label>
+//           <input
+//             type="text"
+//             className="rounded-full border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
+//             placeholder="..."
+//             onChange={(e) =>
+//               setFormData({ ...formData, from_school: e.target.value })
+//             }
+//             value={formData.from_school}
+//           />
+//         </div>
+//         <div className="flex flex-col mb-[1.5rem]">
+//           <label htmlFor="kompetensi1">Pilihan Kompetensi 1 </label>
+//           <select
+//             id="kompetensi1"
+//             name="kompetensi1"
+//             placeholder="..."
+//             className="rounded-full border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
+//             onChange={(e) =>
+//               setFormData({ ...formData, kompetensi1: e.target.value })
+//             }
+//             value={formData.kompetensi1}
+//           >
+//             <option value="" className="rounded-xl">
+//               Pilih...
+//             </option>
+//             {competency.map((item, index) => {
+//               return (
+//                 <option key={index} value={item}>
+//                   {item}
+//                 </option>
+//               );
+//             })}
+//           </select>
+//         </div>
+//         <div className="flex flex-col mb-[1.5rem]">
+//           <label htmlFor="kompetensi2">Pilihan Kompetensi 2 </label>
+//           <select
+//             id="kompetensi2"
+//             name="kompetensi2"
+//             placeholder="..."
+//             className="rounded-full border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
+//             onChange={(e) =>
+//               setFormData({ ...formData, kompetensi2: e.target.value })
+//             }
+//             value={formData.kompetensi2}
+//           >
+//             <option value="">Pilih...</option>
+//             {competency.map((item, index) => {
+//               return (
+//                 <option key={index} value={item}>
+//                   {item}
+//                 </option>
+//               );
+//             })}
+//           </select>
+//         </div>
+//         <div className="flex flex-col mb-[1.5rem]">
+//           <label htmlFor="kompetensi3">Pilihan Kompetensi 3 </label>
+//           <select
+//             id="kompetensi3"
+//             name="kompetensi3"
+//             placeholder="..."
+//             className="rounded-full border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
+//             onChange={(e) =>
+//               setFormData({ ...formData, kompetensi3: e.target.value })
+//             }
+//             value={formData.kompetensi3}
+//           >
+//             <option value="">Pilih...</option>
+//             {competency.map((item, index) => {
+//               return (
+//                 <option key={index} value={item}>
+//                   {item}
+//                 </option>
+//               );
+//             })}
+//           </select>
+//         </div>
+//         <div className="flex flex-col mb-[1.5rem]">
+//           <label htmlFor="">Phone</label>
+//           <input
+//             type="number"
+//             className="rounded-full border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
+//             placeholder="..."
+//             onChange={(e) =>
+//               setFormData({ ...formData, phone: e.target.value })
+//             }
+//             value={formData.phone}
+//           />
+//         </div>
+//         <div className="flex flex-col mb-[1.5rem]">
+//           <label htmlFor="">Email</label>
+//           <input
+//             type="text"
+//             className="rounded-full border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
+//             placeholder="example@gmail.com"
+//             onChange={(e) =>
+//               setFormData({ ...formData, email: e.target.value })
+//             }
+//             value={formData.email}
+//           />
+//         </div>
+
+//         <div className="flex flex-col ">
+//           <label htmlFor="">Password</label>
+//           <input
+//             type="password"
+//             className="rounded-full mt-[0.5rem] border-[#b3b3b3] py-3 px-5"
+//             onChange={(e) =>
+//               setFormData({ ...formData, password: e.target.value })
+//             }
+//           />
+//         </div>
+
+//         <button
+//           className="mt-[2.5rem] mb-[1.6rem] w-full bg-primary text-white  py-3 px-5 rounded-full transition-colors hover:bg-orange-400"
+//           type="submit"
+//         >
+//           Daftar
+//         </button>
+
+//         <p className="text-center">
+//           Sudah Memiliki Akun ?{" "}
+//           <a
+//             href="/login"
+//             className="font-semibold transition-all hover:text-orange-400"
+//           >
+//             Login
+//           </a>
+//         </p>
+//       </form>
+//     </div>
+//   </div>
+// </div>; */}
 
 export default Register;
