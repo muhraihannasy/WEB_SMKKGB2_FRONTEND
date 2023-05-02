@@ -27,25 +27,26 @@ const EditBlog = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setIsLoading(true);
+    // setIsLoading(true);
 
     const req = await FecthData(
       `${APIBASEURL}/admin/blogs/${id}`,
       requestSetting("PUT", formData)
     );
     const res = req;
+    console.log(res);
+    return;
 
     setTimeout(() => {
+      if (res.errors && Object.keys(res.errors).length > 0)
+        setErrors(res.errors);
       if (res.status == 200) {
         setIsLoading(false);
         setErrors({});
         notify("Berhasil Mengubah Artikel", "success");
+        navigate("/dashboard/artikel");
       }
     }, 1000);
-
-    setTimeout(() => {
-      navigate("/dashboard/artikel");
-    }, 2000);
   }
   async function handleUpload(file) {
     const token = JSON.parse(localStorage.getItem("usr")).acctkn;
@@ -134,11 +135,11 @@ const EditBlog = () => {
 
       {/* Content Area */}
 
-      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+      <div className="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <main>
           {/* Welcome banner */}
-          <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+          <div className="w-full px-4 py-8 mx-auto sm:px-6 lg:px-8 max-w-9xl">
             <Form
               ref={editorRef}
               formData={formData}

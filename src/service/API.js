@@ -1,5 +1,5 @@
 // const APIBASEURL = "https://api.smkkgb2.sch.id";
-const APIBASEURL = "https://9b91-103-3-221-66.ngrok-free.app";
+const APIBASEURL = "https://390c-103-3-221-156.ngrok-free.app";
 
 const requestSetting = (type, body = null) => {
   const token =

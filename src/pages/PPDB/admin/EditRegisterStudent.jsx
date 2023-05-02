@@ -500,11 +500,11 @@ const EditRegisterStudent = () => {
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       {/* Content Area */}
-      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+      <div className="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <main>
           {/* Welcome banner */}
-          <div className="px-4 sm:px-6 py-8 w-full max-w-9xl mx-auto ">
+          <div className="w-full px-4 py-8 mx-auto sm:px-6 max-w-9xl ">
             <form
               onSubmit={onSubmit}
               className="shadow-lg px-6 rounded-xl py-8  max-w-[800px] mx-auto overflow-x-hidden"
@@ -698,7 +698,7 @@ const EditRegisterStudent = () => {
                     formData={formData}
                     setFormData={setFormData}
                   />
-                  <div className="grid grid-cols-2 items-center gap-2">
+                  <div className="grid items-center grid-cols-2 gap-2">
                     <Input
                       type="text"
                       field="rt"
@@ -1305,8 +1305,8 @@ const EditRegisterStudent = () => {
                   currentTab == 7 ? "active-form" : "non-active-form"
                 } `}
               >
-                <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-y-8 gap-x-5">
-                  <div className="flex items-start flex-col overflow-hidden">
+                <div className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-y-8 gap-x-5">
+                  <div className="flex flex-col items-start overflow-hidden">
                     <Preview src={formData.nisn_image} />
                     {/* {form} */}
                     <label htmlFor="" className="mb-[0.2em] font-semibold">
@@ -1321,7 +1321,7 @@ const EditRegisterStudent = () => {
                       // required
                     />
                   </div>
-                  <div className="flex items-start flex-col overflow-hidden">
+                  <div className="flex flex-col items-start overflow-hidden">
                     <Preview src={formData.kartu_keluarga_image} />
 
                     <label htmlFor="" className="mb-[0.2em] font-semibold">
@@ -1335,7 +1335,7 @@ const EditRegisterStudent = () => {
                       // required
                     />
                   </div>
-                  <div className="flex items-start flex-col overflow-hidden">
+                  <div className="flex flex-col items-start overflow-hidden">
                     <Preview src={formData.foto_kip} />
                     <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan KIP
@@ -1347,7 +1347,7 @@ const EditRegisterStudent = () => {
                       }
                     />
                   </div>
-                  <div className="flex items-start flex-col">
+                  <div className="flex flex-col items-start">
                     <Preview src={formData.foto_kps} />
                     <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan KPS
@@ -1359,7 +1359,7 @@ const EditRegisterStudent = () => {
                       }
                     />
                   </div>
-                  <div className="flex items-start flex-col">
+                  <div className="flex flex-col items-start">
                     <Preview src={formData.foto_kks} />
                     <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan KKS

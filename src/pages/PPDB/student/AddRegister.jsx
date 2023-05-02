@@ -1043,65 +1043,67 @@ const AddRegister = () => {
                   currentTab == 6 ? "active-form" : "non-active-form"
                 } `}
               >
-                <div className="flex flex-wrap gap-8">
-                  <div className="flex items-start flex-col">
-                    <Preview />
-                    <label htmlFor="" className="pl-3 mb-[0.2em] font-semibold">
+                <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-y-8 gap-x-5">
+                  <div className="flex items-start flex-col overflow-hidden">
+                    <Preview src={formData.nisn_image} />
+                    {/* {form} */}
+                    <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan Nisn
                     </label>
                     <input
                       type="file"
                       onChange={(e) =>
-                        handleUpload(e.target.files[0], "foto_nisn")
+                        handleUpload(e.target.files[0], "nisn_image")
                       }
-                      className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400  `}
+
                       // required
                     />
                   </div>
-                  <div className="flex items-start flex-col">
-                    <label htmlFor="" className="pl-3 mb-[0.2em] font-semibold">
+                  <div className="flex items-start flex-col overflow-hidden">
+                    <Preview src={formData.kartu_keluarga_image} />
+
+                    <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan kartu Keluarga
                     </label>
                     <input
                       type="file"
-                      className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400  `}
                       onChange={(e) =>
-                        handleUpload(e.target.files[0], "foto_kartu_keluarga")
+                        handleUpload(e.target.files[0], "kartu_keluarga_image")
                       }
                       // required
                     />
                   </div>
-                  <div className="flex items-start flex-col">
-                    <label htmlFor="" className="pl-3 mb-[0.2em] font-semibold">
+                  <div className="flex items-start flex-col overflow-hidden">
+                    <Preview src={formData.foto_kip} />
+                    <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan KIP
                     </label>
                     <input
                       type="file"
-                      className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400  `}
                       onChange={(e) =>
                         handleUpload(e.target.files[0], "foto_kip")
                       }
                     />
                   </div>
                   <div className="flex items-start flex-col">
-                    <label htmlFor="" className="pl-3 mb-[0.2em] font-semibold">
+                    <Preview src={formData.foto_kps} />
+                    <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan KPS
                     </label>
                     <input
                       type="file"
-                      className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400  `}
                       onChange={(e) =>
                         handleUpload(e.target.files[0], "foto_kps")
                       }
                     />
                   </div>
                   <div className="flex items-start flex-col">
-                    <label htmlFor="" className="pl-3 mb-[0.2em] font-semibold">
+                    <Preview src={formData.foto_kks} />
+                    <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan KKS
                     </label>
                     <input
                       type="file"
-                      className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400  `}
                       onChange={(e) =>
                         handleUpload(e.target.files[0], "foto_kks")
                       }

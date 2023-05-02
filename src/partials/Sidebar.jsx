@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { RiPagesFill, RiAdminFill } from "react-icons/ri";
 
 import SidebarLinkGroup from "./SidebarLinkGroup";
 
 // Images
 import logo from "../images/logo.png";
-import { APIBASEURL, FecthData, requestSetting } from "../service/API";
 
 function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const [menuPermission, setMenuPermission] = useState([]);
@@ -96,11 +94,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
             <path d="M10.7 18.7l1.4-1.4L7.8 13H20v-2H7.8l4.3-4.3-1.4-1.4L4 12z" />
           </svg>
         </button>
-        <div className="flex justify-between mb-10 pr-3 sm:px-2">
+        <div className="flex justify-between pr-3 mb-10 sm:px-2">
           {/* Close button */}
 
           {/* Logo */}
-          <NavLink end to="/" className=" flex items-center gap-3">
+          <NavLink end to="/" className="flex items-center gap-3 ">
             <img
               src={logo}
               alt="Logo SMK Karya Guna Bhakti 2 Kota Bekasi"
@@ -129,7 +127,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                     }`}
                   >
                     <div className="flex items-center">
-                      <svg className="shrink-0 h-6 w-6" viewBox="0 0 24 24">
+                      <svg className="w-6 h-6 shrink-0" viewBox="0 0 24 24">
                         <path
                           className={`fill-current text-slate-400 ${
                             pathname === "/dashboard" && "!text-indigo-500"
@@ -149,7 +147,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                           d="M12 15c-1.654 0-3-1.346-3-3 0-.462.113-.894.3-1.285L6 6l4.714 3.301A2.973 2.973 0 0112 9c1.654 0 3 1.346 3 3s-1.346 3-3 3z"
                         />
                       </svg>
-                      <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                      <span className="ml-3 text-sm font-medium duration-200 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100">
                         Dashboard
                       </span>
                     </div>
@@ -171,7 +169,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                     }`}
                   >
                     <div className="flex items-center">
-                      <svg className="shrink-0 h-6 w-6" viewBox="0 0 24 24">
+                      <svg className="w-6 h-6 shrink-0" viewBox="0 0 24 24">
                         <path
                           className={`fill-current text-slate-600 ${
                             pathname.includes("ppdb") && "text-indigo-500"
@@ -185,7 +183,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                           d="M12 6a3 3 0 110-6 3 3 0 010 6zm2 18h-4a1 1 0 01-1-1v-6H6v-6a3 3 0 013-3h6a3 3 0 013 3v6h-3v6a1 1 0 01-1 1z"
                         />
                       </svg>
-                      <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                      <span className="ml-3 text-sm font-medium duration-200 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100">
                         PPDB
                       </span>
                     </div>
@@ -220,7 +218,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                           <div className="flex items-center justify-between">
                             <div className="flex items-center">
                               <svg
-                                className="shrink-0 h-6 w-6"
+                                className="w-6 h-6 shrink-0"
                                 viewBox="0 0 24 24"
                               >
                                 <path
@@ -245,11 +243,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                                   d="M12 15c-1.654 0-3-1.346-3-3 0-.462.113-.894.3-1.285L6 6l4.714 3.301A2.973 2.973 0 0112 9c1.654 0 3 1.346 3 3s-1.346 3-3 3z"
                                 />
                               </svg>
-                              <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                              <span className="ml-3 text-sm font-medium duration-200 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100">
                                 Lowongan Kerja
                               </span>
                             </div>
-                            <div className="flex shrink-0 ml-2">
+                            <div className="flex ml-2 shrink-0">
                               <svg
                                 className={`w-3 h-3 shrink-0 ml-1 fill-current text-slate-400 ${
                                   open && "rotate-180"
@@ -263,7 +261,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                         </a>
                         <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
                           <ul className={`pl-9 mt-1 ${!open && "hidden"}`}>
-                            <li className="mb-1 last:mb-0 bg-transparent">
+                            <li className="mb-1 bg-transparent last:mb-0">
                               <NavLink
                                 end
                                 to="/dashboard/lowongan"
@@ -272,12 +270,12 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                                   (isActive ? "!text-indigo-500" : "")
                                 }
                               >
-                                <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                <span className="text-sm font-medium duration-200 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100">
                                   List Lowogan
                                 </span>
                               </NavLink>
                             </li>
-                            <li className="mb-1 last:mb-0 bg-transparent">
+                            <li className="mb-1 bg-transparent last:mb-0">
                               <NavLink
                                 end
                                 to="/dashboard/kategori_lowongan"
@@ -286,7 +284,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                                   (isActive ? "!text-indigo-500" : "")
                                 }
                               >
-                                <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                <span className="text-sm font-medium duration-200 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100">
                                   Kategori Lowongan
                                 </span>
                               </NavLink>
@@ -326,7 +324,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                           <div className="flex items-center justify-between">
                             <div className="flex items-center">
                               <svg
-                                className="shrink-0 h-6 w-6"
+                                className="w-6 h-6 shrink-0"
                                 viewBox="0 0 24 24"
                               >
                                 <path
@@ -351,11 +349,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                                   d="M12 15c-1.654 0-3-1.346-3-3 0-.462.113-.894.3-1.285L6 6l4.714 3.301A2.973 2.973 0 0112 9c1.654 0 3 1.346 3 3s-1.346 3-3 3z"
                                 />
                               </svg>
-                              <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                              <span className="ml-3 text-sm font-medium duration-200 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100">
                                 Artikel
                               </span>
                             </div>
-                            <div className="flex shrink-0 ml-2">
+                            <div className="flex ml-2 shrink-0">
                               <svg
                                 className={`w-3 h-3 shrink-0 ml-1 fill-current text-slate-400 ${
                                   open && "rotate-180"
@@ -369,7 +367,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                         </a>
                         <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
                           <ul className={`pl-9 mt-1 ${!open && "hidden"}`}>
-                            <li className="mb-1 last:mb-0 bg-transparent">
+                            <li className="mb-1 bg-transparent last:mb-0">
                               <NavLink
                                 end
                                 to="/dashboard/artikel"
@@ -378,12 +376,12 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                                   (isActive ? "!text-indigo-500" : "")
                                 }
                               >
-                                <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                <span className="text-sm font-medium duration-200 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100">
                                   List Artikel
                                 </span>
                               </NavLink>
                             </li>
-                            <li className="mb-1 last:mb-0 bg-transparent">
+                            <li className="mb-1 bg-transparent last:mb-0">
                               <NavLink
                                 end
                                 to="/dashboard/kategori_artikel"
@@ -392,7 +390,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                                   (isActive ? "!text-indigo-500" : "")
                                 }
                               >
-                                <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                <span className="text-sm font-medium duration-200 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100">
                                   Kategori Artikel
                                 </span>
                               </NavLink>
@@ -419,7 +417,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                     }`}
                   >
                     <div className="flex items-center">
-                      <svg className="shrink-0 h-6 w-6" viewBox="0 0 24 24">
+                      <svg className="w-6 h-6 shrink-0" viewBox="0 0 24 24">
                         <path
                           className={`fill-current text-slate-600 ${
                             pathname.includes("dashboard/admin") &&
@@ -449,7 +447,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                           d="M19.707 9.292a3.012 3.012 0 00-1.415 1.415L13.286 5.7c-.4.195-.84.298-1.286.3a3 3 0 113-3 2.969 2.969 0 01-.3 1.286l5.007 5.006z"
                         />
                       </svg>
-                      <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                      <span className="ml-3 text-sm font-medium duration-200 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100">
                         Admin
                       </span>
                     </div>
@@ -480,7 +478,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                           <div className="flex items-center">
                             <svg
                               id=""
-                              className="shrink-0 h-6 w-6 "
+                              className="w-6 h-6 shrink-0 "
                               viewBox="0 0 24 24"
                             >
                               <path
@@ -496,12 +494,12 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                                 }`}
                               />
                             </svg>
-                            <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                            <span className="ml-3 text-sm font-medium duration-200 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100">
                               CMS
                             </span>
                           </div>
-                          <div className="flex shrink-0 ml-2">
-                            <div className="flex shrink-0 ml-2">
+                          <div className="flex ml-2 shrink-0">
+                            <div className="flex ml-2 shrink-0">
                               <svg
                                 className={`w-3 h-3 shrink-0 ml-1 fill-current text-slate-400 ${
                                   open && "rotate-180"
@@ -525,7 +523,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                                 (isActive ? "!text-indigo-500" : "")
                               }
                             >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                              <span className="text-sm font-medium duration-200 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100">
                                 Home
                               </span>
                             </NavLink>
@@ -539,7 +537,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                                 (isActive ? "!text-indigo-500" : "")
                               }
                             >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                              <span className="text-sm font-medium duration-200 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100">
                                 About Us
                               </span>
                             </NavLink>
@@ -571,7 +569,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center">
                             <svg
-                              className="shrink-0 h-6 w-6"
+                              className="w-6 h-6 shrink-0"
                               viewBox="0 0 24 24"
                             >
                               <path
@@ -603,11 +601,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                                 d="M19.707 9.292a3.012 3.012 0 00-1.415 1.415L13.286 5.7c-.4.195-.84.298-1.286.3a3 3 0 113-3 2.969 2.969 0 01-.3 1.286l5.007 5.006z"
                               />
                             </svg>
-                            <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                            <span className="ml-3 text-sm font-medium duration-200 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100">
                               Admins
                             </span>
                           </div>
-                          <div className="flex shrink-0 ml-2">
+                          <div className="flex ml-2 shrink-0">
                             <svg
                               className={`w-3 h-3 shrink-0 ml-1 fill-current text-slate-400 ${
                                 open && "rotate-180"
@@ -625,9 +623,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                             <NavLink
                               end
                               to="/"
-                              className="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
+                              className="block truncate transition duration-150 text-slate-400 hover:text-slate-200"
                             >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                              <span className="text-sm font-medium duration-200 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100">
                                 My Account
                               </span>
                             </NavLink>
@@ -643,9 +641,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
           {/* More group */}
           {/* <div>
-            <h3 className="text-xs uppercase text-slate-500 font-semibold pl-3">
+            <h3 className="pl-3 text-xs font-semibold uppercase text-slate-500">
               <span
-                className="hidden lg:block lg:sidebar-expanded:hidden 2xl:hidden text-center w-6"
+                className="hidden w-6 text-center lg:block lg:sidebar-expanded:hidden 2xl:hidden"
                 aria-hidden="true"
               >
                 •••
@@ -675,7 +673,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       }`}
                     />
 
-                    <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                    <span className="ml-3 text-sm font-medium duration-200 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100">
                       Admins
                     </span>
                   </div>
@@ -686,7 +684,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
         </div>
 
         {/* Expand / collapse button */}
-        <div className="pt-3 hidden lg:inline-flex 2xl:hidden justify-end mt-auto">
+        <div className="justify-end hidden pt-3 mt-auto lg:inline-flex 2xl:hidden">
           <div className="px-3 py-2">
             <button onClick={() => setSidebarExpanded(!sidebarExpanded)}>
               <span className="sr-only">Expand / collapse sidebar</span>

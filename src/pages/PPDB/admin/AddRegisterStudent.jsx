@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { IoMdTrash } from "react-icons/io";
 import { Toaster } from "react-hot-toast";
 import Spinner from "react-spinkit";
 
 // Icon
 import { IoAddCircleSharp, IoChevronBackCircleSharp } from "react-icons/io5";
+import { IoMdTrash } from "react-icons/io";
 
 // Service
 import { APIBASEURL, FecthData, requestSetting } from "../../../service/API";

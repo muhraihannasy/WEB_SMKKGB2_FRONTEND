@@ -10,7 +10,6 @@ import { Toaster } from "react-hot-toast";
 const Setting = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState({});
   const [photoProfile, setPhotoProfile] = useState("");
   const [formData, setFormData] = useState({
     fullname: "",
@@ -133,11 +132,11 @@ const Setting = () => {
 
       {/* Content Area */}
 
-      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+      <div className="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <main>
           {/* Welcome banner */}
-          <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+          <div className="w-full px-4 py-8 mx-auto sm:px-6 lg:px-8 max-w-9xl">
             <form onSubmit={handleSubmit} className=" max-w-[35rem]">
               <div className="w-[5rem] h-[5rem] rounded-full overflow-hidden">
                 {formData.photo ? (
@@ -146,7 +145,7 @@ const Setting = () => {
                       formData.photo ??
                       "https://static.vecteezy.com/system/resources/thumbnails/009/734/564/small/default-avatar-profile-icon-of-social-media-user-vector.jpg"
                     }
-                    className="w-full object-cover"
+                    className="object-cover w-full"
                     alt=""
                   />
                 ) : (
@@ -156,7 +155,7 @@ const Setting = () => {
                         ? "https://static.vecteezy.com/system/resources/thumbnails/009/734/564/small/default-avatar-profile-icon-of-social-media-user-vector.jpg"
                         : photoProfile
                     }
-                    className="w-full object-cover"
+                    className="object-cover w-full"
                     alt=""
                   />
                 )}

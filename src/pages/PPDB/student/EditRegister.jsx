@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { IoAddCircleSharp, IoChevronBackCircleSharp } from "react-icons/io5";
+import { useEffect, useState } from "react";
+import { Toaster } from "react-hot-toast";
+import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "react-spinkit";
-import { UploadOutlined } from "@ant-design/icons";
-import { Button, Upload, Progress } from "antd";
+
+// Icon
+import { IoAddCircleSharp, IoChevronBackCircleSharp } from "react-icons/io5";
+import { IoMdTrash } from "react-icons/io";
+
+// Service
+import { APIBASEURL, FecthData, requestSetting } from "../../../service/API";
 
 // Utils
 import {
@@ -13,162 +18,41 @@ import {
   profession,
   receiver,
   religion,
-  residence,
   specialNeeds,
   scholarship,
   levelAchievements,
   typeAchievements,
-  distance,
   typeRegistration,
   extracurriculer,
   uniform,
   year,
-  transport,
 } from "../../../utils/Data";
+import { notify } from "../../../utils/Utils";
 
-// Component
-import { Input, ProgressBarComponent } from "../../../components";
+// Partials
 import Header from "../../../partials/Header";
 import Sidebar from "../../../partials/Sidebar";
-import { APIBASEURL, FecthData, requestSetting } from "../../../service/API";
-import { getUserIsLogin, notify } from "../../../utils/Utils";
-import { json, useNavigate, useParams } from "react-router-dom";
-import { IoMdTrash } from "react-icons/io";
-import { Toaster } from "react-hot-toast";
+
+// Component
+import { Input } from "../../../components";
 import TabsComponent from "../../../components/TabsComponent";
-import { formatStrategyValues } from "rc-tree-select/lib/utils/strategyUtil";
+import Preview from "../../../components/Preview";
 
-const scholarshipInterface = {
-  id: "",
-  type_scholarship: "",
-  year_start_at_scholarship: "",
-  year_finish_at_scholarship: "",
-  descriptions_scholarship: "",
-};
-const achievementInterface = {
-  id: "",
-  name_achievement: "",
-  year_achievement: "",
-  type_achievement: "",
-  level_achievement: "",
-  organinizer_achievement: "",
-};
+// Interfaces
+import {
+  scholarshipInterface,
+  achievementInterface,
+  imagesUploadPPDBInterface,
+  formPPDBStudentInterface,
+} from "../../../interfaces";
 
-const fieldRequire = [
-  "nisn",
-  "nik",
-  "gender",
-  "no_certificate_registration",
-  "religion",
-  "weight",
-  "height",
-  "gender",
-  "foto_nisn",
-  "foto_kartu_keluarga",
-
-  "special_needs",
-  "date",
-  "city",
-  "alamat",
-  "rt",
-  "rw",
-  "kelurahan",
-  "kecamatan",
-  "father_name",
-  "father_nik",
-
-  "father_date",
-  "father_city",
-  "father_education",
-  "father_job",
-  "father_income",
-  "mother_name",
-  "mother_nik",
-  "mother_date",
-  "mother_city",
-  "mother_education",
-
-  "mother_job",
-  "mother_income",
-  "type_registration",
-  "no_examinee",
-  "no_serial_diploma",
-  "no_serial_skhus",
-  "extra1",
-  "extra2",
-  "uniform1",
-  "uniform2",
-
-  "uniform3",
-  "uniform4",
-];
+// Field Require
+import { fieldRequireFormPPDBStudent } from "../../../Field Require/index";
 
 const EditRegister = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    nisn: "",
-    nik: "",
-    no_certificate_registration: "",
-    religion: "",
-    weight: "",
-    height: "",
-    gender: "",
-    foto_nisn: "",
-    foto_kartu_keluarga: "",
-    foto_kps: "",
-    foto_kks: "",
-    foto_kip: "",
-    special_needs: "",
-
-    // Birth
-    date: "",
-    city: "",
-
-    // Address
-    alamat: "",
-    rt: "",
-    rw: "",
-    kelurahan: "",
-    kecamatan: "",
-    kodepos: "",
-
-    // Father
-    father_name: "",
-    father_nik: "",
-    father_date: "",
-    father_city: "",
-    father_education: "",
-    father_job: "",
-    father_income: "",
-
-    // Mother
-    mother_name: "",
-    mother_nik: "",
-    mother_date: "",
-    mother_city: "",
-    mother_education: "",
-    mother_job: "",
-    mother_income: "",
-
-    // Register
-    type_registration: "",
-    no_examinee: "",
-    no_serial_diploma: "",
-    no_serial_skhus: "",
-    extra1: "",
-    extra2: "",
-    uniform1: "",
-    uniform2: "",
-    uniform3: "",
-    uniform4: "",
-
-    receiver_kip: "",
-    receiver_kps: "",
-    no_kip: "",
-    no_kps: "",
-    no_kks: "",
-    name_kip: "",
-    reason_kip: "",
+    ...formPPDBStudentInterface,
   });
   const [scholarships, setScholarships] = useState([
     { ...scholarshipInterface },
@@ -177,23 +61,16 @@ const EditRegister = () => {
     { ...achievementInterface },
   ]);
   const [imagesUpload, setImagesUpload] = useState({
-    foto_nisn: " ",
-    foto_kartu_keluarga: "",
-    foto_kip: "",
-    foto_kks: "",
-    foto_kps: "",
+    ...imagesUploadPPDBInterface,
   });
   const [errors, setErrors] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState(1);
-  const [totalForm, setTotalForm] = useState(8);
   const [isSubmit, setIsSubmit] = useState(false);
   const navigate = useNavigate();
-  const { id } = useParams();
   let errorsTemp = [];
   let schArr = [];
   let achArr = [];
-  // console.log(errors.length);
 
   async function onSubmit(e) {
     errorsTemp = [];
@@ -202,7 +79,10 @@ const EditRegister = () => {
 
     for (const propFormData in formData) {
       let propToString = propFormData.toString();
-      if (formData[propFormData] == "" && fieldRequire.includes(propToString)) {
+      if (
+        formData[propFormData] == "" &&
+        fieldRequireFormPPDBStudent.includes(propToString)
+      ) {
         errorsTemp.push(propToString);
       }
     }
@@ -268,8 +148,8 @@ const EditRegister = () => {
     data.status_registration = 0;
     data.scholarships = scholarships;
     data.achievements = achievements;
-    data.foto_kartu_keluarga = imagesUpload.foto_kartu_keluarga;
-    data.foto_nisn = imagesUpload.foto_nisn;
+    data.kartu_keluarga_image = imagesUpload.kartu_keluarga_image;
+    data.nisn_image = imagesUpload.nisn_image;
 
     delete data.city;
     delete data.alamat;
@@ -320,8 +200,7 @@ const EditRegister = () => {
     const myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer " + token);
 
-    console.log(field);
-    // const temp = imagesUpload[field].split("/");
+    const temp = imagesUpload[field].split("/");
     const imageOld = temp[3] + "/" + temp[4];
 
     const formdata = new FormData();
@@ -334,6 +213,7 @@ const EditRegister = () => {
       body: formdata,
       redirect: "follow",
     };
+
     fetch(`${APIBASEURL}/upload_image`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
@@ -341,12 +221,14 @@ const EditRegister = () => {
           notify(result?.image[0], "error");
           return;
         }
-
+        console.log(result.url, "result url nya");
         setImagesUpload({ ...imagesUpload, [field]: result.url });
         setFormData((prev) => ({ ...prev, [field]: result.url }));
       })
       .catch((error) => console.log("error", error));
   }
+
+  console.log(formData);
 
   const handleFormChange = (event, index, type) => {
     let data = [];
@@ -436,7 +318,6 @@ const EditRegister = () => {
           weight,
           kartu_keluarga_image,
           nisn_image,
-          nik_image,
           father_name,
           father_nik,
           father_birth,
@@ -495,14 +376,13 @@ const EditRegister = () => {
         setAchievements(achArr);
 
         setImagesUpload({
-          foto_nisn: nisn_image,
-          foto_kartu_keluarga: kartu_keluarga_image,
+          nisn_image: nisn_image,
+          kartu_keluarga_image: kartu_keluarga_image,
           foto_kip: s_kip[4],
           foto_kks: s_kks[1],
           foto_kps: s_kps[2],
         });
 
-        console.log(uniforms);
         setFormData({
           scholarships: schArr,
           achievements: achArr,
@@ -588,11 +468,11 @@ const EditRegister = () => {
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       {/* Content Area */}
-      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+      <div className="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <main>
           {/* Welcome banner */}
-          <div className="px-4 sm:px-6 py-8 w-full max-w-9xl mx-auto ">
+          <div className="w-full px-4 py-8 mx-auto sm:px-6 max-w-9xl ">
             <form
               onSubmit={onSubmit}
               className="shadow-lg px-6 rounded-xl py-8  max-w-[800px] mx-auto overflow-x-hidden"
@@ -713,7 +593,7 @@ const EditRegister = () => {
                     formData={formData}
                     setFormData={setFormData}
                   />
-                  <div className="grid grid-cols-2 items-center gap-2">
+                  <div className="grid items-center grid-cols-2 gap-2">
                     <Input
                       type="text"
                       field="rt"
@@ -1320,64 +1200,67 @@ const EditRegister = () => {
                   currentTab == 6 ? "active-form" : "non-active-form"
                 } `}
               >
-                <div className="flex flex-wrap gap-8">
-                  <div className="flex items-start flex-col">
-                    <label htmlFor="" className="pl-3 mb-[0.2em] font-semibold">
+                <div className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-y-8 gap-x-5">
+                  <div className="flex flex-col items-start overflow-hidden">
+                    <Preview src={formData.nisn_image} />
+                    {/* {form} */}
+                    <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan Nisn
                     </label>
                     <input
                       type="file"
                       onChange={(e) =>
-                        handleUpload(e.target.files[0], "foto_nisn")
+                        handleUpload(e.target.files[0], "nisn_image")
                       }
-                      className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400  `}
+
                       // required
                     />
                   </div>
-                  <div className="flex items-start flex-col">
-                    <label htmlFor="" className="pl-3 mb-[0.2em] font-semibold">
+                  <div className="flex flex-col items-start overflow-hidden">
+                    <Preview src={formData.kartu_keluarga_image} />
+
+                    <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan kartu Keluarga
                     </label>
                     <input
                       type="file"
-                      className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400  `}
                       onChange={(e) =>
-                        handleUpload(e.target.files[0], "foto_kartu_keluarga")
+                        handleUpload(e.target.files[0], "kartu_keluarga_image")
                       }
                       // required
                     />
                   </div>
-                  <div className="flex items-start flex-col">
-                    <label htmlFor="" className="pl-3 mb-[0.2em] font-semibold">
+                  <div className="flex flex-col items-start overflow-hidden">
+                    <Preview src={formData.foto_kip} />
+                    <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan KIP
                     </label>
                     <input
                       type="file"
-                      className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400  `}
                       onChange={(e) =>
                         handleUpload(e.target.files[0], "foto_kip")
                       }
                     />
                   </div>
-                  <div className="flex items-start flex-col">
-                    <label htmlFor="" className="pl-3 mb-[0.2em] font-semibold">
+                  <div className="flex flex-col items-start">
+                    <Preview src={formData.foto_kps} />
+                    <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan KPS
                     </label>
                     <input
                       type="file"
-                      className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400  `}
                       onChange={(e) =>
                         handleUpload(e.target.files[0], "foto_kps")
                       }
                     />
                   </div>
-                  <div className="flex items-start flex-col">
-                    <label htmlFor="" className="pl-3 mb-[0.2em] font-semibold">
+                  <div className="flex flex-col items-start">
+                    <Preview src={formData.foto_kks} />
+                    <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan KKS
                     </label>
                     <input
                       type="file"
-                      className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400  `}
                       onChange={(e) =>
                         handleUpload(e.target.files[0], "foto_kks")
                       }

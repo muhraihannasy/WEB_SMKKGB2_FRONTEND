@@ -41,13 +41,10 @@ const AddBlog = () => {
       if (res.status == 200) {
         setErrors({});
         notify("Berhasil Membuat Blog", "success");
+        navigate("/dashboard/artikel");
       }
       setIsLoading(false);
     }, 1000);
-
-    setTimeout(() => {
-      navigate("/dashboard/artikel");
-    }, 2000);
   }
   async function handleUpload(file) {
     const token = JSON.parse(localStorage.getItem("usr")).acctkn;
@@ -115,11 +112,11 @@ const AddBlog = () => {
       <Toaster position="top-right" reverseOrder={false} />
 
       {/* Content Area */}
-      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+      <div className="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <main>
           {/* Welcome banner */}
-          <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+          <div className="w-full px-4 py-8 mx-auto sm:px-6 lg:px-8 max-w-9xl">
             <Form
               ref={editorRef}
               formData={formData}

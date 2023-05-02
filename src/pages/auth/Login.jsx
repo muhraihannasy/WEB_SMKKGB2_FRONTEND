@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Spinner from "react-spinkit";
@@ -9,14 +9,15 @@ import { notify } from "../../utils/Utils";
 import Logo from "../../images/logo.png";
 import Teacher from "../../images/svg/Mathematics-rafiki.svg";
 import squircle2 from "../../images/svg/squircle2.svg";
+import { UserContext } from "../../context/UserContext";
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const { setSetting } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
-  const [isLogged, setIsLogged] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -40,22 +41,25 @@ const Login = () => {
 
     setTimeout(() => {
       setIsLoading(false);
-      console.log(result);
 
       if (result.error) {
         sessionStorage.setItem("error", "Email atau Password salah"), "error";
         return;
       }
 
-      const { access_token, user_type, menu_permission } = result;
+      const { fullname, user_type, menu_permission, access_token } = result;
 
       const user = {
         acctkn: access_token,
         user: user_type,
+        fullname: fullname,
+        // photo: photo,
+        menu_permission: menu_permission,
       };
 
-      sessionStorage.removeItem("info");
+      setSetting(user);
 
+      sessionStorage.removeItem("info");
       localStorage.setItem("usr", JSON.stringify(user));
       localStorage.setItem("menu_permission", menu_permission);
       localStorage.setItem("logged", true);
@@ -82,7 +86,7 @@ const Login = () => {
   }, [isLoading]);
 
   return (
-    <div className="fixed h-full w-full bg-white font-poppins overflow-y-auto">
+    <div className="fixed w-full h-full overflow-y-auto bg-white font-poppins">
       {/* Toast */}
       <Toaster position="top-right" reverseOrder={false} />
 
@@ -93,7 +97,7 @@ const Login = () => {
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
+      <div className="grid h-full grid-cols-1 lg:grid-cols-2">
         <div className="relative w-full flex items-center justify-center flex-col bg-[#28288b] pb-[2em] rounded-bl-[2em] rounded-br-[2em] lg:rounded-none lg:overflow-hidden z-10 px-3">
           <img
             src={Teacher}
@@ -101,7 +105,7 @@ const Login = () => {
             className="w-[20em] lg:w-[25em]
           "
           />
-          <div className="text-white text-center">
+          <div className="text-center text-white">
             <h1 className="text-[1em] font-semibold mx-auto mt-5 mb-3">
               PPDB SMK Karya Guna Bhakti 2 2023
             </h1>

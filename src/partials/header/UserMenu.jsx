@@ -1,16 +1,15 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Transition from "../../utils/Transition";
 
 import UserAvatar from "../../images/user-avatar-32.png";
 import { APIBASEURL, FecthData, requestSetting } from "../../service/API";
 import { data } from "autoprefixer";
+import { UserContext } from "../../context/UserContext";
 
 function UserMenu() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [user, setUser] = useState({});
-
-  const navigate = useNavigate();
+  const { name, logout } = useContext(UserContext);
   const trigger = useRef(null);
   const dropdown = useRef(null);
 
@@ -22,61 +21,16 @@ function UserMenu() {
 
     setTimeout(() => {
       if (request) {
-        localStorage.setItem("logged", false);
-        localStorage.removeItem("usr");
-        localStorage.removeItem("menu_permission");
-        navigate("/");
+        logout();
       }
     }, 500);
   };
-
-  // close on click outside
-  useEffect(() => {
-    const clickHandler = ({ target }) => {
-      if (
-        !dropdownOpen ||
-        dropdown.current.contains(target) ||
-        trigger.current.contains(target)
-      )
-        return;
-      setDropdownOpen(false);
-    };
-    document.addEventListener("click", clickHandler);
-    return () => document.removeEventListener("click", clickHandler);
-  });
-
-  // close if the esc key is pressed
-  useEffect(() => {
-    const keyHandler = ({ keyCode }) => {
-      if (!dropdownOpen || keyCode !== 27) return;
-      setDropdownOpen(false);
-    };
-    document.addEventListener("keydown", keyHandler);
-    return () => document.removeEventListener("keydown", keyHandler);
-  });
-
-  useEffect(() => {
-    const getUserIsLogin = async () => {
-      const request = await fetch(
-        `${APIBASEURL}/auth/user`,
-        requestSetting("GET")
-      );
-      const res = await request.json();
-      const data = await res;
-
-      if (data?.user) {
-        setUser(data?.user);
-      }
-    };
-
-    (async () => getUserIsLogin())();
-  }, []);
 
   return (
     <div className="relative inline-flex">
       <button
         ref={trigger}
-        className="inline-flex justify-center items-center group"
+        className="inline-flex items-center justify-center group"
         aria-haspopup="true"
         onClick={() => setDropdownOpen(!dropdownOpen)}
         aria-expanded={dropdownOpen}
@@ -89,11 +43,11 @@ function UserMenu() {
           alt="User"
         />
         <div className="flex items-center truncate">
-          <span className="truncate ml-2 text-sm font-medium group-hover:text-slate-800">
-            {user?.fullname}
+          <span className="ml-2 text-sm font-medium truncate group-hover:text-slate-800">
+            {name}
           </span>
           <svg
-            className="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400"
+            className="w-3 h-3 ml-1 fill-current shrink-0 text-slate-400"
             viewBox="0 0 12 12"
           >
             <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
@@ -119,7 +73,7 @@ function UserMenu() {
           <ul>
             <li>
               <Link
-                className="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
+                className="flex items-center px-3 py-1 text-sm font-medium text-indigo-500 hover:text-indigo-600"
                 to="/"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               >
@@ -128,7 +82,7 @@ function UserMenu() {
             </li>
             <li>
               <Link
-                className="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
+                className="flex items-center px-3 py-1 text-sm font-medium text-indigo-500 hover:text-indigo-600"
                 to="/settings"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               >
@@ -137,7 +91,7 @@ function UserMenu() {
             </li>
             <li>
               <button
-                className="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
+                className="flex items-center px-3 py-1 text-sm font-medium text-indigo-500 hover:text-indigo-600"
                 onClick={() => {
                   setDropdownOpen(!dropdownOpen);
                   handleLogout();
