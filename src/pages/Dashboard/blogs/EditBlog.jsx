@@ -34,8 +34,6 @@ const EditBlog = () => {
       requestSetting("PUT", formData)
     );
     const res = req;
-    console.log(res);
-    return;
 
     setTimeout(() => {
       if (res.errors && Object.keys(res.errors).length > 0)

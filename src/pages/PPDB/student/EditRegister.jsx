@@ -221,14 +221,12 @@ const EditRegister = () => {
           notify(result?.image[0], "error");
           return;
         }
-        console.log(result.url, "result url nya");
+
         setImagesUpload({ ...imagesUpload, [field]: result.url });
         setFormData((prev) => ({ ...prev, [field]: result.url }));
       })
       .catch((error) => console.log("error", error));
   }
-
-  console.log(formData);
 
   const handleFormChange = (event, index, type) => {
     let data = [];

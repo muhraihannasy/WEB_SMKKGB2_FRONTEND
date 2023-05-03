@@ -191,8 +191,6 @@ const EditRegisterStudent = () => {
       requestSetting("PUT", data)
     );
 
-    console.log(request);
-    return;
     if (request.success) {
       setIsLoading(false);
       notify("Berhasil Mengubah Data", "success");

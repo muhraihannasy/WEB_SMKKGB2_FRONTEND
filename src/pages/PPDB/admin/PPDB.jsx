@@ -50,27 +50,28 @@ const PPDB = () => {
   const componentRef = useRef();
 
   const handleGetData = async (id) => {
-    // setIsLoading(true);
-    console.log(id);
-
-    const result = await FecthData(
-      `${APIBASEURL}/admin/ppdb/${id}`,
-      requestSetting("GET")
-    );
-
-    setTimeout(() => {
-      if (result) {
-        setReadyToPrint(true);
-      }
-
-      setIsLoading(false);
-      setDataToPrint({ ...result });
-    }, 1000);
+    fetch(`${APIBASEURL}/ppdb/print/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/pdf",
+      },
+    })
+      .then((response) => {
+        return response.blob();
+      })
+      .then((blob) => {
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const link = document.createElement("a");
+        console.log(blob);
+        link.href = url;
+        link.setAttribute("download", `Formulir_Pendaftaran_${id}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+      });
   };
 
   const handleVerified = async (e, id, status) => {
     setStatusVerified(!statusVerified);
-    setIsLoading(true);
 
     const registration = { status_registration: "Sudah Diterima" };
 
@@ -79,13 +80,35 @@ const PPDB = () => {
       requestSetting("PUT", registration)
     );
 
+    if (result.status) {
+      setLastRefresh(new Date());
+      notify("Siswa Diterima", "success");
+    }
+  };
+
+  const handleOkModal = async () => {
+    setConfirmLoadingModal(true);
+    const user = getUserIsLogin();
+    const request = await FecthData(
+      `${APIBASEURL}/${user}/registration/code`,
+      requestSetting("POST", codeRegistration)
+    );
+
     setTimeout(() => {
-      if (result.status) {
-        notify("Siswa Diterima", "success");
+      setOpenModal(false);
+      setConfirmLoadingModal(false);
+      setCodeRegistration({
+        id: "",
+        code_registration: "",
+      });
+      if (request == null) {
+        notify("Kode Pembayaran Salah", "error");
+        return;
+      }
+      if (request.status == 200) {
+        notify(request.success, "success");
         setLastRefresh(new Date());
       }
-
-      setIsLoading(false);
     }, 1000);
   };
 
@@ -122,32 +145,6 @@ const PPDB = () => {
     setCodeRegistration({ ...codeRegistration, id });
   };
 
-  const handleOkModal = async () => {
-    setConfirmLoadingModal(true);
-    const user = getUserIsLogin();
-    const request = await FecthData(
-      `${APIBASEURL}/${user}/registration/code`,
-      requestSetting("POST", codeRegistration)
-    );
-
-    setTimeout(() => {
-      setOpenModal(false);
-      setConfirmLoadingModal(false);
-      setUpdatedData(false);
-      setCodeRegistration({
-        id: "",
-        code_registration: "",
-      });
-      if (request == null) {
-        notify("Kode Pembayaran Salah", "error");
-        return;
-      }
-      if (request.status == 200) {
-        notify(request.success, "success");
-      }
-    }, 1000);
-  };
-
   const handleCancelModal = () => {
     console.log("Clicked cancel button");
     setOpenModal(false);
@@ -164,15 +161,18 @@ const PPDB = () => {
 
   return (
     <div className="flex h-screen overflow-hidden">
+      {/* Toast */}
+      <Toaster position="top-right" reverseOrder={false} />
+
       {/* Sidebar  */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       {/* Content Area */}
-      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+      <div className="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
         <main>
-          <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto relative ">
+          <div className="relative w-full px-4 py-8 mx-auto sm:px-6 lg:px-8 max-w-9xl ">
             {/* Modal */}
             <Modal
               title="Kode Pembayaran"
@@ -213,7 +213,7 @@ const PPDB = () => {
                   <IoMdAddCircle className="text-[1.2rem]" />
                 </div>
               </Link>
-              <div className="flex items-center sm:flex-auto flex-wrap justify-end gap-2">
+              <div className="flex flex-wrap items-center justify-end gap-2 sm:flex-auto">
                 <div className="flex border justify-between rounded-xl overflow-hidden sm:w-[18rem] w-full">
                   <input
                     type="text"
@@ -236,7 +236,7 @@ const PPDB = () => {
                   <select
                     name=""
                     id=""
-                    className="border-none focus:ring-0 focus:outline-none focus:border-transparent sm:w-auto w-full"
+                    className="w-full border-none focus:ring-0 focus:outline-none focus:border-transparent sm:w-auto"
                     onChange={(e) => {
                       setPage(1);
                       setFilter(e.target.value);
@@ -311,7 +311,7 @@ const PPDB = () => {
                             <td className="p-2 whitespace-nowrap font-semibold h-[4rem]">
                               {maker ?? "-"}
                             </td>
-                            <td className="p-2 whitespace-nowrap font-semibold">
+                            <td className="p-2 font-semibold whitespace-nowrap">
                               {fullname}
                             </td>
                             <td className="p-2 whitespace-nowrap">
@@ -345,11 +345,11 @@ const PPDB = () => {
                               </div>
                             </td>
                             <td className="p-2 whitespace-nowrap">
-                              <div className="text-center font-medium flex items-center justify-center gap-2">
+                              <div className="flex items-center justify-center gap-2 font-medium text-center">
                                 {status == "Belum Diterima" ||
                                 status == "Sudah Diterima" ? (
                                   <button
-                                    className="bg-orange-500 text-lg p-1 rounded-xl text-white"
+                                    className="p-1 text-lg text-white bg-orange-500 rounded-xl"
                                     onClick={() => {
                                       handleGetData(user_id);
                                     }}
@@ -372,7 +372,7 @@ const PPDB = () => {
                                 {/* {status == "Belum Diterima" ||
                                 status == "Sudah Diterima" ? (
                                   <button
-                                    className="bg-blue-500 p-1 rounded-xl text-lg text-white"
+                                    className="p-1 text-lg text-white bg-blue-500 rounded-xl"
                                     onClick={() =>
                                       navigate(`/dashboard/ppdb/${student_id}`)
                                     }
@@ -399,7 +399,7 @@ const PPDB = () => {
                                       )}
                                     </button>
                                     <button
-                                      className="bg-yellow-500 p-1 text-lg rounded-xl text-white"
+                                      className="p-1 text-lg text-white bg-yellow-500 rounded-xl"
                                       onClick={() =>
                                         navigate(
                                           `/dashboard/ppdb/admin/student/edit/${user_id}`
@@ -453,9 +453,9 @@ const PPDB = () => {
                 </div>
               </div>
 
-              {readyToPrint && (
+              {/* {readyToPrint && (
                 <Example data={dataToPrint} componentRef={componentRef} />
-              )}
+              )} */}
             </div>
           </div>
         </main>
