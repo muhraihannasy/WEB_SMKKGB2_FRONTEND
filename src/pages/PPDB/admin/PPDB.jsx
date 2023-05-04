@@ -50,24 +50,11 @@ const PPDB = () => {
   const componentRef = useRef();
 
   const handleGetData = async (id) => {
-    fetch(`${APIBASEURL}/ppdb/print/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/pdf",
-      },
-    })
-      .then((response) => {
-        return response.blob();
-      })
-      .then((blob) => {
-        const url = window.URL.createObjectURL(new Blob([blob]));
-        const link = document.createElement("a");
-        console.log(blob);
-        link.href = url;
-        link.setAttribute("download", `Formulir_Pendaftaran_${id}.pdf`);
-        document.body.appendChild(link);
-        link.click();
-      });
+    const link = document.createElement("a");
+    link.href = APIBASEURL + "/ppdb/print/" + id;
+    link.setAttribute("target", "_blank");
+    document.body.appendChild(link);
+    link.click();
   };
 
   const handleVerified = async (e, id, status) => {
