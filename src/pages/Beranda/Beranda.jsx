@@ -1,8 +1,10 @@
 // Component
 import Button from "../../components/Button";
+import ExportExcel from "../../components/ExportExcel";
 
 // Images
 import logo from "../../images/logo.png";
+
 
 function Beranda() {
   return (
@@ -25,6 +27,7 @@ function Beranda() {
               <Button type="link" to="/login" bg="primary">
                 Login
               </Button>
+              <ExportExcel />
               <Button type="link" to="/register" bg="outline">
                 Daftar
               </Button>
