@@ -64,7 +64,6 @@ const AddRegisterStudent = () => {
   const [imagesUpload, setImagesUpload] = useState({
     ...imagesUploadPPDBInterface,
   });
-
   const [errors, setErrors] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState(1);
@@ -229,10 +228,11 @@ const AddRegisterStudent = () => {
     fetch(`${APIBASEURL}/upload_image`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        if (result?.image) {
+      if (result?.image) {
           notify(result?.image[0], "error");
           return;
         }
+
 
         setImagesUpload({ ...imagesUpload, [field]: result.url });
         setFormData((prev) => ({ ...prev, [field]: result.url }));
@@ -323,11 +323,11 @@ const AddRegisterStudent = () => {
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       {/* Content Area */}
-      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+      <div className="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <main>
           {/* Welcome banner */}
-          <div className="px-4 sm:px-6 py-8 w-full max-w-9xl mx-auto ">
+          <div className="w-full px-4 py-8 mx-auto sm:px-6 max-w-9xl ">
             <form
               onSubmit={onSubmit}
               className="shadow-lg px-6 rounded-xl py-8  max-w-[800px] mx-auto overflow-x-hidden"
@@ -524,7 +524,7 @@ const AddRegisterStudent = () => {
                     formData={formData}
                     setFormData={setFormData}
                   />
-                  <div className="grid grid-cols-2 items-center gap-2">
+                  <div className="grid items-center grid-cols-2 gap-2">
                     <Input
                       type="text"
                       field="rt"
@@ -1131,8 +1131,8 @@ const AddRegisterStudent = () => {
                   currentTab == 7 ? "active-form" : "non-active-form"
                 } `}
               >
-                <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-y-8 gap-x-5">
-                  <div className="flex items-start flex-col overflow-hidden">
+                <div className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-y-8 gap-x-5">
+                  <div className="flex flex-col items-start overflow-hidden">
                     <Preview src={formData.nisn_image} />
                     <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan Nisn
@@ -1146,7 +1146,7 @@ const AddRegisterStudent = () => {
                       // required
                     />
                   </div>
-                  <div className="flex items-start flex-col overflow-hidden">
+                  <div className="flex flex-col items-start overflow-hidden">
                     <Preview src={formData.kartu_keluarga_image} />
                     <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan kartu Keluarga
@@ -1159,7 +1159,7 @@ const AddRegisterStudent = () => {
                       // required
                     />
                   </div>
-                  <div className="flex items-start flex-col overflow-hidden">
+                  <div className="flex flex-col items-start overflow-hidden">
                     <Preview src={formData.foto_kip} />
                     <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan KIP
@@ -1171,7 +1171,7 @@ const AddRegisterStudent = () => {
                       }
                     />
                   </div>
-                  <div className="flex items-start flex-col">
+                  <div className="flex flex-col items-start">
                     <Preview src={formData.foto_kps} />
                     <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan KPS
@@ -1183,7 +1183,7 @@ const AddRegisterStudent = () => {
                       }
                     />
                   </div>
-                  <div className="flex items-start flex-col">
+                  <div className="flex flex-col items-start">
                     <Preview src={formData.foto_kks} />
                     <label htmlFor="" className="mb-[0.2em] font-semibold">
                       Foto Scan KKS

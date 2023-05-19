@@ -72,7 +72,6 @@ const AddRegister = () => {
   const [isSubmit, setIsSubmit] = useState(false);
   const navigate = useNavigate();
   let errorsTemp = [];
-  // console.log(errors.length);
 
   async function onSubmit(e) {
     errorsTemp = [];

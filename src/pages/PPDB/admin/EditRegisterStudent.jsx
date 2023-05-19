@@ -401,8 +401,6 @@ const EditRegisterStudent = () => {
           foto_kps: s_kps[2] == "undefined" ? "" : s_kps[2],
         });
 
-        console.log(nisn_image, "niss");
-
         setFormData({
           id,
           scholarships: schArr,
@@ -581,6 +579,15 @@ const EditRegisterStudent = () => {
                     setFormData={setFormData}
                     data={competency}
                   />
+                    <Input
+                      type="email"
+                      field="email"
+                      label="Email"
+                      errors={errors}
+                      formData={formData}
+                      setFormData={setFormData}
+                      disable={true}
+                    />
 
                   <div>
                     <Input

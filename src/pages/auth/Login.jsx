@@ -8,7 +8,6 @@ import { notify } from "../../utils/Utils";
 // Images
 import Logo from "../../images/logo.png";
 import Teacher from "../../images/svg/Mathematics-rafiki.svg";
-import squircle2 from "../../images/svg/squircle2.svg";
 import { UserContext } from "../../context/UserContext";
 
 const Login = () => {
@@ -53,7 +52,6 @@ const Login = () => {
         acctkn: access_token,
         user: user_type,
         fullname: fullname,
-        // photo: photo,
         menu_permission: menu_permission,
       };
 

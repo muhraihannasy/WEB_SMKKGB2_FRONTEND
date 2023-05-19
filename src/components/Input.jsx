@@ -11,6 +11,7 @@ export const Input = ({
   errors,
   data = [],
   value,
+  disable
 }) => {
   switch (type) {
     case "text":
@@ -43,15 +44,18 @@ export const Input = ({
             id={field}
             type="email"
             placeholder="..."
-            className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg   ${
-              errors.includes(field)
+            className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg  
+            ${errors.includes(field)
                 ? "border-red-300 focus:border-red-300"
                 : "border-slate-300 focus:border-slate-400"
-            }`}
+            }
+            ${disable ? "bg-slate-200" : ""}
+            `}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, [field]: e.target.value }))
             }
             value={formData[field]}
+            disabled={disable}
           />
           <AlertInputError field={field} errors={errors} />
         </div>

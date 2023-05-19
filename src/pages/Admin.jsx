@@ -2,17 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import Header from "../partials/Header";
 import Sidebar from "../partials/Sidebar";
 import { BiEdit, BiUserPlus } from "react-icons/bi";
-import { Link } from "react-router-dom";
 import { Modal } from "antd";
 import { APIBASEURL, FecthData, requestSetting } from "../service/API";
 import { notify } from "../utils/Utils";
 import { Toaster } from "react-hot-toast";
-import { FiEdit } from "react-icons/fi";
 import Spinner from "react-spinkit";
 
 import { FaTrash } from "react-icons/fa";
+import { imagesUploadPPDBInterface } from "../interfaces";
 
-const menu = ["ppdb", "loker", "dashboard", "admin", "artikel"];
+const menu = ["ppdb", "loker", "dashboard", "all", "artikel"];
 
 const Admin = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -23,16 +22,18 @@ const Admin = () => {
   const [confirmLoadingModalEdit, setConfirmLoadingModalEdit] = useState(false);
   const [isModeEdit, setIsModeEdit] = useState(false);
   const [updateData, setUpdateData] = useState(false);
+  
   const [data, setData] = useState([]);
-  const [photoProfile, setPhotoProfile] = useState("");
   const [lastRefresh, setLastRefresh] = useState(new Date());
   const [formData, setFormData] = useState({
     user_type_id: 2,
     fullname: "",
     phone: "",
-    email: "",
     photo: "",
     password: "",
+  });
+   const [imagesUpload, setImagesUpload] = useState({
+    photoProfile: ""
   });
   const [userId, setUserId] = useState(0);
   const [menuPermission, setMenuPermission] = useState([]);
@@ -42,24 +43,33 @@ const Admin = () => {
   function handleChangeMenuPermission(checked, menu) {
     let menus = [...menuPermission];
 
+
     if (checked) menus.push(menu);
+
     if (!checked) {
       setMenuPermission(menus.filter((item) => item !== menu));
       menus.push(menu);
       return;
     }
 
-    setMenuPermission(menus);
+
+    setMenuPermission(menus.filter(menuItem => menuItem != ""));
   }
 
-  const handleUploadImage = async (file) => {
+    async function handleUpload(file, field) {
     const token = JSON.parse(localStorage.getItem("usr")).acctkn;
     // Upload Image
     const myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer " + token);
 
+    const temp = imagesUpload[field].split("/");
+    const imageOld = temp[3] + "/" + temp[4];
+
+    console.log(imageOld)
+
     const formdata = new FormData();
-    formdata.append("photo", file, file.name);
+    formdata.append("image", file, file.name);
+    formdata.append("image_old", imageOld);
 
     const requestOptions = {
       method: "POST",
@@ -67,15 +77,20 @@ const Admin = () => {
       body: formdata,
       redirect: "follow",
     };
-
-    fetch(`${APIBASEURL}/user/upload`, requestOptions)
+    fetch(`${APIBASEURL}/upload_image`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        setPhotoProfile(result.path);
-        setFormData({ ...formData, photo: result.path });
+        if (!result?.url) {
+          notify(result?.url[0], "error");
+          return;
+        }
+        setImagesUpload({[field]: result.url});
+        setFormData({ ...formData, photo: result.url });
       })
       .catch((error) => console.log("error", error));
-  };
+  }
+
+
   const handleDelete = async (id) => {
     setIsLoading(true);
     setUpdateData(true);
@@ -98,7 +113,8 @@ const Admin = () => {
     }, 1000);
   };
 
-  const showModal = (id) => {
+  const showModal = ()=> {
+    setIsModeEdit(false);
     setOpenModal(true);
   };
 
@@ -154,8 +170,8 @@ const Admin = () => {
         photo: "",
         password: "",
       });
-      setPhotoProfile("");
       photoInput.current.value = null;
+      setImagesUpload({photoProfile: ""});
       setMenuPermission([]);
     }, 1000);
   };
@@ -170,14 +186,15 @@ const Admin = () => {
       photo: "",
       password: "",
     });
-    setPhotoProfile("");
     photoInput.current.value = null;
     setOpenModal(false);
+    setImagesUpload({photoProfile: ""});
     setMenuPermission([]);
   };
 
   const showModalEdit = () => {
     setOpenModalEdit(true);
+    setIsModeEdit(true);
   };
 
   const handleOkModalEdit = async () => {
@@ -195,7 +212,9 @@ const Admin = () => {
       return;
     }
 
-    formData.menu_permission = menuPermission.join("|");
+    const tempMenu = [...menuPermission];
+    tempMenu.push('');
+    formData.menu_permission = tempMenu.join("|");
 
     const request = await FecthData(
       `${APIBASEURL}/admin/user/update/${userId}`,
@@ -230,8 +249,8 @@ const Admin = () => {
         photo: "",
         password: "",
       });
-      setPhotoProfile("");
       photoInput.current.value = null;
+      setImagesUpload({photoProfile: ""});
       setMenuPermission([]);
     }, 1000);
   };
@@ -246,10 +265,10 @@ const Admin = () => {
       photo: "",
       password: "",
     });
-    setPhotoProfile("");
     photoInput.current.value = null;
     setOpenModalEdit(false);
     setIsModeEdit(false);
+    setImagesUpload({photoProfile: ""});
     setMenuPermission([]);
   };
 
@@ -269,6 +288,8 @@ const Admin = () => {
 
     (async () => getAdmin())();
   }, [isLoading, lastRefresh]);
+
+  
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -300,11 +321,11 @@ const Admin = () => {
             <div className="w-[5rem] h-[5rem] rounded-full overflow-hidden">
               <img
                 src={
-                  photoProfile == ""
+                  imagesUpload.photoProfile == ""
                     ? "https://static.vecteezy.com/system/resources/thumbnails/009/734/564/small/default-avatar-profile-icon-of-social-media-user-vector.jpg"
-                    : photoProfile
+                    : imagesUpload.photoProfile
                 }
-                className="w-full object-cover"
+                className="object-cover w-full"
                 alt=""
               />
             </div>
@@ -314,7 +335,7 @@ const Admin = () => {
             <input
               type="file"
               className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
-              onChange={(e) => handleUploadImage(e.target.files[0])}
+              onChange={(e) => handleUpload(e.target.files[0], "photoProfile")}
               ref={photoInput}
             />
           </div>
@@ -348,21 +369,7 @@ const Admin = () => {
               value={formData.phone}
             />
           </div>
-          <div className="flex flex-col gap-2 mb-[1rem]">
-            <label htmlFor="email" className="font-regular">
-              Email
-            </label>
-            <input
-              type="email"
-              className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
-              name="email"
-              id="email"
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              value={formData.email}
-            />
-          </div>
+          
           <div className="flex flex-col gap-2 mb-[1rem]">
             <label htmlFor="password" className="font-regular">
               Password
@@ -419,11 +426,11 @@ const Admin = () => {
             <div className="w-[5rem] h-[5rem] rounded-full overflow-hidden">
               <img
                 src={
-                  photoProfile == ""
+                          imagesUpload.photoProfile == ""
                     ? "https://static.vecteezy.com/system/resources/thumbnails/009/734/564/small/default-avatar-profile-icon-of-social-media-user-vector.jpg"
-                    : photoProfile
+                    : imagesUpload.photoProfile
                 }
-                className="w-full object-cover"
+                className="object-cover w-full"
                 alt=""
               />
             </div>
@@ -433,7 +440,7 @@ const Admin = () => {
             <input
               type="file"
               className={`border-1 py-2 px-3 focus:ring-0 focus:outline-none rounded-lg border-slate-300 focus:border-slate-400 text-slate-600`}
-              onChange={(e) => handleUploadImage(e.target.files[0])}
+              onChange={(e) => handleUpload(e.target.files[0], 'photoProfile')}
               ref={photoInput}
             />
           </div>
@@ -504,7 +511,7 @@ const Admin = () => {
             Menu Permission
           </label>
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             {menu.map((item) => {
               return (
                 <div className="flex items-center gap-2 mb-[1rem]">
@@ -528,11 +535,11 @@ const Admin = () => {
         </Modal>
       )}
 
-      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+      <div className="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <main>
           {/* Welcome banner */}
-          <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+          <div className="w-full px-4 py-8 mx-auto sm:px-6 lg:px-8 max-w-9xl">
             <button
               className="mb-[0.5rem] flex items-center gap-2 ml-auto w-max bg-primary text-white text-[0.9rem]  py-3 px-5 rounded-xl transition-colors hover:bg-orange-400"
               onClick={showModal}
@@ -572,14 +579,14 @@ const Admin = () => {
                                     ? "https://static.vecteezy.com/system/resources/thumbnails/009/734/564/small/default-avatar-profile-icon-of-social-media-user-vector.jpg"
                                     : item.photo
                                 }
-                                className="w-full object-cover"
+                                className="object-cover w-full"
                                 alt=""
                               />
                             </div>
                           </td>
                           <td>{item.fullname}</td>
                           <td>{item.email}</td>
-                          <td className="p-2 whitespace-nowrap flex justify-center">
+                          <td className="flex justify-center p-2 whitespace-nowrap">
                             <div className="flex items-center gap-2 pt-3">
                               <button className="flex items-center p-1.5 rounded-xl text-md bg-third justify-center">
                                 <FaTrash
@@ -588,7 +595,7 @@ const Admin = () => {
                                 />
                               </button>
                               <button
-                                className="bg-yellow-500 p-1 rounded-xl text-lg text-white"
+                                className="p-1 text-lg text-white bg-yellow-500 rounded-xl"
                                 onClick={() => {
                                   setIsModeEdit(true);
                                   showModalEdit();
@@ -599,6 +606,7 @@ const Admin = () => {
                                     menu_permission: item.menu_permission,
                                     phone: item.phone,
                                   });
+                                  setImagesUpload({photoProfile: item.photo})
                                   setMenuPermission(
                                     item.menu_permission.split("|")
                                   );

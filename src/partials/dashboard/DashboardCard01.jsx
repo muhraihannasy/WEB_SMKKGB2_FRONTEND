@@ -7,7 +7,7 @@ import EditMenu from "../EditMenu";
 // Import utilities
 import { tailwindConfig, hexToRGB } from "../../utils/Utils";
 
-function DashboardCard01() {
+function DashboardCard01({amount}) {
   const chartData = {
     labels: [
       "12-01-2020",
@@ -36,13 +36,16 @@ function DashboardCard01() {
       "11-01-2022",
       "12-01-2022",
       "01-01-2023",
+      "01-01-2023",
+      "01-01-2023",
+      "01-01-2023",
     ],
     datasets: [
       // Indigo line
       {
         data: [
           10, 20, 610, 504, 504, 504, 349, 349, 504, 342, 504, 610, 391, 192,
-          154, 273, 191, 191, 126, 263, 349, 252, 423, 622, 470, 532,
+          154, 273, 191, 191, 126, 263, 349, 252, 423, 622, 470, 532, 200, 10
         ],
         fill: true,
         backgroundColor: `rgba(${hexToRGB(
@@ -71,52 +74,25 @@ function DashboardCard01() {
   };
 
   return (
-    <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white shadow-lg rounded-sm border border-slate-200">
+    <div className="flex flex-col bg-white border rounded-sm shadow-lg col-span-full sm:col-span-6 xl:col-span-4 border-slate-200">
       <div className="px-5 pt-5">
-        <header className="flex justify-between items-start mb-2">
+        <header className="flex items-start justify-between mb-2">
           {/* Icon */}
           <img src={Icon} width="32" height="32" alt="Icon 01" />
           {/* Menu button */}
-          {/* <EditMenu className="relative inline-flex"> */}
-          {/* <li>
-            <Link
-              className="font-medium text-sm text-slate-600 hover:text-slate-800 flex py-1 px-3"
-              to="#0"
-            >
-              Option 1
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="font-medium text-sm text-slate-600 hover:text-slate-800 flex py-1 px-3"
-              to="#0"
-            >
-              Option 2
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="font-medium text-sm text-rose-500 hover:text-rose-600 flex py-1 px-3"
-              to="#0"
-            >
-              Removes
-            </Link>
-          </li> */}
-          {/* </EditMenu> */}
         </header>
-        <h2 className="text-lg font-semibold text-slate-800 mb-2">
+        <h2 className="mb-2 text-lg font-semibold text-slate-800">
           Jumlah Pendaftar
         </h2>
 
-        <div className="flex items-start">
-          <div className="text-3xl font-bold text-slate-800 mr-2">80</div>
+        <div className="flex items-start pb-6">
+          <div className="mr-2 text-3xl font-bold text-slate-800">{amount}</div>
         </div>
       </div>
       {/* Chart built with Chart.js 3 */}
-      <div className="grow">
-        {/* Change the height attribute to adjust the chart height */}
-        {/* <LineChart data={chartData} width={389} height={128} /> */}
-      </div>
+      {/* <div className="grow">
+        <LineChart data={chartData} width={389} height={128} />
+      </div> */}
     </div>
   );
 }

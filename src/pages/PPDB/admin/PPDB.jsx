@@ -17,14 +17,17 @@ import { getUserIsLogin, notify } from "../../../utils/Utils";
 import { useReactToPrint } from "react-to-print";
 import Example from "../../../components/PrintComponent";
 import { IoMdAddCircle } from "react-icons/io";
+import ButtonExportExcel from "../../../components/Button/ButtonExportExcel";
+import ButtonNav from "../../../components/Button/ButtonNav";
 
 const PPDB = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [filter, setFilter] = useState("");
+  const [status, setStatus] = useState("");
   const [totalPage, setTotalPage] = useState(0);
-  const [isPaid, setIsPaid] = useState(1);
   const [endPage, setEndPage] = useState(false);
+  const [filterData, setFilterData] = useState([]);
   const [data, setData] = useState([]);
   const [dataToPrint, setDataToPrint] = useState({});
   const [readyToPrint, setReadyToPrint] = useState(false);
@@ -102,9 +105,10 @@ const PPDB = () => {
   useEffect(() => {
     (async () => {
       const result = await FecthData(
-        `${APIBASEURL}/admin/registration?limit=${limit}&page=${page}&filter=${filter}&ispaid=${isPaid}`,
+        `${APIBASEURL}/admin/registration?limit=${limit}&page=${page}&filter=${filter}`,
         requestSetting("GET")
       );
+
 
       setTimeout(() => {
         if (result.data) {
@@ -116,16 +120,28 @@ const PPDB = () => {
         }
 
         setData(result.data);
+        setFilterData(result.data);
         setTotalPage(result.total_page);
+
       }, 1000);
     })();
-  }, [statusVerified, filter, page, limit, endPage, isPaid, lastRefresh]);
+
+
+
+
+    
+  }, [statusVerified, filter, page, limit, endPage ,lastRefresh]);
 
   useEffect(() => {
-    if (readyToPrint) {
-      handlePrint();
-    }
-  }, [dataToPrint]);
+      const filtered = data.filter((item) => {
+        if(status == "") return item; 
+        if(item.status == status) {
+          return item;
+        }
+      });
+
+      setFilterData(filtered);
+  }, [status]);
 
   const showModal = (id) => {
     setOpenModal(true);
@@ -133,7 +149,6 @@ const PPDB = () => {
   };
 
   const handleCancelModal = () => {
-    console.log("Clicked cancel button");
     setOpenModal(false);
   };
 
@@ -191,15 +206,24 @@ const PPDB = () => {
             {/* Main Content */}
 
             <div className=" pb-[1rem]">
-              <Link
-                className="w-max h-[2.5rem] text-white pt-2 px-5 bg-orange-400 block rounded-[4px] mb-[30px] ml-auto mt-[2.5rem]"
+              
+              <div className="flex items-center justify-end gap-2 mt-5 mb-5">
+               <ButtonExportExcel  />
+               <ButtonNav 
                 to="/dashboard/ppdb/admin/student/add"
+               >
+                 <div className="flex items-center gap-2">
+                    <span>Tambah Peserta</span>
+                    <IoMdAddCircle className="text-[1.2rem]" />
+                  </div>
+               </ButtonNav>
+                {/* <Link
+                className="w-max h-[2.5rem] text-white pt-2 px-5 bg-orange-400 block rounded-[4px] "
               >
-                <div className="flex items-center gap-2">
-                  <span>Tambah Peserta</span>
-                  <IoMdAddCircle className="text-[1.2rem]" />
-                </div>
-              </Link>
+               
+              </Link> */}
+              </div>
+
               <div className="flex flex-wrap items-center justify-end gap-2 sm:flex-auto">
                 <div className="flex border justify-between rounded-xl overflow-hidden sm:w-[18rem] w-full">
                   <input
@@ -226,7 +250,7 @@ const PPDB = () => {
                     className="w-full border-none focus:ring-0 focus:outline-none focus:border-transparent sm:w-auto"
                     onChange={(e) => {
                       setPage(1);
-                      setFilter(e.target.value);
+                      setStatus(e.target.value)
                     }}
                   >
                     <option value="">Default</option>
@@ -275,8 +299,8 @@ const PPDB = () => {
                     </tr>
                   </thead>
                   <tbody className="text-sm divide-y divide-slate-100">
-                    {data &&
-                      data.map((item) => {
+                    {filterData &&
+                      filterData.map((item) => {
                         const {
                           id,
                           user_id,
@@ -335,7 +359,8 @@ const PPDB = () => {
                               <div className="flex items-center justify-center gap-2 font-medium text-center">
                                 {status == "Belum Diterima" ||
                                 status == "Sudah Diterima" ? (
-                                  <button
+                                  <>
+                                    <button
                                     className="p-1 text-lg text-white bg-orange-500 rounded-xl"
                                     onClick={() => {
                                       handleGetData(user_id);
@@ -343,6 +368,19 @@ const PPDB = () => {
                                   >
                                     <AiFillPrinter />
                                   </button>
+                                           <button
+                                      className="p-1 text-lg text-white bg-yellow-500 rounded-xl"
+                                      onClick={() =>
+                                        navigate(
+                                          `/dashboard/ppdb/admin/student/edit/${user_id}`
+                                        )
+                                      }
+                                    >
+                                      <BiEdit />
+                                    </button>
+                                  </>
+                                
+                                  
                                 ) : (
                                   ""
                                 )}

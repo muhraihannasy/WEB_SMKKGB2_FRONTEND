@@ -35,6 +35,7 @@ function reducer(state, action) {
         isLogin: true,
         name: data?.fullname,
         menu_permission: menuPermission,
+        token: data?.acctkn
       };
     case TypeReducerAction.SET_USER_SETTING_FROM_LOGIN:
       data = action.payload;
@@ -44,6 +45,7 @@ function reducer(state, action) {
         isLogin: true,
         name: data.fullname,
         menu_permission: menuPermission,
+        token: data?.acctkn
       };
     case TypeReducerAction.SET_LOGOUT:
       localStorage.setItem("logged", false);
@@ -89,6 +91,7 @@ const UserProvider = ({ children }) => {
     isLogin: state.isLogin,
     name: state.name,
     menu_permission: state.menu_permission,
+    token: state.token,
     logout: logout,
     setSetting: setSetting,
   };
