@@ -32,8 +32,6 @@ const Register = () => {
       formData.email === "" ||
       formData.password === "" ||
       formData.kompetensi1 === "" ||
-      formData.kompetensi2 === "" ||
-      formData.kompetensi3 === "" ||
       formData.from_school === "" ||
       formData.phone === "" ||
       formData.fullname === ""
@@ -109,7 +107,7 @@ const Register = () => {
   }, [isLoading]);
 
   return (
-    <div className="fixed h-full w-full bg-white font-poppins overflow-y-auto">
+    <div className="fixed w-full h-full overflow-y-auto bg-white font-poppins">
       {/* Toast */}
       <Toaster position="top-right" reverseOrder={false} />
 
@@ -120,7 +118,7 @@ const Register = () => {
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
+      <div className="grid h-full grid-cols-1 lg:grid-cols-2">
         <div className="relative w-full flex items-center justify-center flex-col bg-[#28288b] pb-[2em] rounded-bl-[2em] rounded-br-[2em] lg:rounded-none lg:overflow-hidden z-10 px-3">
           <img
             src={Teacher}
@@ -128,7 +126,7 @@ const Register = () => {
             className="w-[20em] lg:w-[25em]
           "
           />
-          <div className="text-white text-center">
+          <div className="text-center text-white">
             <h1 className="text-[1em] font-semibold mx-auto mt-5 mb-3">
               PPDB SMK Karya Guna Bhakti 2 2023
             </h1>
@@ -173,7 +171,7 @@ const Register = () => {
               />
             </div>
             <div className="flex flex-col mb-[1.5rem]">
-              <label htmlFor="kompetensi1">Pilihan Kompetensi 1 </label>
+              <label htmlFor="kompetensi1">Pilihan Kompetensi </label>
               <select
                 id="kompetensi1"
                 name="kompetensi1"
@@ -196,50 +194,7 @@ const Register = () => {
                 })}
               </select>
             </div>
-            <div className="flex flex-col mb-[1.5rem]">
-              <label htmlFor="kompetensi2">Pilihan Kompetensi 2 </label>
-              <select
-                id="kompetensi2"
-                name="kompetensi2"
-                placeholder="..."
-                className="rounded-[0.5em] border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
-                onChange={(e) =>
-                  setFormData({ ...formData, kompetensi2: e.target.value })
-                }
-                value={formData.kompetensi2}
-              >
-                <option value="">Pilih...</option>
-                {competency.map((item, index) => {
-                  return (
-                    <option key={index} value={item}>
-                      {item}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-            <div className="flex flex-col mb-[1.5rem]">
-              <label htmlFor="kompetensi3">Pilihan Kompetensi 3 </label>
-              <select
-                id="kompetensi3"
-                name="kompetensi3"
-                placeholder="..."
-                className="rounded-[0.5em] border-[#d3d3d3] mt-[0.5rem] py-3 px-5"
-                onChange={(e) =>
-                  setFormData({ ...formData, kompetensi3: e.target.value })
-                }
-                value={formData.kompetensi3}
-              >
-                <option value="">Pilih...</option>
-                {competency.map((item, index) => {
-                  return (
-                    <option key={index} value={item}>
-                      {item}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
+
             <div className="flex flex-col mb-[1.5rem]">
               <label htmlFor="">Phone</label>
               <input
@@ -299,7 +254,7 @@ const Register = () => {
   );
 };
 
-// {/* <div className=" h-full w-full my-auto bg-white grid lg:grid-cols-2 font-poppins ">
+// {/* <div className="grid w-full h-full my-auto bg-white lg:grid-cols-2 font-poppins">
 //   {/* Toast */}
 //   <Toaster position="top-right" reverseOrder={false} />
 
