@@ -108,8 +108,8 @@ const Login = () => {
               PPDB SMK Karya Guna Bhakti 2 2023
             </h1>
             <p className="text-[0.9em] w-[90%] lg:w-[30em] mx-auto">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
-              nisi praesentium dicta ducimus cum ab illo,
+              Bersiaplah untuk melangkah ke dalam dunia di mana impian dan
+              prestasi tumbuh bersama.
             </p>
           </div>
 

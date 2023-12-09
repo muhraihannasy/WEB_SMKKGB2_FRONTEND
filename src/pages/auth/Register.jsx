@@ -128,11 +128,11 @@ const Register = () => {
           />
           <div className="text-center text-white">
             <h1 className="text-[1em] font-semibold mx-auto mt-5 mb-3">
-              PPDB SMK Karya Guna Bhakti 2 2023
+              PPDB SMK Karya Guna Bhakti 2 {new Date().getFullYear() + 1}
             </h1>
             <p className="text-[0.9em] w-[90%] lg:w-[30em] mx-auto">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
-              nisi praesentium dicta ducimus cum ab illo,
+              Bergabung dengan SMK Karya Guna Bhakti 2. Daftarkan dirimu hari
+              ini dan mari wujudkan masa depan yang gemilang bersama-sama.
             </p>
           </div>
 
@@ -185,13 +185,13 @@ const Register = () => {
                 <option value="" className="rounded-xl">
                   Pilih...
                 </option>
-                {competency.map((item, index) => {
-                  return (
-                    <option key={index} value={item}>
-                      {item}
-                    </option>
-                  );
-                })}
+
+                <option value={competency[0]}>
+                  Teknik Komputer dan Jaringan
+                </option>
+
+                <option value={competency[1]}>Managemen Perkantoran</option>
+                <option value={competency[2]}>Akutansi</option>
               </select>
             </div>
 
